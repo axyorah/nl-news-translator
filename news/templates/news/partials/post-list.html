@@ -3,3 +3,11 @@
   <li>probably just a list of titles, maybe some additional metadata</li>
   <li>only displayed after filter form is submitted</li>
 </ul>
+
+{% if posts %}
+  <pre>
+    <code>
+      {{ posts }}
+    </code>
+  </pre>
+{% endif %}
