@@ -4,8 +4,28 @@ import requests as rq
 import datetime
 import time
 
-def form2params(form):
-    pass
+def newsform2params(form):
+
+    params = {
+        'q': None,
+        'category_list': [],
+        'from_date': None,
+        'to_date': None
+    }
+
+    for k,v in form.items():
+        if k == 'query_filter':
+            params['q'] = v[0]
+        elif 'category' in k:
+            # TODO: replace by regex
+            params['category_list'].append(k.split('-')[-1])
+        elif k == 'from-filter':
+            pass
+        elif k == 'to-filter':
+            pass
+
+    return params
+    
 
 class NewsRequester:
     def __init__(self, api_key):
