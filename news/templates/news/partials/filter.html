@@ -1,0 +1,30 @@
+<form action="#" method="POST">
+  {% csrf_token %}
+
+  <div class="hor-collection" id="category-container">
+    {% for name in categories %}
+      <input
+        type="checkbox"
+        class="btn-check"
+        id="category-{{ name }}"
+        name="category-{{ name }}"
+        autocomplete="off"
+      />
+      <label class="btn btn-outline-secondary" for="category-{{ name }}">
+          lbl-{{ name }}
+      </label>
+    {% endfor %}
+  </div>
+
+    <div id="query-container">
+      <label for="query-filter">Search by Key Word</label>
+      <input type="text" id="query-filter" name="query-filter"/>
+    </div>
+
+    <div id="date-container">
+      <label for="date-filter">Filter by Date</label>
+      <span>TBA</span>
+    </div>
+
+  <button type="submit" class="btn btn-outline-secondary">Submit</button>
+</form>

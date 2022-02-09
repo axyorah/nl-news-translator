@@ -1,3 +1,11 @@
 body {
     font-family: sans-serif;
 }
+
+.boxed {
+    border: 1px solid rgba(200,200,200,0.8);
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
