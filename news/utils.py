@@ -1,7 +1,7 @@
 from typing import List, Tuple, Set, Dict, Union, Optional
 
 import requests as rq
-import datetime
+from datetime import datetime
 import time
 
 def newsform2params(form):
@@ -15,7 +15,7 @@ def newsform2params(form):
 
     for k,v in form.items():
         if k == 'query_filter':
-            params['q'] = v[0]
+            params['q'] = v[0] if v[0] else None
         elif 'category' in k:
             # TODO: replace by regex
             params['category_list'].append(k.split('-')[-1])
@@ -24,14 +24,17 @@ def newsform2params(form):
         elif k == 'to-filter':
             pass
 
+    print(params)
+
     return params
     
 
 class NewsRequester:
+    # TODO: newsapi top-headlines can only process one category at a time!!!
     def __init__(self, api_key):
         self.api_key = api_key
         self.url = 'https://newsapi.org/v2/top-headlines?'
-        self.period = 3 # default period [days] over which news would be requested
+        self.period = 7 # default period [days] over which news would be requested
         self.categories = {
             'business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'
         }
@@ -83,17 +86,10 @@ class NewsRequester:
                 f'`from_date` is out of range, got {from_date}'
             )
 
-    def _retry(self, params, times=3, sleep=5):
+    def _retry(self, url, times=3, sleep=5):        
+
         for _ in range(times):
-            res = rq.get(
-                f'{self.url}'
-                f'{"category=" + params["category"] + "&" if params["category"] else ""}'
-                f'{"from=" + params["from"] + "&" if params["from"] else ""}'
-                f'{"to=" + params["to"] + "&" if params["to"] else ""}'
-                f'country=nl&'
-                f'sortBy=popularity&'
-                f'apiKey={self.api_key}'
-            )
+            res = rq.get(url)
 
             if res.status_code == 200:
                 return res.json()
@@ -117,7 +113,7 @@ class NewsRequester:
 
         to_date = to_date or datetime.now()
         from_date = from_date or datetime.fromtimestamp(
-            to_date - self.period * 24 * 60 * 60
+            datetime.timestamp(to_date) - self.period * 24 * 60 * 60
         )
 
         params = {
@@ -126,7 +122,19 @@ class NewsRequester:
             'from': str(from_date).split(' ')[0],
             'to': str(to_date).split(' ')[0]
         }
+        print(params)
 
-        return self._retry(params, times=3, sleep=5)
+        url = (
+            f'{self.url}'
+            f'{"category=" + params["category"] + "&" if params["category"] else ""}'
+            f'{"from=" + params["from"] + "&" if params["from"] else ""}'
+            f'{"to=" + params["to"] + "&" if params["to"] else ""}'
+            f'country=nl&'
+            f'sortBy=popularity&'
+            f'apiKey={self.api_key}'
+        )
+        print(url)
+
+        return self._retry(url, times=3, sleep=5)
 
         
