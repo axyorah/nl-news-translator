@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'news.apps.NewsConfig'
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-          os.path.join(BASE_DIR, 'templates')
+          os.path.join(BASE_DIR, 'templates'),
+          os.path.join(BASE_DIR, 'news/temlpates/news')
         ],
         'APP_DIRS': True,
         'OPTIONS': {

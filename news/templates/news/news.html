@@ -1,0 +1,65 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>Search NL News</h1>
+
+<section class="container box-container" id="box-filter">
+  <form>
+    <div>
+      <label for="query-filter">Search by Key Word</label>
+      <input type="text" id="query-filter" />
+    </div>
+
+    <div>
+      <label for="category-filter">Filter by Category</label>
+      <select>
+        <option value="business">News</option>
+        <option value="entertainment">Entertainment</option>
+        <option value="general">General</option>
+        <option value="health">Health</option>
+        <option value="science">Science</option>
+        <option value="sports">Sports</option>
+        <option value="technology">Technology</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="date-filter">Filter by Date</label>
+      <span>TBA</span>
+    </div>
+  </form>
+</section>
+
+<section class="container box-container" id="news-overview">
+  <p>Search Result Overview</p>
+  <ul>
+    <li>probably just a list of titles, maybe some additional metadata</li>
+    <li>only displayed after filter form is submitted</li>
+  </ul>
+</section>
+
+<section class="container box-container" id="post">
+  <p>Selected Post</p>
+  <ul>
+    <li>post will be desplayed here in a Nx2 table</li>
+    <li>
+      each sentence in a separate row, 2 columns for original text and english
+      translation
+    </li>
+  </ul>
+</section>
+
+<section class="container box-container" id="memo">
+  <p>Option to add a two-sided memo</p>
+  <ul>
+    <li>side A = orgin text, side B = translation+notes</li>
+    <li>An option to create and add multiple tags</li>
+    <li>
+      url of an article will be infered automatically and addded to form (should
+      be updated each time new post is selected)
+    </li>
+    <li>only visible for logged in users</li>
+  </ul>
+</section>
+
+{% endblock content %}
