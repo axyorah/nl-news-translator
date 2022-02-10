@@ -1,2 +1,5 @@
 django
 python-dotenv
+requests
+transformers
+djangorestframework
