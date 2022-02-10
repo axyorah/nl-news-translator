@@ -167,7 +167,10 @@ class NewsRequester:
             if res.get('status') and res['status'] == 'ok':
                 final['status'] = 'ok'
                 final['totalResults'] += res.get('totalResults', 0)
-                final['articles'] += res.get('articles', [])
+                final['articles'] += [
+                    {**article, **{'category': category}} 
+                    for article in res.get('articles', [])
+                ]
             else:
                 # TODO: handle errors properly
                 print(res)
