@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 def newsform2params(form):
-
+    # TODO: handle dates
     params = {
         'q': None,
         'category_list': [],
@@ -63,10 +63,10 @@ class NewsRequester:
             )
         
         if category_list and any(
-            cat not in self.categories for cat in category_list
+            cat not in self.CATEGORIES for cat in category_list
         ):
             raise ValueError(
-                f'Categories should be one or several of {self.categories}; '
+                f'Categories should be one or several of {self.CATEGORIES}; '
                 f'got {category_list}'
             )
         
