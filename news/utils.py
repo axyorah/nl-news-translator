@@ -30,14 +30,19 @@ def newsform2params(form):
     
 
 class NewsRequester:
-    # TODO: newsapi top-headlines can only process one category at a time!!!
+    CATEGORIES = {
+        'business', 
+        'entertainment', 
+        'general', 
+        'health', 
+        'science', 
+        'sports', 
+        'technology'
+    }
     def __init__(self, api_key):
         self.api_key = api_key
         self.url = 'https://newsapi.org/v2/top-headlines?'
-        self.period = 7 # default period [days] over which news would be requested
-        self.categories = {
-            'business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'
-        }
+        self.period = 7 # default period [days] over which news would be requested        
 
     def _validate(
         self,
@@ -98,33 +103,7 @@ class NewsRequester:
 
         return res.text
 
-    def get(
-        self,
-        q: str = None, 
-        category_list: Optional[List[str]] = None,
-        from_date: Optional[datetime.date] = None, 
-        to_date: Optional[datetime.date] = None
-    ):
-        try:
-            self._validate(q, category_list, from_date, to_date)
-        except Exception as e:
-            print(e)
-            return
-
-        to_date = to_date or datetime.now()
-        from_date = from_date or datetime.fromtimestamp(
-            datetime.timestamp(to_date) - self.period * 24 * 60 * 60
-        )
-        category_list = category_list if category_list else list(self.categories)
-
-        params = {
-            'q': q,
-            'category': ','.join(category_list),
-            'from': str(from_date).split(' ')[0],
-            'to': str(to_date).split(' ')[0]
-        }
-        print(params)
-
+    def _get_valid(self, params):
         url = (
             f'{self.url}'
             f'{"category=" + params["category"] + "&" if params["category"] else ""}'
@@ -132,11 +111,71 @@ class NewsRequester:
             f'{"from=" + params["from"] + "&" if params["from"] else ""}'
             f'{"to=" + params["to"] + "&" if params["to"] else ""}'
             f'country=nl&'
-            f'sortBy=popularity&'
             f'apiKey={self.api_key}'
         )
-        print(url)
 
         return self._retry(url, times=3, sleep=5)
 
+    def get(
+        self,
+        q: str = None, 
+        category_list: Optional[List[str]] = None,
+        from_date: Optional[datetime.date] = None, 
+        to_date: Optional[datetime.date] = None
+    ):  
+        """
+        fetches news from newsapi filtered by:
+        q: [optional str] key word 
+        category_list: [optional list[str]]: list of categories 
+            from NewsRequester.CATEGORIES;
+            if empty or None all categories will be used
+        from_date: [optional datetime obj]
+        to_date: [optional datetimeobj]
+        """
+        try:
+            self._validate(q, category_list, from_date, to_date)
+        except Exception as e:
+            print(e)
+            return
+
+        # use default values for params if no value is provided
+        to_date = to_date or datetime.now()
+        from_date = from_date or datetime.fromtimestamp(
+            datetime.timestamp(to_date) - self.period * 24 * 60 * 60
+        )
+        category_list = category_list if category_list else list(self.CATEGORIES)
+
+        # newsapi can only process one category (or none = all) at a time;
+        # additonally, if `q` is set `category` also needs to be provided;
+        # so we'll need to send several small requests for each category 
+        # and lump them together at the end
+        final = {
+            'status': None,
+            'totalResults': 0,
+            'articles': []
+        }
+
+        for category in category_list:
+            params = {
+                'q': q,
+                'category': category,
+                'from': str(from_date).split(' ')[0],
+                'to': str(to_date).split(' ')[0]
+            }
+            res = self._get_valid(params)
+
+            if res.get('status') and res['status'] == 'ok':
+                final['status'] = 'ok'
+                final['totalResults'] += res.get('totalResults', 0)
+                final['articles'] += res.get('articles', [])
+            else:
+                # TODO: handle errors properly
+                print(res)
+
+        return final
+
+
+        
+
+        
         
