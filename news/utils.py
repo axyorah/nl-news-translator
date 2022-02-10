@@ -14,8 +14,8 @@ def newsform2params(form):
     }
 
     for k,v in form.items():
-        if k == 'query_filter':
-            params['q'] = v[0] if v[0] else None
+        if k == 'query-filter':
+            params['q'] = v if v else None
         elif 'category' in k:
             # TODO: replace by regex
             params['category_list'].append(k.split('-')[-1])
@@ -115,6 +115,7 @@ class NewsRequester:
         from_date = from_date or datetime.fromtimestamp(
             datetime.timestamp(to_date) - self.period * 24 * 60 * 60
         )
+        category_list = category_list if category_list else list(self.categories)
 
         params = {
             'q': q,
@@ -127,6 +128,7 @@ class NewsRequester:
         url = (
             f'{self.url}'
             f'{"category=" + params["category"] + "&" if params["category"] else ""}'
+            f'{"q=" + params["q"] + "&" if params["q"] else ""}'
             f'{"from=" + params["from"] + "&" if params["from"] else ""}'
             f'{"to=" + params["to"] + "&" if params["to"] else ""}'
             f'country=nl&'
