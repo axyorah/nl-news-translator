@@ -4,10 +4,18 @@
   <li>only displayed after filter form is submitted</li>
 </ul>
 
-{% if posts %}
-  <pre>
-    <code>
-      {{ posts }}
-    </code>
-  </pre>
+{% if articles %}
+<ul class="list-group">
+  {% for article in articles %}
+  <li class="list-group-item">
+    <a href="{{ article.url }}">
+        {{ article.title }}
+    </a>
+    ({{ article.category }})
+    <p>
+      {{ article }}
+    </p>
+  </li>
+  {% endfor %}
+</ul>
 {% endif %}

@@ -21,8 +21,10 @@ def index(request):
 
     if request.method == 'POST':
 
+        print(request.POST)
+
         params = newsform2params(request.POST)
         res = news_requester.get(**params)
-        context['posts'] = json.dumps(res, indent=4)
+        context['articles'] = res.get('articles')
 
     return render(request, 'news/news.html', context)
