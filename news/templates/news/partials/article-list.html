@@ -1,21 +1,34 @@
-<p>Search Result Overview</p>
-<ul>
-  <li>probably just a list of titles, maybe some additional metadata</li>
-  <li>only displayed after filter form is submitted</li>
-</ul>
-
 {% if articles %}
+<h3 class="m-3">Search Results</h3>
 <ul class="list-group">
+  
   {% for article in articles %}
-  <li class="list-group-item">
-    <a href="{{ article.url }}">
+  <div class="expandable">
+    <li class="list-group-item">
+      
+      <div class="li-title li-between">
         {{ article.title }}
-    </a>
-    ({{ article.category }})
-    <p>
-      {{ article }}
-    </p>
-  </li>
+        <span class="category">{{ article.category }}</span>
+      </div>
+
+      <div class="hidden">
+        <div class="li-meta li-between">
+
+          {% if article.author %}
+              <span>{{ article.author }}</span>
+          {% else %}
+              <span></span>
+          {% endif %}
+
+          <span><a href="{{ article.url }}">{{ article.source.name }}</a></span>
+
+        </div>
+        <div class="li-text">{{ article.description }}</div>
+      </div>
+
+    </li>
+  </div>
   {% endfor %}
+
 </ul>
 {% endif %}

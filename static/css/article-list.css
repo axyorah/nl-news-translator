@@ -1,0 +1,39 @@
+.li-title {
+    font-weight: 200;
+    font-size: medium;
+    color: rbg(100,100,100)
+}
+
+.li-text {
+    font-weight: 100;
+    font-size: small;
+    color: rgb(150,150,150);
+}
+
+.li-meta {
+    font-size: 100;
+    font-weight: 200;
+    color: rgb(150,150,150);
+}
+
+.li-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.category {
+    height: 20px;
+    font-size: small;
+    color: white;
+    background-color: rgb(150,150,150);
+    border: none;
+    border-radius: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.hidden {
+    display: none;
+    transition-delay: 500;
+}

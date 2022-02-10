@@ -1,7 +1,7 @@
-<form action="#" method="POST">
+<form action="" method="POST">
   {% csrf_token %}
 
-  <div class="hor-collection" id="category-container">
+  <div class="form-check hor-collection" id="category-container">
     {% for name in categories %}
       <input
         type="checkbox"
