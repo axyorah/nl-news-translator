@@ -3,12 +3,11 @@
 <ul class="list-group">
   
   {% for article in articles %}
-  <div class="expandable">
-    <li class="list-group-item">
+    <li class="list-group-item article expandable">
       
       <div class="li-title li-between">
         {{ article.title }}
-        <span class="category">{{ article.category }}</span>
+        <span class="capsule">{{ article.source.name }}</span>
       </div>
 
       <div class="hidden">
@@ -20,14 +19,13 @@
               <span></span>
           {% endif %}
 
-          <span><a href="{{ article.url }}">{{ article.source.name }}</a></span>
+          <span><a href="{{ article.url }}">source</a></span>
 
         </div>
         <div class="li-text">{{ article.description }}</div>
       </div>
 
     </li>
-  </div>
   {% endfor %}
 
 </ul>
