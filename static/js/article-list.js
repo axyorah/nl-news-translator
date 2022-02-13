@@ -14,13 +14,25 @@ expandables.forEach(expandable => {
 
 articles.forEach(article => {
     article.addEventListener('click', async function(evt) {
-        const a = this.querySelector('a');
-        console.log(a.href);
-        console.log(a.innerText);
-        const url = a.href;
-        const source = a.innerText;
+        const aNode = this.querySelector('a');
+        const sourceNode = this.querySelector('#source');
+        
+        const params = {
+            url: aNode.href,
+            source: sourceNode.innerText
+        }
 
-        //const res = await fetch(url).catch(err => console.log(err));
+        console.log(params);
+
+        fetch(`/api/paragraphs?url=${params['url']}&source=${params['source']}`)
+            .then(res => res.json())
+            .then(res => {
+                // this should be moved to `article-selected.js`
+                document.querySelector(
+                    '#article-selected'
+                ).innerHTML = JSON.stringify(res.data, null, 4);
+            })
+            .catch(err => console.log(err));
     })
 })
 
