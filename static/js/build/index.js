@@ -7,12 +7,27 @@ expandables.forEach((expandable) => {
 });
 articles.forEach((article) => {
     article.addEventListener('click', function (evt) {
-        const aNode = this.querySelector('a');
-        const sourceNode = this.querySelector('#source');
-        fetchArticleParagraphs(sourceNode.innerText, aNode.href)
+        // get all necessary tar html elements
+        const tarContainer = document.querySelector('#article-selected-container');
+        const tarBodyContainer = tarContainer.querySelector('#article-selected-body');
+        const tarTitleNode = tarContainer.querySelector('#article-selected-title');
+        const tarANode = tarContainer.querySelector('a');
+        const tarSourceNode = tarContainer.querySelector('#article-selected-source');
+        // get title, source and url from list (src)
+        const srcTitleNode = this.querySelector('.li-title');
+        const srcANode = this.querySelector('a');
+        const srcSourceNode = this.querySelector('#source');
+        // make container for selected article visible
+        console.log(tarContainer);
+        tarContainer.style.display = 'block';
+        // set title, source and url to selected
+        tarTitleNode.innerText = srcTitleNode.innerText;
+        tarANode.href = srcANode.href;
+        tarSourceNode.innerText = srcSourceNode.innerText;
+        // show article body
+        fetchArticleParagraphs(srcSourceNode.innerText, srcANode.href)
             .then((res) => {
-            const articleSelectedContainer = document.querySelector('#article-selected');
-            displayArticleParagraphs(res.data, articleSelectedContainer);
+            displayArticleParagraphs(res.data, tarBodyContainer);
         })
             .catch(err => console.log(err));
     });

@@ -125,6 +125,11 @@ function translateSentences(sentences: string[]) {
 export function displayArticleParagraphs(
     paragraphsRaw: ParagraphsRaw, divRoot: HTMLElement
 ): void {
+    // clear div
+    while (divRoot.childNodes.length) {
+        divRoot.removeChild(divRoot.lastChild);
+    }
+    
     // initialize table
     const columnSpecs = [
         {'name': 'Original Text', 'widthPercent': 45},

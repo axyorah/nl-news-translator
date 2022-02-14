@@ -84,6 +84,10 @@ function translateSentences(sentences) {
     });
 }
 export function displayArticleParagraphs(paragraphsRaw, divRoot) {
+    // clear div
+    while (divRoot.childNodes.length) {
+        divRoot.removeChild(divRoot.lastChild);
+    }
     // initialize table
     const columnSpecs = [
         { 'name': 'Original Text', 'widthPercent': 45 },

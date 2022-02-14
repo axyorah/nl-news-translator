@@ -17,13 +17,32 @@ expandables.forEach((expandable: Expandable): void => {
 
 articles.forEach((article: HTMLElement): void => {
     article.addEventListener('click', function(evt) {
-        const aNode: HTMLAnchorElement = this.querySelector('a');
-        const sourceNode: HTMLElement = this.querySelector('#source');
+        // get all necessary tar html elements
+        const tarContainer: HTMLElement = document.querySelector('#article-selected-container');
+        const tarBodyContainer: HTMLElement = tarContainer.querySelector('#article-selected-body');
 
-        fetchArticleParagraphs(sourceNode.innerText, aNode.href)
-        .then((res: ParagraphResponse) => {
-            const articleSelectedContainer: HTMLElement = document.querySelector('#article-selected');
-            displayArticleParagraphs(res.data, articleSelectedContainer);
+        const tarTitleNode: HTMLElement = tarContainer.querySelector('#article-selected-title');
+        const tarANode: HTMLAnchorElement = tarContainer.querySelector('a');
+        const tarSourceNode: HTMLElement = tarContainer.querySelector('#article-selected-source');
+
+        // get title, source and url from list (src)
+        const srcTitleNode: HTMLElement = this.querySelector('.li-title');
+        const srcANode: HTMLAnchorElement = this.querySelector('a');
+        const srcSourceNode: HTMLElement = this.querySelector('#source');
+
+        // make container for selected article visible
+        console.log(tarContainer);
+        tarContainer.style.display = 'block';
+
+        // set title, source and url to selected
+        tarTitleNode.innerText = srcTitleNode.innerText;
+        tarANode.href = srcANode.href;
+        tarSourceNode.innerText = srcSourceNode.innerText;
+
+        // show article body
+        fetchArticleParagraphs(srcSourceNode.innerText, srcANode.href)
+        .then((res: ParagraphResponse) => {            
+            displayArticleParagraphs(res.data, tarBodyContainer);
         })
         .catch(err => console.log(err));
     })
