@@ -7,21 +7,12 @@
       
       <div class="li-title li-between">
         {{ article.title }}
-        <span class="capsule" id="source">{{ article.source.name }}</span>
+        <span class="capsule hidden" id="source">
+          <a class="capsule-a" href="{{ article.url }}">{{ article.source.name }}</a>
+        </span>
       </div>
 
       <div class="hidden">
-        <div class="li-meta li-between">
-
-          {% if article.author %}
-              <span>{{ article.author }}</span>
-          {% else %}
-              <span></span>
-          {% endif %}
-
-          <span><a href="{{ article.url }}">source</a></span>
-
-        </div>
         <div class="li-text">{{ article.description }}</div>
       </div>
 

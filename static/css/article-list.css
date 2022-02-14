@@ -22,7 +22,7 @@
     justify-content: space-between;
 }
 
-.capsule {
+.capsule, .capsule-a {
     height: 20px;
     font-size: small;
     color: white;
@@ -36,4 +36,8 @@
 .hidden {
     display: none;
     transition-delay: 500;
+}
+
+.list-group-item:hover {
+    background-color: rgba(230,230,250,0.3);
 }

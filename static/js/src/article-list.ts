@@ -14,12 +14,16 @@ export interface Expandable extends HTMLElement {
 
 export function toggleExpandable(expandable: Expandable): void {
     expandable.addEventListener('mouseover', function(evt) {
-        const hidden: HTMLElement = this.querySelector('.hidden');
-        hidden.style.display = 'block';
+        const hiddensElements: NodeListOf<HTMLElement> = this.querySelectorAll('.hidden');
+        hiddensElements.forEach((hidden: HTMLElement) => {
+            hidden.style.display = 'block';
+        });
     });
     expandable.addEventListener('mouseout', function(evt) {
-        const hidden: HTMLElement = this.querySelector('.hidden');
-        hidden.style.display = 'none';
+        const hiddensElements: NodeListOf<HTMLElement> = this.querySelectorAll('.hidden');
+        hiddensElements.forEach((hidden: HTMLElement) => {
+            hidden.style.display = 'none';
+        });
     });
 }
 
@@ -28,11 +32,4 @@ export function fetchArticleParagraphs(
 ): Promise<ParagraphResponse> {
     return fetch(`/api/paragraphs?url=${url}&source=${source}`)
         .then((res: Response): Promise<ParagraphResponse> => res.json());
-}
-
-export function displayArticleParagraphs(
-    res: ParagraphResponse, div: HTMLElement
-): void {
-    // this should be moved to `article-selected.js`
-    div.innerHTML = JSON.stringify(res.data, null, 4);
 }
