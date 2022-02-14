@@ -3,6 +3,7 @@ tr:hover {
 }
 
 .dark-block {
+    width: 100%;
     display: block;
     background-color: rgba(17,17,27, 0.7);
     color: white;
