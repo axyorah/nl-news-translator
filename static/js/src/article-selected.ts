@@ -1,9 +1,13 @@
-interface ColumnSpec {
+import { 
+    ParagraphsRaw, ParagraphsParsed, ParagraphResponse 
+} from "./article-list";
+
+export interface ColumnSpec {
     name?: string,
     widthPercent: number
 }
 
-class CustomHTMLTable {
+export class CustomHTMLTable {
     root: HTMLElement
     table: HTMLTableElement
     columnSpecs: ColumnSpec[] | null
@@ -17,6 +21,7 @@ class CustomHTMLTable {
 
     initTable(): HTMLTableElement {
         const table = document.createElement('table');
+        table.setAttribute('class', 'table');
         
         if (this.columnSpecs) {
             const colGroup = document.createElement('colgroup');
@@ -26,7 +31,7 @@ class CustomHTMLTable {
                 col.style.width = `${spec.widthPercent}%`;
                 colGroup.appendChild(col);
             });
-            this.table.appendChild(colGroup);
+            table.appendChild(colGroup);
         }
 
         this.root.appendChild(table);
@@ -44,7 +49,7 @@ class CustomHTMLTable {
 
         const row = document.createElement('tr');
         columns.forEach(colText => {
-            const col = document.createElement('th');
+            const col = document.createElement('td');
             col.innerText = colText;
             row.appendChild(col);
         });
@@ -53,4 +58,47 @@ class CustomHTMLTable {
 
         return row;
     }
+}
+
+function splitParagraph(paragraphRaw: string) {
+    return paragraphRaw
+        .split('. ')
+        .map((sentence: string): string => {
+            return sentence.endsWith('.') ? sentence : sentence + '.'
+        });
+}
+
+function translateSentences(sentences: string[]) {
+    // TODO: proper translation
+    return sentences.map((sentence: string, is: number) => {
+        return `sentence #${is}`;
+    })
+}
+
+export function displayArticleParagraphs(
+    paragraphsRaw: ParagraphsRaw, divRoot: HTMLElement
+): void {
+    // initialize table
+    const columnSpecs = [
+        {'name': 'original', 'widthPercent': 45},
+        {'name': 'original-space', 'widthPercent': 5},
+        {'name': 'translation-space', 'widthPercent': 5},
+        {'name': 'translation', 'widthPercent': 45}
+    ];
+    const table = new CustomHTMLTable(divRoot, columnSpecs);
+
+    // fill table
+    paragraphsRaw.forEach((paragraphRaw: string, ip: number) => {
+        const sentences = splitParagraph(paragraphRaw);
+        const translations = translateSentences(sentences);
+        
+        sentences.forEach((sentence: string, is: number) => {            
+            table.addRow([
+                sentence, '', '', translations[is]
+            ]);
+        });
+        table.addRow(['', '', '', '']);
+
+    });
+
 }

@@ -1,5 +1,8 @@
+export type ParagraphsRaw = string[];
+export type ParagraphsParsed = string[][];
+
 export interface ParagraphResponse {
-    data: string[]
+    data: ParagraphsRaw;
 }
 
 export interface Expandable extends HTMLElement {
@@ -17,14 +20,14 @@ export function toggleExpandable(expandable: Expandable): void {
     expandable.addEventListener('mouseout', function(evt) {
         const hidden: HTMLElement = this.querySelector('.hidden');
         hidden.style.display = 'none';
-    })
+    });
 }
 
 export function fetchArticleParagraphs(
     source: string, url: string
 ): Promise<ParagraphResponse> {
     return fetch(`/api/paragraphs?url=${url}&source=${source}`)
-        .then((res: Response): Promise<ParagraphResponse> => res.json())
+        .then((res: Response): Promise<ParagraphResponse> => res.json());
 }
 
 export function displayArticleParagraphs(

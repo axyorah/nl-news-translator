@@ -1,4 +1,5 @@
-import { toggleExpandable, fetchArticleParagraphs, displayArticleParagraphs } from './article-list.js';
+import { toggleExpandable, fetchArticleParagraphs } from './article-list.js';
+import { displayArticleParagraphs } from './article-selected.js';
 const expandables = document.querySelectorAll('.expandable');
 const articles = document.querySelectorAll('.article');
 expandables.forEach((expandable) => {
@@ -11,7 +12,7 @@ articles.forEach((article) => {
         fetchArticleParagraphs(sourceNode.innerText, aNode.href)
             .then((res) => {
             const articleSelectedContainer = document.querySelector('#article-selected');
-            displayArticleParagraphs(res, articleSelectedContainer);
+            displayArticleParagraphs(res.data, articleSelectedContainer);
         })
             .catch(err => console.log(err));
     });

@@ -2,9 +2,10 @@ import {
     ParagraphResponse,
     Expandable,
     toggleExpandable,
-    fetchArticleParagraphs,
-    displayArticleParagraphs
+    fetchArticleParagraphs
 } from './article-list';
+
+import { displayArticleParagraphs } from './article-selected';
 
 
 const expandables: NodeListOf<Expandable> = document.querySelectorAll('.expandable');
@@ -22,7 +23,7 @@ articles.forEach((article: HTMLElement): void => {
         fetchArticleParagraphs(sourceNode.innerText, aNode.href)
         .then((res: ParagraphResponse) => {
             const articleSelectedContainer: HTMLElement = document.querySelector('#article-selected');
-            displayArticleParagraphs(res, articleSelectedContainer);
+            displayArticleParagraphs(res.data, articleSelectedContainer);
         })
         .catch(err => console.log(err));
     })
