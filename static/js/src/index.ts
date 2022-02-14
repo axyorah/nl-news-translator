@@ -40,8 +40,12 @@ articles.forEach((article: HTMLElement): void => {
 
         // show article body
         fetchArticleParagraphs(srcSourceNode.innerText, srcANode.href)
-        .then((res: ParagraphResponse) => {            
-            displayArticleParagraphs(res.data, tarBodyContainer);
+        .then((res: ParagraphResponse) => {
+            if (res && res.data) {
+                displayArticleParagraphs(res.data, tarBodyContainer);
+            } else {
+                throw new Error(`Couldn't fetch any data from ${srcANode.href}`);
+            }
         })
         .catch(err => console.log(err));
     })

@@ -26,7 +26,12 @@ articles.forEach((article) => {
         // show article body
         fetchArticleParagraphs(srcSourceNode.innerText, srcANode.href)
             .then((res) => {
-            displayArticleParagraphs(res.data, tarBodyContainer);
+            if (res && res.data) {
+                displayArticleParagraphs(res.data, tarBodyContainer);
+            }
+            else {
+                throw new Error(`Couldn't fetch any data from ${srcANode.href}`);
+            }
         })
             .catch(err => console.log(err));
     });
