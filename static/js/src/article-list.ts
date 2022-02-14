@@ -1,8 +1,7 @@
-export type ParagraphsRaw = string[];
-export type ParagraphsParsed = string[][];
+export type Paragraph = string;
 
 export interface ParagraphResponse {
-    data: ParagraphsRaw;
+    data: Paragraph[];
 }
 
 export interface Expandable extends HTMLElement {

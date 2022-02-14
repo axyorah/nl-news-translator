@@ -31,7 +31,6 @@ articles.forEach((article: HTMLElement): void => {
         const srcSourceNode: HTMLElement = this.querySelector('#source');
 
         // make container for selected article visible
-        console.log(tarContainer);
         tarContainer.style.display = 'block';
 
         // set title, source and url to selected

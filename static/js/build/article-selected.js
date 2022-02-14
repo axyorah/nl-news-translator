@@ -79,8 +79,8 @@ function splitParagraph(paragraphRaw) {
 }
 function translateSentences(sentences) {
     // TODO: proper translation
-    return sentences.map((sentence, is) => {
-        return `sentence #${is}`;
+    return sentences.map((sentence, isent) => {
+        return `sentence #${isent}`;
     });
 }
 export function displayArticleParagraphs(paragraphsRaw, divRoot) {
@@ -97,12 +97,12 @@ export function displayArticleParagraphs(paragraphsRaw, divRoot) {
     ];
     const table = new CustomHTMLTable(divRoot, columnSpecs);
     // fill table
-    paragraphsRaw.forEach((paragraphRaw, ip) => {
+    paragraphsRaw.forEach((paragraphRaw, ipar) => {
         const sentences = splitParagraph(paragraphRaw);
         const translations = translateSentences(sentences);
-        sentences.forEach((sentence, is) => {
+        sentences.forEach((sentence, isent) => {
             table.addRow([
-                sentence, '', '', translations[is]
+                sentence, '', '', translations[isent]
             ]);
         });
         table.addRow(['', '', '', '']);

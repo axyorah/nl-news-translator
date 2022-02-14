@@ -18,7 +18,6 @@ articles.forEach((article) => {
         const srcANode = this.querySelector('a');
         const srcSourceNode = this.querySelector('#source');
         // make container for selected article visible
-        console.log(tarContainer);
         tarContainer.style.display = 'block';
         // set title, source and url to selected
         tarTitleNode.innerText = srcTitleNode.innerText;

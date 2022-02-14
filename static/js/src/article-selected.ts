@@ -1,6 +1,6 @@
-import { 
-    ParagraphsRaw, ParagraphsParsed, ParagraphResponse 
-} from "./article-list";
+import { Paragraph } from "./article-list";
+
+export type Sentence = string;
 
 export interface ColumnSpec {
     name?: string,
@@ -107,46 +107,46 @@ export class CustomHTMLTable {
     }
 }
 
-function splitParagraph(paragraphRaw: string) {
+function splitParagraph(paragraphRaw: Paragraph): Sentence[] {
     return paragraphRaw
         .split('. ')
-        .map((sentence: string): string => {
+        .map((sentence: Sentence): Sentence => {
             return sentence.endsWith('.') ? sentence : sentence + '.'
         });
 }
 
-function translateSentences(sentences: string[]) {
+function translateSentences(sentences: Sentence[]) {
     // TODO: proper translation
-    return sentences.map((sentence: string, is: number) => {
-        return `sentence #${is}`;
+    return sentences.map((sentence: Sentence, isent: number): Sentence => {
+        return `sentence #${isent}`;
     })
 }
 
 export function displayArticleParagraphs(
-    paragraphsRaw: ParagraphsRaw, divRoot: HTMLElement
+    paragraphsRaw: Paragraph[], divRoot: HTMLElement
 ): void {
     // clear div
     while (divRoot.childNodes.length) {
         divRoot.removeChild(divRoot.lastChild);
     }
-    
+
     // initialize table
     const columnSpecs = [
         {'name': 'Original Text', 'widthPercent': 45},
         {'name': '', 'widthPercent': 5},
         {'name': '', 'widthPercent': 5},
         {'name': 'Translation', 'widthPercent': 45}
-    ];
+    ] as ColumnSpec[];
     const table = new CustomHTMLTable(divRoot, columnSpecs);
 
     // fill table
-    paragraphsRaw.forEach((paragraphRaw: string, ip: number) => {
+    paragraphsRaw.forEach((paragraphRaw: Paragraph, ipar: number) => {
         const sentences = splitParagraph(paragraphRaw);
         const translations = translateSentences(sentences);
         
-        sentences.forEach((sentence: string, is: number) => {            
+        sentences.forEach((sentence: Sentence, isent: number) => {            
             table.addRow([
-                sentence, '', '', translations[is]
+                sentence, '', '', translations[isent]
             ]);
         });
         table.addRow(['', '', '', '']);
