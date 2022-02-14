@@ -1,6 +1,8 @@
 django
 python-dotenv
 requests
-transformers
 djangorestframework
 beautifulsoup4
+torch
+sentencepiece
+transformers
