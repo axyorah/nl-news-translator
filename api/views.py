@@ -3,10 +3,14 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .utils import source2paragraphs
+from .utils import (
+    source2paragraphs,
+    NlToEnTranslator
+)
 
 import json
-import requests as rq
+
+nl2en = NlToEnTranslator()
 
 def validate_paragraphs_query(params):
     if not params.get('source') or not params.get('url'):
@@ -31,7 +35,7 @@ def validate_paragraphs_query(params):
 def getRoutes(request):
     routes = [
         {'GET': '/api/paragraphs'},
-        {'POST': '/api/translates'}
+        {'POST': '/api/translations'}
     ]
 
     return Response(routes)
@@ -59,5 +63,23 @@ def getParagraphs(request):
     }
 
     print(res)
+
+    return Response(res)
+
+@api_view(['POST'])
+def getTranslations(request):
+
+    res = {}
+
+    if request.method == 'POST':    
+        try:
+            body = json.loads(request.body)
+            sentences = body['sentences']
+
+            translations = nl2en.translate(sentences)
+            res['translations'] = translations
+    
+        except Exception as e:
+            print(e)
 
     return Response(res)

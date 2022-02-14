@@ -1,6 +1,16 @@
 import { Paragraph } from "./article-list";
+import { postData, JSONData, Method } from "./utils";
 
 export type Sentence = string;
+export type Translation = string;
+
+export interface SentenceRequest extends JSONData {
+    sentences: Sentence[];
+}
+
+export interface TranslationResponse extends JSONData {
+    translations: Translation[];
+}
 
 export interface ColumnSpec {
     name?: string,
@@ -115,11 +125,13 @@ function splitParagraph(paragraphRaw: Paragraph): Sentence[] {
         });
 }
 
-function translateSentences(sentences: Sentence[]) {
-    // TODO: proper translation
-    return sentences.map((sentence: Sentence, isent: number): Sentence => {
-        return `sentence #${isent}`;
-    })
+function translateSentences(sentences: Sentence[]): Promise<Translation[]> {
+
+    return postData<SentenceRequest, JSONData>(
+        '/api/translations/', { sentences: sentences }, 'POST'
+        )
+        .then((res: JSONData) => res.translations)
+        .catch(err => console.log(err));
 }
 
 export function displayArticleParagraphs(
@@ -140,17 +152,19 @@ export function displayArticleParagraphs(
     const table = new CustomHTMLTable(divRoot, columnSpecs);
 
     // fill table
-    paragraphsRaw.forEach((paragraphRaw: Paragraph, ipar: number) => {
-        const sentences = splitParagraph(paragraphRaw);
-        const translations = translateSentences(sentences);
-        
-        sentences.forEach((sentence: Sentence, isent: number) => {            
-            table.addRow([
-                sentence, '', '', translations[isent]
-            ]);
-        });
-        table.addRow(['', '', '', '']);
+    paragraphsRaw.forEach((paragraph: Paragraph): void => {
+        const sentences = splitParagraph(paragraph);
 
+        translateSentences(sentences)
+            .then((translations: Translation[]): void => {
+                translations.forEach(
+                    (translation: Translation, itrans: number): void => {
+                    table.addRow([
+                        sentences[itrans], '', '', translation
+                    ]);
+                });
+                table.addRow(['', '', '', '']);
+            });
     });
 
 }

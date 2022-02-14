@@ -1,3 +1,7 @@
+th[scope="col"] {
+    background-color: rgba(17,17,27, 0.1);;
+}
+
 tr:hover {
     background-color: rgba(230,230,250, 0.3);
 }

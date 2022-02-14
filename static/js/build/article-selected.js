@@ -1,3 +1,4 @@
+import { postData } from "./utils.js";
 export class CustomHTMLTable {
     constructor(divRoot, columnSpecs) {
         // https://stackoverflow.com/questions/928849/setting-table-column-width
@@ -78,10 +79,9 @@ function splitParagraph(paragraphRaw) {
     });
 }
 function translateSentences(sentences) {
-    // TODO: proper translation
-    return sentences.map((sentence, isent) => {
-        return `sentence #${isent}`;
-    });
+    return postData('/api/translations/', { sentences: sentences }, 'POST')
+        .then((res) => res.translations)
+        .catch(err => console.log(err));
 }
 export function displayArticleParagraphs(paragraphsRaw, divRoot) {
     // clear div
@@ -97,14 +97,16 @@ export function displayArticleParagraphs(paragraphsRaw, divRoot) {
     ];
     const table = new CustomHTMLTable(divRoot, columnSpecs);
     // fill table
-    paragraphsRaw.forEach((paragraphRaw, ipar) => {
-        const sentences = splitParagraph(paragraphRaw);
-        const translations = translateSentences(sentences);
-        sentences.forEach((sentence, isent) => {
-            table.addRow([
-                sentence, '', '', translations[isent]
-            ]);
+    paragraphsRaw.forEach((paragraph) => {
+        const sentences = splitParagraph(paragraph);
+        translateSentences(sentences)
+            .then((translations) => {
+            translations.forEach((translation, itrans) => {
+                table.addRow([
+                    sentences[itrans], '', '', translation
+                ]);
+            });
+            table.addRow(['', '', '', '']);
         });
-        table.addRow(['', '', '', '']);
     });
 }
