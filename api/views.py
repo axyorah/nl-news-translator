@@ -3,10 +3,8 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .utils import (
-    source2paragraphs,
-    NlToEnTranslator
-)
+from .utils.scrap_utils import source2paragraphs
+from .utils.translation_utils import NlToEnTranslator
 
 import json
 
