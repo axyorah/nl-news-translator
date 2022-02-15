@@ -22,5 +22,5 @@ urlpatterns = [
     path('', index),
     path('api/', include('api.urls')),
     path('news/', include('news.urls')),
-    #path('users/', include('users.urls')),
+    path('users/', include('users.urls')),
 ]
