@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.conf import settings
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 
 from users.models import Profile
 
@@ -27,8 +27,7 @@ def loginUser(request):
         if user is not None:
             # create session for user and add it to browser cookies
             login(request, user)
-            profile = Profile.objects.get(username=username)
-            return redirect('profile', pk=profile.id)
+            return redirect('profile')
         else:
             print('username or password is incorrect')
             # TODO add flash message
@@ -38,6 +37,7 @@ def loginUser(request):
     return render(request, 'users/login_registration.html', context)
 
 def logoutUser(request):
+    logout(request)
     return redirect('news')
 
 def profile(request):
