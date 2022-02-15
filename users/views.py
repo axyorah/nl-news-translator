@@ -5,6 +5,8 @@ from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 
+from django.contrib import messages
+
 from users.models import Profile
 
 # Create your views here.
@@ -21,6 +23,7 @@ def loginUser(request):
         except Exception as e:
             print(e)
             print(f'User `{username}` does not exist!')
+            messages.error(request, 'Wrong Username or Password!')
             return redirect('news')
 
         # check if username and password match
@@ -28,10 +31,10 @@ def loginUser(request):
         if user is not None:
             # create session for user and add it to browser cookies
             login(request, user)
+            messages.success(request, f'Welcome back, {user.username}!')
             return redirect('profile')
         else:
-            print('username or password is incorrect')
-            # TODO add flash message
+            messages.error(request, 'Wrong Username or Password!')
             return redirect('news')
     
     context = {}
@@ -39,6 +42,7 @@ def loginUser(request):
 
 def logoutUser(request):
     logout(request)
+    messages.info(request, 'Bye!')
     return redirect('news')
 
 @login_required(login_url='login')
