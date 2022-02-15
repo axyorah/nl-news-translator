@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { postData } from "./utils.js";
 export class CustomHTMLTable {
     constructor(divRoot, columnSpecs) {
@@ -83,30 +92,37 @@ function translateSentences(sentences) {
         .then((res) => res.translations)
         .catch(err => console.log(err));
 }
-export function displayArticleParagraphs(paragraphsRaw, divRoot) {
+export function displayArticleParagraphs(paragraphs, divRoot) {
     // clear div
     while (divRoot.childNodes.length) {
         divRoot.removeChild(divRoot.lastChild);
     }
     // initialize table
     const columnSpecs = [
-        { 'name': 'Original Text', 'widthPercent': 45 },
-        { 'name': '', 'widthPercent': 5 },
-        { 'name': '', 'widthPercent': 5 },
-        { 'name': 'Translation', 'widthPercent': 45 }
+        { 'name': 'Original Text', 'widthPercent': 47 },
+        { 'name': '', 'widthPercent': 3 },
+        { 'name': '', 'widthPercent': 3 },
+        { 'name': 'Translation', 'widthPercent': 47 }
     ];
     const table = new CustomHTMLTable(divRoot, columnSpecs);
-    // fill table
-    paragraphsRaw.forEach((paragraph) => {
-        const sentences = splitParagraph(paragraph);
-        translateSentences(sentences)
-            .then((translations) => {
-            translations.forEach((translation, itrans) => {
-                table.addRow([
-                    sentences[itrans], '', '', translation
-                ]);
+    // fill table // await to ensure that paragraph order is preserved
+    function addParagraphAndTranslation(i) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (i >= paragraphs.length) {
+                return;
+            }
+            const sentences = splitParagraph(paragraphs[i]);
+            yield translateSentences(sentences)
+                .then((translations) => {
+                translations.forEach((translation, itrans) => {
+                    table.addRow([
+                        sentences[itrans], '', '', translation
+                    ]);
+                });
+                table.addRow(['', '', '', '']);
             });
-            table.addRow(['', '', '', '']);
+            yield addParagraphAndTranslation(i + 1);
         });
-    });
+    }
+    addParagraphAndTranslation(0);
 }

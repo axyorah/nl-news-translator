@@ -135,7 +135,7 @@ function translateSentences(sentences: Sentence[]): Promise<Translation[]> {
 }
 
 export function displayArticleParagraphs(
-    paragraphsRaw: Paragraph[], divRoot: HTMLElement
+    paragraphs: Paragraph[], divRoot: HTMLElement
 ): void {
     // clear div
     while (divRoot.childNodes.length) {
@@ -144,18 +144,20 @@ export function displayArticleParagraphs(
 
     // initialize table
     const columnSpecs = [
-        {'name': 'Original Text', 'widthPercent': 45},
-        {'name': '', 'widthPercent': 5},
-        {'name': '', 'widthPercent': 5},
-        {'name': 'Translation', 'widthPercent': 45}
+        {'name': 'Original Text', 'widthPercent': 47},
+        {'name': '', 'widthPercent': 3},
+        {'name': '', 'widthPercent': 3},
+        {'name': 'Translation', 'widthPercent': 47}
     ] as ColumnSpec[];
     const table = new CustomHTMLTable(divRoot, columnSpecs);
 
-    // fill table
-    paragraphsRaw.forEach((paragraph: Paragraph): void => {
-        const sentences = splitParagraph(paragraph);
-
-        translateSentences(sentences)
+    // fill table // await to ensure that paragraph order is preserved
+    async function addParagraphAndTranslation(i: number): Promise<void> {
+        if (i >= paragraphs.length) {
+            return;
+        }
+        const sentences = splitParagraph(paragraphs[i]);
+        await translateSentences(sentences)
             .then((translations: Translation[]): void => {
                 translations.forEach(
                     (translation: Translation, itrans: number): void => {
@@ -165,6 +167,9 @@ export function displayArticleParagraphs(
                 });
                 table.addRow(['', '', '', '']);
             });
-    });
 
+        await addParagraphAndTranslation(i + 1);
+    }
+
+    addParagraphAndTranslation(0);
 }
