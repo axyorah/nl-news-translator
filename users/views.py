@@ -51,6 +51,8 @@ def logoutUser(request):
 
 def registerUser(request):
 
+    form = UserCreationForm()
+
     if request.method == "POST":
         username = request.POST['username']
 
@@ -73,10 +75,13 @@ def registerUser(request):
                 messages.success(request, f'Welcome, {user.username}!')
                 return redirect('profile')
             else:
-                messages.error(request, 'Invalid data!')
-                return redirect('login')
+                messages.error(request, form.error_messages)
+                return render(
+                    request, 
+                    'users/login_registration.html', 
+                    {'page': 'register', 'form': form}
+                ) # <-- stay on the page, show errors
     
-    form = UserCreationForm()
     context = {
         'page': 'register', 
         'form': form
