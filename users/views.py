@@ -2,7 +2,8 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.conf import settings
 
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
 from users.models import Profile
 
@@ -40,12 +41,9 @@ def logoutUser(request):
     logout(request)
     return redirect('news')
 
+@login_required(login_url='login')
 def profile(request):
-    if not request.user.is_authenticated:
-        print('user is not authenticated')
-        return redirect('news')
-
-    profile = Profile.objects.get(user=request.user)
+    profile = request.user.profile
     context = {
         'profile': profile
     }
