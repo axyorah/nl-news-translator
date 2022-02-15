@@ -6,3 +6,4 @@ beautifulsoup4
 torch
 sentencepiece
 transformers
+pillow
