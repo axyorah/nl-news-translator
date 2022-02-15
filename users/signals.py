@@ -10,7 +10,7 @@ def createProfile(sender, instance, created, **kwargs):
         user = instance
         profile = Profile.objects.create(
             user=user,
-            name=user.username,
+            username=user.username,
         )
    
 @receiver(post_delete, sender=Profile)

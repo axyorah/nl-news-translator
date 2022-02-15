@@ -10,7 +10,7 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
+    username = models.CharField(max_length=200, blank=True, null=True)
     profile_picture = models.ImageField(
         null=True, 
         blank=True, 
