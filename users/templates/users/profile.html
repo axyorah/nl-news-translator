@@ -1,10 +1,17 @@
-{% extends 'main.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'main.html' %} {% load static %} {% block content %}
 
 <div>
-    TBA: PROFILE INFO + BASIC MEMOS STATS
+  <p>TBA: PROFILE INFO + BASIC MEMOS STATS</p>
+
+  <div>
+    <p>Profile Info:</p>
+
+    {% if profile %} 
+      {{ profile }} 
+    {% endif %}
+
+  </div>
+
 </div>
 
 {% endblock content %}
