@@ -40,8 +40,12 @@ def loginUser(request):
 def logoutUser(request):
     return redirect('news')
 
-def profile(request, pk):
-    profile = Profile.objects.get(id=pk)
+def profile(request):
+    if not request.user.is_authenticated:
+        print('user is not authenticated')
+        return redirect('news')
+
+    profile = Profile.objects.get(user=request.user)
     context = {
         'profile': profile
     }
