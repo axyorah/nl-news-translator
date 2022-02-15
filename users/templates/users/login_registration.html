@@ -1,12 +1,15 @@
-{% extends 'main.html' %}
-{% load static %}
+{% extends 'main.html' %} 
+{% load static %} 
 
 {% block content %}
 
+<form method="POST" action="{% url 'login' %}">
+  {% csrf_token %}
 
-<div>
-    TBA: LOGIN/REGISTRATION FORM
-</div>
-
+  <input type="text" name="username" />
+  <input type="password" name="password" />
+  <input type="submit" value="Login" />
+  
+</form>
 
 {% endblock content %}
