@@ -1,10 +1,15 @@
-{% extends 'main.html' %} {% load static %} {% block content %}
+{% extends 'main.html' %} 
+{% load static %} 
+
+{% block content %}
 
 <div>
   <p>TBA: PROFILE INFO + BASIC MEMOS STATS</p>
 
   <div>
     <p>Profile Info:</p>
+
+    <img class="profile-picture" src="{{ profile.profile_picture.url }}" />
 
     {% if profile %} 
       {{ profile }} 

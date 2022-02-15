@@ -63,7 +63,7 @@ def registerUser(request):
                 messages.error(request, f'Username `{username}` already exists!')
                 return redirect('login')
         finally:
-            form = UserCreationForm(request.POST)
+            form = UserCreationForm(request.POST, request.FILE)
             if form.is_valid():
                 # save
                 user = form.save(commit=False)
