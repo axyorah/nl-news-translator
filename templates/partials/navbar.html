@@ -1,6 +1,41 @@
-<nav>
-  <p>
-    Nav bar with `HOME`, `my account` (only for logged in users), `Login/SignUp`
-  </p>
-  <hr />
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">HOME</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <ul class="navbar-nav space-between me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Sign Up/Login</a>
+        </li>        
+      </ul>
+
+      <form class="d-flex">
+        <input
+          name="quick-translate-input"
+          id="quick-translate-input"
+          class="form-control me-2"
+          type="text"
+          placeholder="Quick Translation"
+          aria-label="Translate"
+        />
+        <label
+          for="quick-translate-input"
+          id="quick-translate-output"
+          class="hidden form-control me-2"
+        ></label>
+        <button class="btn btn-outline-secondary arrow my-2 my-sm-0" type="submit">
+          &#10148;
+        </button>
+      </form>
+
+    </div>
+
+  </div>
 </nav>
