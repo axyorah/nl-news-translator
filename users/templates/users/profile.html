@@ -1,22 +1,52 @@
-{% extends 'main.html' %} 
-{% load static %} 
+{% extends 'main.html' %} {% load static %} {% block content %}
 
-{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-4 col-lg-3 col-xxl-2 px-0">
+      <div class="profile-info boxed">
+        <img class="profile-picture" src="{{ profile.profile_picture.url }}" />
 
-<div>
-  <p>TBA: PROFILE INFO + BASIC MEMOS STATS</p>
+        <div class="profile-username">{{ profile.username }}</div>
+      </div>
+    </div>
 
-  <div>
-    <p>Profile Info:</p>
+    <div class="col px-0">
+      <div class="profile-tags boxed">
+        <h5>My Notes</h5>
 
-    <img class="profile-picture" src="{{ profile.profile_picture.url }}" />
+        <div class="figure">
+          TBA: bar chart with number of notes for each tag
+        </div>
 
-    {% if profile %} 
-      {{ profile }} 
-    {% endif %}
-
+        <div class="figure">
+          TBA: stacked bar chart with tagged notes' timeline 
+          (full timeline, last month)
+        </div>
+      </div>
+    </div>
   </div>
 
+  <div class="row">
+    <div class="col boxed">
+      TBA: clickable tags with the number of notes (radio or checkboxes);
+      <ul>
+        <li>colorcode the same as on the figures above?</li>
+        <li>
+          on click: show all (paginated) notes from selected tag in a "table"
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col boxed">
+      TBA: table of notes from a selected tag(s?): (created, tags, side a, side b)
+      <ul>
+        <li>sortable by `created`</li>
+        <li>side b can be hidden</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}
