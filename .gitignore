@@ -1,6 +1,7 @@
 venv
 db.sqlite3
 migrations
+staticfiles
 __pycache__
 .env*
 tmp
