@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from users.models import Profile
 
+from users.forms import ProfileForm
+
 # Create your views here.
 
 def loginUser(request):
@@ -99,5 +101,21 @@ def profile(request):
 
 @login_required(login_url='login')
 def updateProfile(request):
-    context = {}
+    profile = request.user.profile
+    form = ProfileForm(instance=profile) # <-- autofills!!!
+    
+    if request.method == 'POST':
+        form = ProfileForm(
+            request.POST, 
+            request.FILES, # <-- this used to be `request.FILE`???
+            instance=profile
+        )
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+
+    context = {
+        'profile': profile,
+        'form': form,
+    }
     return render(request, 'users/profile_form.html', context)
