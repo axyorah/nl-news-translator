@@ -5,3 +5,5 @@ staticfiles
 __pycache__
 .env*
 tmp
+static/imgs/profiles/*
+staticfiles*
