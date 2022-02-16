@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news.apps.NewsConfig',
     'users.apps.UsersConfig',
+    'notes.apps.NotesConfig',
     'rest_framework'
 ]
 
@@ -68,6 +69,7 @@ TEMPLATES = [
           os.path.join(BASE_DIR, 'templates'),
           os.path.join(BASE_DIR, 'news/temlpates/news'),
           os.path.join(BASE_DIR, 'users/templates/users'),
+          os.path.join(BASE_DIR, 'notes/templates/notes'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
