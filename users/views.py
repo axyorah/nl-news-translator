@@ -96,3 +96,8 @@ def profile(request):
         'profile': profile
     }
     return render(request, 'users/profile.html', context)
+
+@login_required(login_url='login')
+def updateProfile(request):
+    context = {}
+    return render(request, 'users/profile_form.html', context)

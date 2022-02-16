@@ -7,6 +7,10 @@
         <img class="profile-picture" src="{{ profile.profile_picture.url }}" />
 
         <div class="profile-username">{{ profile.username }}</div>
+
+        <a href="{% url 'profile-update' %}">
+          <small>change profile picture</small>
+        </a>
       </div>
     </div>
 
