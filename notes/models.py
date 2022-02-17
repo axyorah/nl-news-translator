@@ -14,7 +14,7 @@ class Note(models.Model):
     side_a = models.TextField(null=True, blank=True)
     side_b = models.TextField(null=True, blank=True)
 
-    tags = models.ManyToManyField('Tag', blank=True)
+    tags = models.ManyToManyField('Tag', blank=True) #through='Membership', 
 
     def __str__(self):
         return f'{self.side_a[:50]}... -> {self.side_b[:50]}...'
@@ -26,7 +26,18 @@ class Tag(models.Model):
     created = models.DateField(auto_now_add=True)
 
     name = models.CharField(max_length=200)
-    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} by {self.owner.username}'
+
+
+# this should be used to constrain tags available for note 
+# to tags that were created by note's owner only;
+# this creates errors when migration, however, 
+# so just leaving it here unreferenced for now...
+class Membership(models.Model):
+    owner = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.CASCADE)
+    note = models.ForeignKey('Note', blank=True, null=True, on_delete=models.DO_NOTHING)
+    tag = models.ForeignKey('Tag', blank=True, null=True, on_delete=models.DO_NOTHING)
+

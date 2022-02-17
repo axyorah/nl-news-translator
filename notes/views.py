@@ -3,29 +3,45 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
-from notes.models import Tag, Note
-from notes.forms import TagForm, NoteForm
+from notes.models import Note, Tag, Membership
+from notes.forms import NoteForm, TagForm
 
 # Create your views here.
 @login_required(login_url='login')
 def createNote(request):
     profile = request.user.profile
-    form = NoteForm()
+    noteForm = NoteForm()
+    tagForm = TagForm()
+
+    # fugly constraint on tags visible for `this` note:
+    # this constraint should be added during model creation via `Membership`,
+    # but that creates errors for some reason...
+    noteForm.fields['tags'].queryset = profile.tag_set.all()
 
     if request.method == 'POST':
-        form = NoteForm(request.POST)
-        if form.is_valid():
-            note = form.save(commit=False)
+
+        noteForm = NoteForm(request.POST)
+        if noteForm.is_valid():
+            note = noteForm.save(commit=False)
             note.owner = profile
-            # note.tags = ...
-            # createTag(request, note.id) ???
+
+            # tagForm = TagForm(request.POST)
+            # print("TAG.FORM:")
+            # print(tagForm)
+            # if tagForm.is_valid():
+            #     tags = tagForm.save(commit=False)
+            #     tags.owner = profile
+            #     tags.notes = note
+            #     tags.save()
+
             note.save()
             return redirect('profile')
         else:
             messages.error(request, 'Note creation failed :(')
 
     context = {
-        'noteForm': form
+        'noteForm': noteForm,
+        'tagForm': tagForm
     }    
     return render(request, 'notes/note.html', context)
 
@@ -57,7 +73,7 @@ def createTag(request, pk):
             messages.error(request, 'Tag data is not valid')
 
     context = {
-        'tagForm': form
+        'tagForm': form,
     }
 
     return render(request, 'notes/note.html', context)
