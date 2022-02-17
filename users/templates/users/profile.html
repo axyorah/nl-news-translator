@@ -44,6 +44,13 @@
           on click: show all (paginated) notes from selected tag in a "table"
         </li>
       </ul>
+
+      <p>DEBUG: showing all the notes</p>
+      <ul>
+        {% for note in profile.note_set.all %}
+          <li>{{ note }} ({{ note.tags }}) </li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
 
