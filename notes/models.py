@@ -17,7 +17,7 @@ class Note(models.Model):
     tags = models.ManyToManyField('Tag', blank=True) #through='Membership', 
 
     def __str__(self):
-        return f'{self.side_a[:50]}... -> {self.side_b[:50]}...'
+        return f'{self.side_a[:50] if self.side_a else ""}... -> {self.side_b[:50] if self.side_b else ""}...'
 
 class Tag(models.Model):
     id = models.UUIDField(
