@@ -24,6 +24,7 @@ def createNote(request):
         if noteForm.is_valid():
             note = noteForm.save(commit=False)
             note.owner = profile
+            #tags = noteForm.cleaned_data.get('tags')
 
             # tagForm = TagForm(request.POST)
             # print("TAG.FORM:")
@@ -35,6 +36,7 @@ def createNote(request):
             #     tags.save()
 
             note.save()
+            noteForm.save_m2m() # <-- save tags !!!
             return redirect('profile')
         else:
             messages.error(request, 'Note creation failed :(')
