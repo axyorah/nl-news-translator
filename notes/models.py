@@ -49,6 +49,9 @@ class Tag(models.Model):
     def __str__(self):
         return f'{self.name} by {self.owner.username if self.owner else "undefined"}'
 
+    class Meta:
+        unique_together = [['owner', 'name']]
+
 
 # this should be used to constrain tags available for note 
 # to tags that were created by note's owner only;
