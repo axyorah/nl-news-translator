@@ -29,7 +29,7 @@ class Tag(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.name} by {self.owner.username}'
+        return f'{self.name} by {self.owner.username if self.owner else "undefined"}'
 
 
 # this should be used to constrain tags available for note 
