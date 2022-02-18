@@ -6,6 +6,12 @@ expandables.forEach((expandable) => {
     toggleExpandable(expandable);
 });
 articles.forEach((article) => {
+    /*
+    on click:
+    - fetch article paragraphs from source
+    - translate paragraphs with model from HuggingFace at /api/translations
+    - display original and translated paragraphs in a "table"
+    */
     article.addEventListener('click', function (evt) {
         // get all necessary tar html elements
         const tarContainer = document.querySelector('#article-selected-container');
@@ -27,6 +33,7 @@ articles.forEach((article) => {
         fetchArticleParagraphs(srcSourceNode.innerText, srcANode.href)
             .then((res) => {
             if (res && res.data) {
+                // displays original and translated paragraphs
                 displayArticleParagraphs(res.data, tarBodyContainer);
             }
             else {

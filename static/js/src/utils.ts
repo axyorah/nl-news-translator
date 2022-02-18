@@ -31,7 +31,7 @@ export async function postData<T extends JSONData, U extends JSONData>(
         credentials: 'same-origin', 
         headers: {
           'Content-Type': 'application/json',
-          //'X-CSRFToken': getCookie('csrftoken')
+          'X-CSRFToken': getCookie('csrftoken')
         },
         redirect: 'follow', 
         referrerPolicy: 'no-referrer', 

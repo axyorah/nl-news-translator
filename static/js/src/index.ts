@@ -7,7 +7,6 @@ import {
 
 import { displayArticleParagraphs } from './article-selected';
 
-
 const expandables: NodeListOf<Expandable> = document.querySelectorAll('.expandable');
 const articles: NodeListOf<HTMLElement> = document.querySelectorAll('.article');
 
@@ -16,6 +15,12 @@ expandables.forEach((expandable: Expandable): void => {
 });
 
 articles.forEach((article: HTMLElement): void => {
+    /*
+    on click: 
+    - fetch article paragraphs from source
+    - translate paragraphs with model from HuggingFace at /api/translations
+    - display original and translated paragraphs in a "table"
+    */ 
     article.addEventListener('click', function(evt) {
         // get all necessary tar html elements
         const tarContainer: HTMLElement = document.querySelector('#article-selected-container');
@@ -42,6 +47,7 @@ articles.forEach((article: HTMLElement): void => {
         fetchArticleParagraphs(srcSourceNode.innerText, srcANode.href)
         .then((res: ParagraphResponse) => {
             if (res && res.data) {
+                // displays original and translated paragraphs
                 displayArticleParagraphs(res.data, tarBodyContainer);
             } else {
                 throw new Error(`Couldn't fetch any data from ${srcANode.href}`);
@@ -49,4 +55,4 @@ articles.forEach((article: HTMLElement): void => {
         })
         .catch(err => console.log(err));
     })
-})
+});

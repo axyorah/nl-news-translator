@@ -126,11 +126,12 @@ function splitParagraph(paragraphRaw: Paragraph): Sentence[] {
 }
 
 function translateSentences(sentences: Sentence[]): Promise<Translation[]> {
-
     return postData<SentenceRequest, JSONData>(
         '/api/translations/', { sentences: sentences }, 'POST'
         )
-        .then((res: JSONData) => res.translations)
+        .then((res: JSONData) => {
+            return res.translations;
+        })
         .catch(err => console.log(err));
 }
 
@@ -159,6 +160,9 @@ export function displayArticleParagraphs(
         const sentences = splitParagraph(paragraphs[i]);
         await translateSentences(sentences)
             .then((translations: Translation[]): void => {
+                if (!translations || !translations.length) {
+                    throw new Error('No translations received :(');
+                }
                 translations.forEach(
                     (translation: Translation, itrans: number): void => {
                     table.addRow([
@@ -166,7 +170,8 @@ export function displayArticleParagraphs(
                     ]);
                 });
                 table.addRow(['', '', '', '']);
-            });
+            })
+            .catch(err => console.log(err));
 
         await addParagraphAndTranslation(i + 1);
     }

@@ -28,10 +28,20 @@
             <b>{{ field.label }}: </b>
         </label>
         {{ field }}
+
+        {% if field.label == 'Tags' %}
+
+          <input type="text" name="name" id="add-partial-tag-name" placeholder="Add New Tag"/>
+          <button type="button" class="btn btn-outline-secondary" id="add-partial-tag-btn">Add</button>
+
+        {% endif %}
+
     </div>
     {% endfor %}
 
-    <input type="submit" class="btn btn-outline-secondary" value="Submit"/>
+    <input type="submit" class="btn btn-outline-secondary" value="Submit"/> 
 </form>
+
+<script src="/static/js/build/notes.js" type="module"></script>
 
 {% endblock content %}

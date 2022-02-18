@@ -89,7 +89,9 @@ function splitParagraph(paragraphRaw) {
 }
 function translateSentences(sentences) {
     return postData('/api/translations/', { sentences: sentences }, 'POST')
-        .then((res) => res.translations)
+        .then((res) => {
+        return res.translations;
+    })
         .catch(err => console.log(err));
 }
 export function displayArticleParagraphs(paragraphs, divRoot) {
@@ -114,13 +116,17 @@ export function displayArticleParagraphs(paragraphs, divRoot) {
             const sentences = splitParagraph(paragraphs[i]);
             yield translateSentences(sentences)
                 .then((translations) => {
+                if (!translations || !translations.length) {
+                    throw new Error('No translations received :(');
+                }
                 translations.forEach((translation, itrans) => {
                     table.addRow([
                         sentences[itrans], '', '', translation
                     ]);
                 });
                 table.addRow(['', '', '', '']);
-            });
+            })
+                .catch(err => console.log(err));
             yield addParagraphAndTranslation(i + 1);
         });
     }
