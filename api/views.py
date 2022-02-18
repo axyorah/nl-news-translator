@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from .utils.scrap_utils import source2paragraphs
 from .utils.translation_utils import NlToEnTranslator
 
+from notes.models import Tag, Note
+
 import json
 
 nl2en = NlToEnTranslator()
@@ -48,7 +50,7 @@ def getParagraphs(request):
         print(e)
         return Response({'errors': e.args[0]})
 
-    print(f'api: getParagraphs fun in views')
+    print(f'api/views.py -> getParagraphs:')
     print(f'url: {params["url"]}, source: {params["source"]}')
 
     if params.get('source') and params['source'] in source2paragraphs: 
@@ -71,13 +73,36 @@ def getTranslations(request):
 
     if request.method == 'POST':    
         try:
-            body = json.loads(request.body)
+            body = request.data # json.loads(request.body) # <-- only read once!
             sentences = body['sentences']
 
             translations = nl2en.translate(sentences)
             res['translations'] = translations
     
         except Exception as e:
-            print(e)
+            print(f'Error: {e}')
 
     return Response(res)
+
+@api_view(['POST'])
+def createPartialTag(request):
+    res = {}
+    if request.method == 'POST':
+        try: 
+            body = json.loads(request.body)
+            name = body['name']
+
+            print(f'Creating new tag with name: {name}')
+
+            # create tag without ref to note and owner;
+            # these need to be added when the note is saved!
+            tag = Tag.objects.create(name=name)
+            tag.save()
+
+            res['ok'] = True
+        except Exception as e:
+            print(e)
+            res['errors'] = e.args[0]
+    
+    return Response(res)
+
