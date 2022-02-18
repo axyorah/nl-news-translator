@@ -48,7 +48,7 @@
       <p>DEBUG: showing all the notes</p>
       <ul>
         {% for note in profile.note_set.all %}
-          <li>{{ note }} ({{ note.tags }}) </li>
+          <li>{{ note }} ({% for tag in note.tags.all %} {{ tag.name }} {% endfor %}) </li>
         {% endfor %}
       </ul>
     </div>
