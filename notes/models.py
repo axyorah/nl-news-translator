@@ -16,6 +16,16 @@ class Note(models.Model):
 
     tags = models.ManyToManyField('Tag', blank=True) #through='Membership', 
 
+    def json(self):
+        return {
+            'id': str(self.id),
+            'created': str(self.created),
+            'owner': str(self.owner),
+            'side_a': str(self.side_a),
+            'side_b': str(self.side_b),
+            'tags': [tag.json() for tag in self.tags]
+        }
+
     def __str__(self):
         return f'{self.side_a[:50] if self.side_a else ""}... -> {self.side_b[:50] if self.side_b else ""}...'
 
@@ -27,6 +37,14 @@ class Tag(models.Model):
 
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
+
+    def json(self):
+        return {
+            'id': str(self.id),
+            'created': str(self.created),
+            'name': str(self.name),
+            'owner': str(self.owner)
+        }
 
     def __str__(self):
         return f'{self.name} by {self.owner.username if self.owner else "undefined"}'
