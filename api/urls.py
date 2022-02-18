@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.getRoutes, name='api-routes'),
     path('paragraphs/', views.getParagraphs, name='news-paragraphs'),
     path('translations/', views.getTranslations, name='translations'),
+    path('tags/new/', views.createPartialTag, name='partial-tag-create'),
 ]

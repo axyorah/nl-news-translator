@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .utils.scrap_utils import source2paragraphs
 from .utils.translation_utils import NlToEnTranslator
 
+from users.models import Profile
 from notes.models import Tag, Note
 
 import json
@@ -89,20 +90,27 @@ def createPartialTag(request):
     res = {}
     if request.method == 'POST':
         try: 
-            body = json.loads(request.body)
+            body = request.data #json.loads(request.body)
             name = body['name']
+            profile = request.user.profile
 
-            print(f'Creating new tag with name: {name}')
+            # check if [tagname, owner_id] is already in db
+            if (profile.tag_set.filter(name=name)):
+                raise ValueError(f'User {profile} already has tag {name}, aborting')
 
             # create tag without ref to note and owner;
             # these need to be added when the note is saved!
             tag = Tag.objects.create(name=name)
+            tag.owner = request.user.profile
             tag.save()
 
-            res['ok'] = True
+            res['tag'] = tag.json()
+            print(f'Created new tag {name} by {profile}')
+
         except Exception as e:
             print(e)
             res['errors'] = e.args[0]
     
+    print(res)
     return Response(res)
 
