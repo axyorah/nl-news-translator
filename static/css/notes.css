@@ -1,0 +1,19 @@
+/* .form-field ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+} */
+
+form .row {
+    margin: 5px 0 5px 0;
+    padding: 5px 0 5px 0;
+}
+
+form textarea {
+    width: 100%;
+}
+
+input[type="checkbox"] {
+    /* opacity: 1; */
+    transition: visibility 0.3s linear, opacity 0.3s linear;
+}

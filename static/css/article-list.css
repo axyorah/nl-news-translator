@@ -23,14 +23,20 @@
 }
 
 .capsule, .capsule-a {
-    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;    
+    max-height: fit-content;
+    max-width: fit-content;
     font-size: small;
     color: white;
-    background-color: rgb(150,150,150);
+    background-color: #6c757d;
     border: none;
     border-radius: 10px;
     padding-left: 7px;
     padding-right: 7px;
+    margin: 5px;
 }
 
 .hidden {

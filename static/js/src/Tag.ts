@@ -147,6 +147,7 @@ export class Tag implements TagJSON {
         
         // create new child (tag); should look as:
         const li = document.createElement('li');
+        li.setAttribute('class', 'col capsule');
         
         const label = document.createElement('label');
         label.setAttribute('for', `id_tags_${lis.length}`);

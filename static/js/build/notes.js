@@ -10,3 +10,12 @@ addPartialTagBtn.addEventListener('click', function (evt) {
     }) // add updated tag to form
         .catch(err => console.log(err));
 });
+window.addEventListener('load', function (evt) {
+    tagsUl.setAttribute('class', 'row');
+    tagsUl.style.listStyleType = 'none';
+
+    const lis = tagsUl.querySelectorAll('li');
+    lis.forEach((li) => {
+        li.setAttribute('class', 'col capsule');
+    });
+});

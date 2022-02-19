@@ -19,27 +19,40 @@
 
 {% block content %}
 
-<form class="form" action="{% url 'note-create' %}" method="POST">
+<form class="form bg-light" action="{% url 'note-create' %}" method="POST">
     {% csrf_token %}
 
-    {% for field in noteForm %}
-    <div class="form-field">
-        <label for="form-input#text">
-            <b>{{ field.label }}: </b>
-        </label>
-        {{ field }}
-
-        {% if field.label == 'Tags' %}
-
-          <input type="text" name="name" id="add-partial-tag-name" placeholder="Add New Tag"/>
-          <button type="button" class="btn btn-outline-secondary" id="add-partial-tag-btn">Add</button>
-
-        {% endif %}
-
+    <div class="row">
+        <div class="form-field col-12 col-md-6">
+            <label for="form-input#text"><b>{{ noteForm.side_a.label }}</b></label>
+            {{ noteForm.side_a }}
+        </div>
+    
+        <div class="form-field col-12 col-md-6">
+            <label for="form-input#text"><b>{{ noteForm.side_b.label }}</b></label>
+            {{ noteForm.side_b }}
+        </div>
     </div>
-    {% endfor %}
 
-    <input type="submit" class="btn btn-outline-secondary" value="Submit"/> 
+    <div class="row">
+        <div class="form-field">
+            <label for="form-input#text">
+                <b>{{ noteForm.tags.label }}: </b>
+            </label>
+            {{ noteForm.tags }}
+        </div>
+
+        <div class="input-group d-flex justify-content-center w-100">
+            <input type="text" class="form-control" name="name" id="add-partial-tag-name" placeholder="Add New Tag"/>
+            <button type="button" class="btn btn-outline-secondary" id="add-partial-tag-btn">Add</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-field d-flex justify-content-center">
+            <input type="submit" class="btn btn-secondary w-100 my-3" value="Submit"/> 
+        </div>
+    </div>
 </form>
 
 <script src="/static/js/build/notes.js" type="module"></script>

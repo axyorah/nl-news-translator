@@ -15,3 +15,15 @@ addPartialTagBtn.addEventListener('click', function(evt): void {
         }) // add updated tag to form
         .catch(err => console.log(err));
 })
+
+window.addEventListener('load', function(evt){
+    // restyle form
+    // tags should be displayed as a row of capsules
+    tagsUl.setAttribute('class', 'row');
+    tagsUl.style.listStyleType = 'none';
+
+    const lis: NodeListOf<HTMLLIElement> = tagsUl.querySelectorAll('li');
+    lis.forEach((li: HTMLLIElement) => {
+        li.setAttribute('class', 'col capsule');
+    });
+})
