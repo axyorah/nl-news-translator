@@ -20,27 +20,63 @@ export class Tag {
         });
         return tag;
     }
+    json() {
+        const json = {
+            id: this.id,
+            name: this.name
+        }; // this is needed to comply with TagJSON interface
+        Object.keys(this).forEach(key => {
+            if (typeof (this[key]) !== 'function' && this[key] !== null) {
+                json[key] = this[key];
+            }
+        }); // add remaining non-null properties, ignore methods
+        return json;
+    }
     update(json) {
-        /* updates this and returns updated instance */
-        // TODO: should also update DB
-        Object.keys(json).forEach((key) => {
-            this[key] = json[key];
+        /* updates this and db and returns updated instance */
+        const id = this.id || json.id;
+        // udpate db        
+        return postData(`/api/tags/${id}/edit/`, json, 'PUT')
+            .then((res) => {
+            // udpate this
+            if (res.tag) {
+                Object.keys(res.tag).forEach((key) => {
+                    this[key] = res.tag[key];
+                });
+                return this;
+            }
+            else {
+                throw new Error(res.errors);
+            }
+        })
+            .catch(err => {
+            return {
+                'errors': err
+            };
         });
-        return this;
     }
     add() {
-        /* adds this to db via api, updates this and returns updated instance */
+        /* adds this to db, updates this and returns updated instance */
         const data = {
             name: this.name
         };
+        // post data to db
         return postData('/api/tags/new/', data, 'POST')
             .then((res) => {
-            return this.update(res.tag);
+            // update this
+            Object.keys(res.tag).forEach((key) => {
+                this[key] = res.tag[key];
+            });
+            return this;
         })
             .catch(err => {
             console.log(err);
             return { 'errors': err };
         });
+    }
+    delete(id) {
+        // deletes tag with given id from db; returns promise with success or failure msg
+        return postData(`/api/tags/${id}/delete/`, {}, 'DELETE');
     }
     addToForm(tagsUl) {
         /*
@@ -56,6 +92,7 @@ export class Tag {
           </>
         </li>
         */
+        // TODO: this should be move to a separate class... 
         // get current children
         const lis = tagsUl.querySelectorAll('li');
         // create new child (tag); should look as:
