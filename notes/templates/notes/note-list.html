@@ -43,19 +43,32 @@
 
     <p>{{ request.user.profile.username }}'s notes:</p>
 
-    <table class="container w-100">
+    <table class="table container w-100">
+        <thead>
         <tr>
-            <th>Date</th>
-            <th>Side A</th>
-            <th>Side B</th>
-            <th>Tags</th>
+            <th scope="col">Date</th>
+            <th scope="col">Side A</th>
+            <th scope="col" class="d-flex">
+                <span>Side B</span>
+                <span class="form-check-inline form-switch d-flex">
+                    <input class="form-check-input expandable-global m-0" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked"></label>
+                </span>
+            </th>
+            <th scope="col">Tags</th>
         </tr>
+        </thead>
 
+        <tbody> 
         {% for note in notes %}
         <tr>
             <td>{{ note.created }}</td>
-            <td>{{ note.side_a }}</td>
-            <td>{{ note.side_b }}</td>
+            <td class="collapsable">
+                {{ note.side_a|slice:":25"}}
+            </td>
+            <td class="collapsable hiddle-global">
+                {{ note.side_b|slice:":25"}}
+            </td>
             <td>
                 <div class="row">
                     {% for tag in note.tags.all %}
@@ -65,6 +78,7 @@
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% endif %}
   
