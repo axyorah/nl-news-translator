@@ -38,19 +38,37 @@
       <li>sortable by `created`</li>
       <li>side b can be hidden</li>
     </ul>
-  
-    <p>{{ request.user.profile.username }}'s notes:</p>
+
     {% if notes %}
-      <ul>
+
+    <p>{{ request.user.profile.username }}'s notes:</p>
+
+    <table class="container w-100">
+        <tr>
+            <th>Date</th>
+            <th>Side A</th>
+            <th>Side B</th>
+            <th>Tags</th>
+        </tr>
+
         {% for note in notes %}
-        <li>
-             {{ note }} 
-             ({% for tag in note.tags.all %} {{ tag.name }} {% endfor %}) 
-        </li>
+        <tr>
+            <td>{{ note.created }}</td>
+            <td>{{ note.side_a }}</td>
+            <td>{{ note.side_b }}</td>
+            <td>
+                <div class="row">
+                    {% for tag in note.tags.all %}
+                    <span class="col capsule">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </td>
+        </tr>
         {% endfor %}
-      </ul>
+    </table>
     {% endif %}
-    </div>
+  
+    </div>  
   </div>
 </div>
 
