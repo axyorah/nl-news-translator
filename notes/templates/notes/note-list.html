@@ -13,6 +13,21 @@
             on click: show all (paginated) notes from selected tag in a "table"
           </li>
         </ul>
+
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <ul class="row">
+                {% for tag in request.user.profile.tag_set.all %}
+                <li class="col capsule">
+                    <label for="{{ tag.name }}">
+                        <input type="checkbox" id="id_{{ tag.name }}" name="{{ tag.name }}"/>
+                        {{ tag.name }}
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+        </form>
     </div>
   </div>
   
@@ -27,7 +42,7 @@
     <p>{{ request.user.profile.username }}'s notes:</p>
     {% if notes %}
       <ul>
-        {% for note in request.user.profile.note_set.all %}
+        {% for note in notes %}
         <li>
              {{ note }} 
              ({% for tag in note.tags.all %} {{ tag.name }} {% endfor %}) 

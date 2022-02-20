@@ -8,13 +8,20 @@ from notes.forms import NoteForm, TagForm
 
 @login_required(login_url='login')
 def showNotes(request):
-    # TODO: paging, filter
+    # TODO: paging
     profile = request.user.profile
 
-    notes = profile.note_set.order_by('created')# filter by 
+    # all notes 
+    notes = profile.note_set.order_by('created')
+
+    if request.method == 'POST':
+        # filter notes by tags
+        tagNames = [name for name in request.POST if name != 'csrfmiddlewaretoken']
+        tags = Tag.objects.filter(owner=profile, name__in=tagNames)
+        notes = notes & Note.objects.filter(tags__in=tags)
 
     context = {
-        'notes': notes
+        'notes': notes,
     }
 
     return render(request, 'notes/note-list.html', context)
