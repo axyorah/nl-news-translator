@@ -19,12 +19,13 @@ def createNote(request):
     noteForm.fields['tags'].queryset = profile.tag_set.all()
 
     if request.method == 'POST':
-
+        print(request.POST)
         noteForm = NoteForm(request.POST)
         if noteForm.is_valid():
             note = noteForm.save(commit=False)
             note.owner = profile
-            #tags = noteForm.cleaned_data.get('tags')
+            tags = noteForm.cleaned_data.get('tags')
+            print(tags)
 
             # tagForm = TagForm(request.POST)
             # print("TAG.FORM:")
@@ -39,13 +40,14 @@ def createNote(request):
             noteForm.save_m2m() # <-- save tags !!!
             return redirect('profile')
         else:
+            print(noteForm)
             messages.error(request, 'Note creation failed :(')
 
     context = {
         'noteForm': noteForm,
         'tagForm': tagForm
     }    
-    return render(request, 'notes/note.html', context)
+    return render(request, 'notes/note-form.html', context)
 
 @login_required(login_url='login')
 def updateNote(request, pk):
