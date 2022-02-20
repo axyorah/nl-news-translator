@@ -47,7 +47,7 @@ class Tag(models.Model):
         }
 
     def __str__(self):
-        return f'{self.name} by {self.owner.username if self.owner else "undefined"}'
+        return str(self.name)
 
     class Meta:
         unique_together = [['owner', 'name']]

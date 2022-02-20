@@ -16,6 +16,18 @@ class NoteForm(ModelForm):
             'tags': forms.CheckboxSelectMultiple(),
         }
 
+        labels = {
+            'side_a': 'Side A',
+            'side_b': 'Side B'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(NoteForm, self).__init__(*args, **kwargs)
+
+        self.fields['side_a'].widget.attrs.update({'class': 'card'})
+        self.fields['side_b'].widget.attrs.update({'class': 'card'})
+
+
 class TagForm(ModelForm):
     class Meta:
         model = Tag
