@@ -2,6 +2,23 @@ body {
     font-family: sans-serif;
 }
 
+.capsule, .capsule-a {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    max-height: fit-content;
+    max-width: fit-content;
+    font-size: small;
+    color: white;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+    margin: 5px;
+}
+
 .boxed {
     border: 1px solid rgba(200,200,200,0.8);
     border-radius: 5px;
