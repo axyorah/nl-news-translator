@@ -19,7 +19,23 @@
 
 {% block content %}
 
-<form class="form bg-light" action="{% url 'note-create' %}" method="POST">
+<main class="container bg-light py-4">
+<div class="d-flex space-between my-4">
+  <a class="btn btn-outline-secondary" href="{% url 'note-list' %}">Back to List</a>
+  {% if note %}
+  <a class="btn btn-outline-secondary" href="{% url 'note-delete' note.id %}">Delete</a>  
+  {% endif %}
+</div>
+
+<form 
+    class="form bg-light my-4" 
+    {% if note %}
+    action="{% url 'note-update' note.id %}"
+    {% else %}
+    action="{% url 'note-create' %}"
+    {% endif %} 
+    method="POST"
+>
     {% csrf_token %}
 
     <div class="row">
@@ -54,6 +70,7 @@
         </div>
     </div>
 </form>
+</main>
 
 <script src="/static/js/build/notes.js" type="module"></script>
 

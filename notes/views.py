@@ -12,7 +12,7 @@ def showNotes(request):
     profile = request.user.profile
 
     # all notes 
-    notes = profile.note_set.order_by('created')
+    notes = profile.note_set.order_by('-created')
 
     if request.method == 'POST':
         # filter notes by tags
@@ -30,15 +30,15 @@ def showNotes(request):
 def getNote(request, pk):
     profile = request.user.profile
 
-    # chec if note exists
+    # check if note exists
     if not Note.objects.filter(id=pk):
-        messages.error('Note not found :(')
+        messages.error(request, 'Note not found :(')
         return render(request, 'notes/note.html')
     note = Note.objects.get(id=pk)
 
     # check if authorized
     if not profile.note_set.filter(id=pk):
-        messages.error('You are not authorized to see this note')
+        messages.error(request, 'You are not authorized to see this note')
         return render(request, 'note/note.html')
 
     context = {
@@ -72,8 +72,9 @@ def createNote(request):
             #tags = noteForm.cleaned_data.get('tags')
             #print(tags)
             #print(note.tag_set.all())
-
-            return redirect('profile')
+            
+            messages.success(request, 'Note created successfully!')
+            return redirect('note-list')
         else:
             print(noteForm)
             messages.error(request, 'Note creation failed :(')
@@ -86,15 +87,70 @@ def createNote(request):
 
 @login_required(login_url='login')
 def updateNote(request, pk):
+    profile = request.user.profile
+
+    # check if note exists
+    if not Note.objects.filter(id=pk):
+        messages.error(request, 'Note not found :(')
+        return render(request, 'notes/note-list.html', {'notes': profile.note_set.all()})
+    
+    # check if authorized
+    if not profile.note_set.filter(id=pk):
+        messages.error(request, 'You are not authorized to view this note')
+        return render(request, 'notes/note-list.html', {'notes': profile.note_set.all()})
+
     note = Note.objects.get(id=pk)
-    context = {}
-    # TODO: ...
-    return render(request, 'notes/note.html', context)
+    noteForm = NoteForm(instance=note)
+    tagForm = TagForm()
+
+    # fugly constraint on tags visible for `this` note:
+    # this constraint should be added during model creation via `Membership`,
+    # but that creates errors for some reason...
+    noteForm.fields['tags'].queryset = profile.tag_set.all()
+
+    if request.method == 'POST':
+        #print(request.POST)
+        noteForm = NoteForm(request.POST, instance=note)
+        if noteForm.is_valid():
+            noteForm.save()
+            #noteForm.save_m2m() # <-- no longer needed because already commited !!!
+
+            #tags = noteForm.cleaned_data.get('tags')
+            #print(tags)
+            #print(note.tag_set.all())
+            messages.success(request, 'Note updated successfully!')
+            return redirect('note-list')
+        else:
+            messages.error(request, 'Note creation failed :(')
+
+    context = {
+        'noteForm': noteForm,
+        'tagForm': tagForm,
+        'note': note
+    }
+
+    print(noteForm)
+    return render(request, 'notes/note-form.html', context)
 
 @login_required(login_url='login')
 def deleteNote(request, pk):
-    # TODO: ...
-    return redirect('profile')
+    profile = request.user.profile
+
+    # check if note exists
+    if not Note.objects.filter(id=pk):
+        messages.error(request, 'Note not found :(')
+        return render(request, 'notes/note-list.html', {'notes': profile.note_set.all()})
+    
+    # check if authorized
+    if not profile.note_set.filter(id=pk):
+        messages.error(request, 'You are not authorized to delete this note')
+        return render(request, 'notes/note-list.html', {'notes': profile.note_set.all()})
+
+    note = Note.objects.get(id=pk)
+    note.delete()
+    messages.success(request, 'Note deleted successfully!')
+
+    return redirect('note-list')
 
 # @login_required(login_url='login')
 # def createTag(request, pk):
