@@ -1,0 +1,51 @@
+{% extends 'main.html' %} 
+{% load static %} 
+
+{% block content %} 
+{% if note %}
+
+<main class="container bg-light py-4">
+<div class="d-flex space-between my-4">
+  <a class="btn btn-outline-secondary" href="{% url 'note-list' %}">Back to List</a>
+  
+</div>
+
+<div class="row my-4">
+  <div class="col-12 col-md-6">
+    <p><b>Side A</b></p>
+    <div class="card p-3">
+      <pre>
+        <code>
+        {{ note.side_a }}
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <p><b>Side B</b></p>
+    <div class="card p-3">
+      <pre>
+        <code>
+        {{ note.side_b }}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="row my-4">
+  <div class="col">
+  <p><b>Tags: </b></p>
+  {% if note.tags %} 
+    {% for tag in note.tags.all %}
+      <span class="capsule">{{ tag }}</span>
+    {% endfor %} 
+  {% endif %}
+  </div>
+</div>
+
+</main>
+
+{% endif %} 
+{% endblock content %}

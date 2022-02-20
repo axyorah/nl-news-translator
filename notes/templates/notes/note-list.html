@@ -46,6 +46,7 @@
     <table class="table container w-100">
         <thead>
         <tr>
+            <th scope="col"></th>
             <th scope="col">Date</th>
             <th scope="col">Side A</th>
             <th scope="col" class="d-flex">
@@ -60,8 +61,9 @@
         </thead>
 
         <tbody> 
-        {% for note in notes %}
+        {% for note in notes %}        
         <tr>
+            <th scope="row"><a href="{% url 'note' note.id %}">&#10551;</a></th>
             <td>{{ note.created }}</td>
             <td class="collapsable">
                 {{ note.side_a|slice:":25"}}

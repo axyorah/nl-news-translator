@@ -26,6 +26,28 @@ def showNotes(request):
 
     return render(request, 'notes/note-list.html', context)
 
+@login_required(login_url='login')
+def getNote(request, pk):
+    profile = request.user.profile
+
+    # chec if note exists
+    if not Note.objects.filter(id=pk):
+        messages.error('Note not found :(')
+        return render(request, 'notes/note.html')
+    note = Note.objects.get(id=pk)
+
+    # check if authorized
+    if not profile.note_set.filter(id=pk):
+        messages.error('You are not authorized to see this note')
+        return render(request, 'note/note.html')
+
+    context = {
+        'note': note
+    }
+
+    return render(request, 'notes/note.html', context)
+
+
 # Create your views here.
 @login_required(login_url='login')
 def createNote(request):
