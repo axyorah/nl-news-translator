@@ -1,0 +1,42 @@
+{% extends 'main.html' %} 
+{% load static %} 
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col boxed">
+        TBA: clickable tags with the number of notes (radio or checkboxes);
+        <ul>
+          <li>colorcode the same as on the figures above?</li>
+          <li>
+            on click: show all (paginated) notes from selected tag in a "table"
+          </li>
+        </ul>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col boxed">
+    TBA: table of notes from a selected tag(s?): (created, tags, side a, side b)
+    <ul>
+      <li>sortable by `created`</li>
+      <li>side b can be hidden</li>
+    </ul>
+  
+    <p>{{ request.user.profile.username }}'s notes:</p>
+    {% if notes %}
+      <ul>
+        {% for note in request.user.profile.note_set.all %}
+        <li>
+             {{ note }} 
+             ({% for tag in note.tags.all %} {{ tag.name }} {% endfor %}) 
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

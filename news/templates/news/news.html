@@ -16,14 +16,13 @@
 </section>
 
 <section class="container box-container boxed" id="article-selected">
-  
   {% include './partials/article-selected.html' %}
 
 </section>
 
-<section class="container box-container boxed" id="memo">
-  <!-- THIS WILL BE MOVED TO MEMOS APP -->
-  <p>Option to add a two-sided memo</p>
+<section class="container box-container boxed" id="note">
+  <!-- THIS WILL BE MOVED TO NOTES APP -->
+  <p>Option to add a two-sided note</p>
   <ul>
     <li>side A = orgin text, side B = translation+notes</li>
     <li>An option to create and add multiple tags</li>
@@ -33,6 +32,11 @@
     </li>
     <li>only visible for logged in users</li>
   </ul>
+
+  <p>TEMPORARY: redirect to separate page to create a note</p>
+
+  <a class="btn btn-outline-secondary" href="{% url 'note-create' %}">Make a Note</a>
+
 </section>
 
 {% endblock content %}
