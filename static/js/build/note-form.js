@@ -11,9 +11,10 @@ addPartialTagBtn.addEventListener('click', function (evt) {
         .catch(err => console.log(err));
 });
 window.addEventListener('load', function (evt) {
+    // restyle form
+    // tags should be displayed as a row of capsules
     tagsUl.setAttribute('class', 'row');
     tagsUl.style.listStyleType = 'none';
-
     const lis = tagsUl.querySelectorAll('li');
     lis.forEach((li) => {
         li.setAttribute('class', 'col capsule');
