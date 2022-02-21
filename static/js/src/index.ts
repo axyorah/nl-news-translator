@@ -6,12 +6,23 @@ import {
 } from './article-list';
 
 import { displayArticleParagraphs } from './article-selected';
+import { Collapsible } from './Collapsible';
 
 const expandables: NodeListOf<Expandable> = document.querySelectorAll('.expandable');
+const collapsibles: NodeListOf<HTMLTableCellElement> = document.querySelectorAll('.collapsible');
 const articles: NodeListOf<HTMLElement> = document.querySelectorAll('.article');
+
 
 expandables.forEach((expandable: Expandable): void => {
     toggleExpandable(expandable);
+});
+
+const decoratedCollapsibles: Collapsible[] = [];
+collapsibles.forEach(element => {
+    decoratedCollapsibles.push(
+        new Collapsible(element)
+    );
+    //decoratedCollapsibles.push(collapsible);
 });
 
 articles.forEach((article: HTMLElement): void => {

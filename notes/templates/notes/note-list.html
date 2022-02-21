@@ -65,11 +65,11 @@
         <tr>
             <th scope="row"><a href="{% url 'note' note.id %}">&#10551;</a></th>
             <td>{{ note.created }}</td>
-            <td class="collapsable">
-                {{ note.side_a|slice:":25"}}
+            <td class="collapsible">
+                <pre><code>{{ note.side_a}}</code></pre>
             </td>
-            <td class="collapsable hiddle-global">
-                {{ note.side_b|slice:":25"}}
+            <td class="collapsible hiddle-global">
+                <pre><code>{{ note.side_a}}</code></pre>
             </td>
             <td>
                 <div class="row">
