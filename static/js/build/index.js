@@ -1,16 +1,10 @@
-import { toggleExpandable, fetchArticleParagraphs } from './article-list.js';
+import { fetchArticleParagraphs } from './article-list.js';
+import { toggleExpandable } from './expandable.js';
 import { displayArticleParagraphs } from './article-selected.js';
-import { Collapsible } from './Collapsible.js';
 const expandables = document.querySelectorAll('.expandable');
-const collapsibles = document.querySelectorAll('.collapsible');
 const articles = document.querySelectorAll('.article');
 expandables.forEach((expandable) => {
     toggleExpandable(expandable);
-});
-const decoratedCollapsibles = [];
-collapsibles.forEach(element => {
-    decoratedCollapsibles.push(new Collapsible(element));
-    //decoratedCollapsibles.push(collapsible);
 });
 articles.forEach((article) => {
     /*

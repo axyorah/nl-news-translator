@@ -65,11 +65,13 @@
         <tr>
             <th scope="row"><a href="{% url 'note' note.id %}">&#10551;</a></th>
             <td>{{ note.created }}</td>
-            <td class="collapsible">
-                <pre><code>{{ note.side_a}}</code></pre>
+            <td class="expandable">
+                <div class="preview">{{ note.side_a|slice:"0:25" }}</div>
+                <div class="hidden"><pre><code>{{ note.side_a }}</code></pre></div>
             </td>
-            <td class="collapsible hiddle-global">
-                <pre><code>{{ note.side_b}}</code></pre>
+            <td class="expandable hiddle-global">
+                <div class="preview">{{ note.side_b|slice:"0:25" }}</div>
+                <div class="hidden"><pre><code>{{ note.side_b }}</code></pre></div>
             </td>
             <td>
                 <div class="row">
