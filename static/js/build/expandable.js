@@ -1,6 +1,5 @@
 export function toggleExpandable(expandable) {
     expandable.addEventListener('mouseenter', function (evt) {
-        console.log('MOUSEENTER')
         const hiddensElements = this.querySelectorAll('.hidden');
         hiddensElements.forEach((hidden) => {
             hidden.style.display = 'block';
@@ -11,7 +10,6 @@ export function toggleExpandable(expandable) {
         });
     });
     expandable.addEventListener('mouseleave', function (evt) {
-        console.log('MOUSELEAVE')
         const hiddensElements = this.querySelectorAll('.hidden');
         hiddensElements.forEach((hidden) => {
             hidden.style.display = 'none';
