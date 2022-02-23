@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+{% load static }
+
+{% block content %}
+{% if error %}
+
+<main class="container bg-danger">{{ error }}</main>
+
+{% endif %}
+{% endblock content %}

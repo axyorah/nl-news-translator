@@ -11,13 +11,13 @@
         <li class="nav-item">
           {% if request.user.is_authenticated %}
             <ul class="navbar-nav space-between">
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">My Account</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="{% url 'note-list' %}">My Notes</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mx-1">
                 <a class="nav-link active" aria-current="page" href="{% url 'tag-list' %}">My Tags</a>
               </li>
             </ul>            
