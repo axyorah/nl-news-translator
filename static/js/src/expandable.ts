@@ -16,6 +16,10 @@ export interface Expandable extends HTMLElement {
     children: ExpandableCollection;
 }
 
+export interface GlobalExpandable extends HTMLElement {
+    class: 'expandable-global';
+}
+
 export function toggleExpandable(expandable: Expandable): void {
     expandable.addEventListener('mouseenter', function(evt) {
         const hiddensElements: NodeListOf<HTMLElement> = this.querySelectorAll('.hidden');
@@ -39,4 +43,19 @@ export function toggleExpandable(expandable: Expandable): void {
             preview.style.display = 'block';
         });
     });
+}
+
+export function toggleGlobalExpandable(expandable: GlobalExpandable): void {
+    expandable.addEventListener('click', function(evt) {
+    
+        const hiddensElements: NodeListOf<HTMLElement> = document.querySelectorAll('.hidden-global');
+        hiddensElements.forEach((hidden: HTMLElement) => {
+            if (hidden.style.visibility === '' || hidden.style.visibility === 'visible') {
+                hidden.style.visibility = 'hidden';
+            }
+            else {
+                hidden.style.visibility = '';
+            }
+        });
+    });    
 }

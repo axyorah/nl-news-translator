@@ -20,3 +20,16 @@ export function toggleExpandable(expandable) {
         });
     });
 }
+export function toggleGlobalExpandable(expandable) {
+    expandable.addEventListener('click', function (evt) {
+        const hiddensElements = document.querySelectorAll('.hidden-global');
+        hiddensElements.forEach((hidden) => {
+            if (hidden.style.visibility === '' || hidden.style.visibility === 'visible') {
+                hidden.style.visibility = 'hidden';
+            }
+            else {
+                hidden.style.visibility = '';
+            }
+        });
+    });
+}

@@ -1,10 +1,14 @@
 import { fetchArticleParagraphs } from './article-list.js';
-import { toggleExpandable } from './expandable.js';
+import { toggleExpandable, toggleGlobalExpandable } from './expandable.js';
 import { displayArticleParagraphs } from './article-selected.js';
-const expandables = document.querySelectorAll('.expandable');
 const articles = document.querySelectorAll('.article');
+const expandables = document.querySelectorAll('.expandable');
+const globalExpandables = document.querySelectorAll('.expandable-global');
 expandables.forEach((expandable) => {
     toggleExpandable(expandable);
+});
+globalExpandables.forEach((expandable) => {
+    toggleGlobalExpandable(expandable);
 });
 articles.forEach((article) => {
     /*
