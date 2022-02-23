@@ -93,7 +93,7 @@ def createNote(request):
         context = {
             'noteForm': noteForm,
             'tagForm': tagForm
-        }    
+        }
         return render(request, 'notes/note-form.html', context)
 
     except Exception as e:
@@ -125,7 +125,6 @@ def updateNote(request, pk):
         noteForm.fields['tags'].queryset = profile.tag_set.all()
     
         if request.method == 'POST':
-            #print(request.POST)
             noteForm = NoteForm(request.POST, instance=note)
             if noteForm.is_valid():
                 noteForm.save()
@@ -206,6 +205,7 @@ def createTag(request):
                 tag = form.save(commit=False)
                 tag.owner = request.user.profile
                 tag.save()
+                messages.success(request, 'Tag was successfully created!')
             else:
                 messages.error(request, 'Tag data is not valid')
     

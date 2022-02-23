@@ -2,10 +2,23 @@
 <div class="messages">
 
   {% for message in messages %}
-  <div {% if message.tags %} class="alert alert-{{ message.tags }}" role="alert" {% endif %}>
-    {{ message }}
+  <div {% if message.tags %} 
+      class="alert alert-{{ message.tags }} d-flex space-between align-items-center" role="alert" 
+  {% endif %} >
+    <span class="alert-message d-flex align-items-center">{{ message }}</span>
+    <button class="alert alert-close m-0 p-1">⨯</button>
   </div>
   {% endfor %}
 
 </div>
+
+<script>
+  const alertClose = document.querySelectorAll('.alert-close');
+
+  alertClose.forEach(closeBox => {
+    closeBox.addEventListener('click', function(evt) {
+      evt.srcElement.parentElement.parentElement.style.display = 'none';
+    });
+  })
+</script>
 {% endif %}
