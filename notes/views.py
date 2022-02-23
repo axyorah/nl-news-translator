@@ -152,6 +152,17 @@ def deleteNote(request, pk):
 
     return redirect('note-list')
 
+@login_required(login_url='login')
+def showTags(request):
+    profile = request.user.profile
+
+    tags = profile.tag_set.all()
+    context = {
+        'tags': tags
+    }
+
+    return render(request, 'notes/tag-list.html', context)
+
 # @login_required(login_url='login')
 # def createTag(request, pk):
 #     # DO IT THROUGH API!

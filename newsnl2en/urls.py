@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('news/', include('news.urls')),
     path('users/', include('users.urls')),
-    path('notes/', include('notes.urls')),
+    path('', include('notes.urls')),
 ]
 
 urlpatterns += static(

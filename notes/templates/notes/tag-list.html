@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+{% if tags %}
+
+My Tags:
+<ul>
+{% for tag in tags %}
+    <li class="d-flex"><span class="capsule">{{ tag }}</span> ({{ tag.note_set.count }} notes)</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock content %}
