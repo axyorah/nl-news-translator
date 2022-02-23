@@ -4,7 +4,10 @@
 {% block content %}
 {% if error %}
 
-<main class="container bg-danger">{{ error }}</main>
+<main class="container">
+    <h1 style="color:brown;">Something Went Wrong :(</h1>
+    {{ error }}
+</main>
 
 {% endif %}
 {% endblock content %}
