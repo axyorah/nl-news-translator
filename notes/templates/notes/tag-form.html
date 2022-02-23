@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="container bg-light py-4">
+
+    <div class="d-flex space-between py-2">
+        <a class="btn btn-outline-secondary" href="{% url 'tag-list' %}" >Back to List</a>        
+        <form action="{% url 'tag-delete' tag.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+    </div>
+
+    {% if form %}
+    <form action="#" method="POST" class="input-group d-flex justify-content-center w-100 py-2">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="name" id="id_name" value="{{ form.name.value }}"/>
+        <button type="submit" class="btn btn-outline-secondary" >Change</button>
+    </form>
+    {% endif %}
+</main>
+
+{% endblock content %}

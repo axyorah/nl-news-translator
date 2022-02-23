@@ -180,4 +180,56 @@ def createTag(request):
 
     return redirect('tag-list')
 
+@login_required(login_url='login')
+def updateTag(request, pk):
+    profile = request.user.profile
 
+    # check if tag exists
+    if not Tag.objects.filter(id=pk):
+        messages.error(request, 'Tag not found :(')
+        return render(request, 'notes/tag-list.html', {'tags': profile.tag_set.all()})
+    
+    # check if authorized
+    if not profile.tag_set.filter(id=pk):
+        messages.error(request, 'You are not authorized to update this tag')
+        return render(request, 'notes/tag-list.html', {'tags': profile.tag_set.all()})
+
+    tag = Tag.objects.get(id=pk)
+    form = TagForm(instance=tag)
+
+    if request.method == 'POST':
+        form = TagForm(request.POST, instance=tag)
+        tag = form.save(commit=False)
+        tag.owner = profile
+        tag.save()
+
+        messages.success(request, 'Tag was successfully updated!')
+        return redirect('tag-list')
+
+    context = {
+        'tag': tag,
+        'form': form
+    }
+    return render(request, 'notes/tag-form.html', context)
+
+@login_required(login_url='login')
+def deleteTag(request, pk):
+    profile = request.user.profile
+
+    # check if exists
+    if not Tag.objects.filter(id=pk):
+        messages.error(request, 'Tag does not exist')
+        return redirect('tag-list')
+
+    # check if authorized
+    if not profile.tag_set.filter(id=pk):
+        messages.error(request, 'You are not authorized to delete this tag')
+        return redirect('tag-list')
+
+    if request.method == 'DELETE' or request.method == 'POST':
+        tag = Tag.objects.get(id=pk)
+        name = tag.name
+        tag.delete()
+        messages.success(request, f'Tag `{name}` succesfully deleted')
+        
+    return redirect('tag-list')
