@@ -2,27 +2,42 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 from notes.models import Note, Tag, Membership
 from notes.forms import NoteForm, TagForm
 
 @login_required(login_url='login')
 def showNotes(request):
-    # TODO: paging
     try:
         profile = request.user.profile
     
         # all notes 
         notes = profile.note_set.order_by('-created')
-    
+
+        # filter notes by tags
         if request.method == 'POST':
-            # filter notes by tags
             tagNames = [name for name in request.POST if name != 'csrfmiddlewaretoken']
             tags = Tag.objects.filter(owner=profile, name__in=tagNames)
             notes = notes & Note.objects.filter(tags__in=tags)
+
+        # current page notes
+        page = request.GET.get('page', 1)
+        paginator = Paginator(notes, 5)
+
+        # adjust page number if needed
+        if isinstance(page, str) and not page.isnumeric():
+            messages.warning(request, 'Page should be a number')
+            page = 1
+        elif int(page) <= 0:
+            messages.warning(request, 'Page number should be above 0')
+            page = 1
+        elif int(page) > int(paginator.num_pages):
+            messages.warning(request, f'Page number {page} is out of range')
+            page = paginator.num_pages
     
         context = {
-            'notes': notes,
+            'notes': paginator.page(page)
         }
     
         return render(request, 'notes/note-list.html', context)

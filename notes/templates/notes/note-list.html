@@ -3,8 +3,8 @@
 
 {% block content %}
 
-<div class="container">
-  <div class="row">
+<main class="container">
+  <section class="row">
     <div class="col boxed">
         TBA: clickable tags with the number of notes (radio or checkboxes);
         <ul>
@@ -29,9 +29,9 @@
             <button type="submit" class="btn btn-outline-secondary">Filter</button>
         </form>
     </div>
-  </div>
+  </section>
   
-  <div class="row">
+  <section class="row">
     <div class="col boxed">
     TBA: table of notes from a selected tag(s?): (created, tags, side a, side b)
     <ul>
@@ -86,8 +86,41 @@
     </table>
     {% endif %}
   
-    </div>  
-  </div>
-</div>
+    </div>
+  </section>
+
+  <section class="row justify-content-center">
+      {% if notes.paginator %}
+
+      {% if notes.has_previous %}
+      <a class="col capsule-a" href="{% url 'note-list' %}?page={{ notes.previous_page_number }}">
+        prev
+      </a>
+      {% endif %}
+
+      {% for page in notes.paginator.page_range %}
+          
+          {% if page == notes.number %}
+          <a class="col capsule-a bg-dark" href="{% url 'note-list' %}?page={{ page }}">
+            {{ page }}
+          </a>
+          {% else %}
+          <a class="col capsule-a" href="{% url 'note-list' %}?page={{ page }}">
+            {{ page }}
+          </a>
+          {% endif %}
+
+      {% endfor %}
+
+      {% if notes.has_next %}
+      <a class="col capsule-a" href="{% url 'note-list' %}?page={{ notes.next_page_number }}">
+        next
+      </a>
+      {% endif %}
+
+      {% endif %}
+  </section>
+
+</main>
 
 {% endblock content %}
