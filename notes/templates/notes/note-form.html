@@ -19,26 +19,29 @@
 
 {% block content %}
 
-<main class="container bg-light py-4">
-<div class="d-flex space-between my-4">
-  <a class="btn btn-outline-secondary" href="{% url 'note-list' %}">Back to List</a>
-  {% if note %}
-  <form action="{% url 'note-delete' note.id %}" method="POST">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline-danger">Delete</button>
-  </form>
-  {% endif %}
-</div>
+<main class="container">
+  <div class="row abs-centered">
+  <div class="col mycard boxed py-4">
 
-<form 
-    class="form bg-light my-4" 
+  <section class="d-flex space-between m-2">
+    <a class="btn btn-outline-secondary" href="{% url 'note-list' %}">Back to List</a>
+    {% if note %}
+    <form action="{% url 'note-delete' note.id %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger">Delete</button>
+    </form>
+    {% endif %}
+  </section>
+  
+  <form 
+    class="form my-4" 
     {% if note %}
     action="{% url 'note-update' note.id %}"
     {% else %}
     action="{% url 'note-create' %}"
     {% endif %} 
     method="POST"
->
+  >
     {% csrf_token %}
 
     <div class="row">
@@ -72,7 +75,10 @@
             <input type="submit" class="btn btn-secondary w-100 my-3" value="Submit"/> 
         </div>
     </div>
-</form>
+  </form>
+
+  </div>
+  </div>
 </main>
 
 <script src="/static/js/build/tag-create.js" type="module"></script>

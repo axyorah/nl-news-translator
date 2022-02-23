@@ -11,6 +11,8 @@ form .row {
 
 form textarea, input[type="text"] {
     width: 100%;
+    background-color: var(--color-inpt);
+    color: var(--color-inpt-txt);
 }
 
 input[type="checkbox"] {

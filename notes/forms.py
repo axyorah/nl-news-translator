@@ -24,8 +24,8 @@ class NoteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(NoteForm, self).__init__(*args, **kwargs)
 
-        self.fields['side_a'].widget.attrs.update({'class': 'card'})
-        self.fields['side_b'].widget.attrs.update({'class': 'card'})
+        self.fields['side_a'].widget.attrs.update({'class': 'boxed'})
+        self.fields['side_b'].widget.attrs.update({'class': 'boxed'})
 
 
 class TagForm(ModelForm):
