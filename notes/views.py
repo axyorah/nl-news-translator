@@ -146,9 +146,10 @@ def deleteNote(request, pk):
         messages.error(request, 'You are not authorized to delete this note')
         return render(request, 'notes/note-list.html', {'notes': profile.note_set.all()})
 
-    note = Note.objects.get(id=pk)
-    note.delete()
-    messages.success(request, 'Note deleted successfully!')
+    if request.method == 'DELETE' or request.method == 'POST':
+        note = Note.objects.get(id=pk)
+        note.delete()
+        messages.success(request, 'Note deleted successfully!')
 
     return redirect('note-list')
 

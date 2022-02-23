@@ -6,11 +6,13 @@
 <main class="container bg-light py-4">
 
     <div class="d-flex space-between py-2">
-        <a class="btn btn-outline-secondary" href="{% url 'tag-list' %}" >Back to List</a>        
+        <a class="btn btn-outline-secondary" href="{% url 'tag-list' %}" >Back to List</a>   
+        {% if tag %}     
         <form action="{% url 'tag-delete' tag.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-danger">Delete</button>
         </form>
+        {% endif %}
     </div>
 
     {% if form %}

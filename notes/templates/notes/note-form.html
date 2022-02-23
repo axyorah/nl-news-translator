@@ -23,7 +23,10 @@
 <div class="d-flex space-between my-4">
   <a class="btn btn-outline-secondary" href="{% url 'note-list' %}">Back to List</a>
   {% if note %}
-  <a class="btn btn-outline-secondary" href="{% url 'note-delete' note.id %}">Delete</a>  
+  <form action="{% url 'note-delete' note.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+  </form>
   {% endif %}
 </div>
 
