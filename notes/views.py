@@ -155,34 +155,29 @@ def deleteNote(request, pk):
 @login_required(login_url='login')
 def showTags(request):
     profile = request.user.profile
+    form = TagForm()
 
     tags = profile.tag_set.all()
     context = {
-        'tags': tags
+        'tags': tags,
+        'tagForm': form,
     }
 
     return render(request, 'notes/tag-list.html', context)
 
-# @login_required(login_url='login')
-# def createTag(request, pk):
-#     # DO IT THROUGH API!
-#     form = TagForm()
-#     note = Note.objects.get(id=pk)
+@login_required(login_url='login')
+def createTag(request):
+    form = TagForm()
 
-#     if request.method == 'POST':
-#         form = TagForm(request.POST)
-#         if form.is_valid():
-#             tag = form.save(commit=False)
-#             tag.owner = request.user.profile
-#             tag.note = note
-#             tag.save()
-#         else:
-#             messages.error(request, 'Tag data is not valid')
+    if request.method == 'POST':
+        form = TagForm(request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.owner = request.user.profile
+            tag.save()
+        else:
+            messages.error(request, 'Tag data is not valid')
 
-#     context = {
-#         'tagForm': form,
-#     }
+    return redirect('tag-list')
 
-#     return render(request, 'notes/note.html', context)
-    
 

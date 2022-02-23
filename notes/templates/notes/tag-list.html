@@ -2,13 +2,26 @@
 {% load static %}
 
 {% block content %}
-{% if tags %}
 
-My Tags:
-<ul>
+<main class="container bg-light p-4">
+<h3>My Tags:</h3>
+{% if tags %}
+<ul id="id_tags" class="row">
 {% for tag in tags %}
-    <li class="d-flex"><span class="capsule">{{ tag }}</span> ({{ tag.note_set.count }} notes)</li>
+    <li class="col capsule">
+        <span>{{ tag }}</span> 
+        <span>&nbsp;({{ tag.note_set.count }})</span>
+    </li>
 {% endfor %}
 </ul>
 {% endif %}
+
+<form action="{% url 'tag-create' %}" method="POST" class="input-group d-flex justify-content-center w-100">
+    {% csrf_token %}
+    <input type="text" class="form-control" name="name" id="id_name" placeholder="Add New Tag"/>
+    <button type="submit" class="btn btn-outline-secondary" >Add</button>
+</form>
+
+</main>
+
 {% endblock content %}

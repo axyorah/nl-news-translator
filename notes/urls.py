@@ -3,6 +3,7 @@ from notes import views
 
 urlpatterns = [
     path('tags/', views.showTags, name='tag-list'),
+    path('tags/new/', views.createTag, name='tag-create-new'),
     path('notes/', views.showNotes, name='note-list'),
     path('notes/new/', views.createNote, name='note-create'),
     path('notes/<pk>/', views.getNote, name='note'),
