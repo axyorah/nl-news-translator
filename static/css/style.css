@@ -1,15 +1,18 @@
 /* DARK THEME */
 :root {
-    --color-bg: white;
     --color-txt: rgb(52, 50, 58);
-    --color-inpt-highlight: rgb(238, 238, 250);
-    --color-inpt: rgb(228, 228, 233);
+    --color-inpt-highlight: rgb(240, 238, 255);
+    --color-inpt: rgb(228, 228, 238);
     --color-inpt-txt: rgb(52, 50, 58);
-    --color-card: rgb(169, 169, 172);
+    --color-card: rgb(172, 169, 180);
     --color-box-edge: rgba(200,200,200,0.8);
+    --color-capsule: rgb(108, 117, 125);
 
     --bg: url('../imgs/angelfish5.png');
-    --bg-gradient: linear-gradient(black, #999);
+    --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.7), rgba(33, 37, 41, 1));
+    --bg-gradient-bw: linear-gradient(rgb(4, 0, 12), rgb(178, 164, 190));
+    --bg-gradient-tr-inv: linear-gradient(rgba(33, 37, 41, 1), rgba(33, 37, 41, 0.7));
+    --bg-gradient-bw-inv: linear-gradient(rgb(178, 164, 190), rgb(4, 0, 12));
 }
 
 /* AGRHH! MY EYES! */
@@ -20,6 +23,7 @@
     --color-inpt-txt: white;
     --color-card: rgb(117, 13, 65);
     --color-box-edge: rgba(129, 79, 98, 0.95);
+    --color-capsule: rgb(108, 117, 125);
 
     --bg: url('../imgs/angelfish5.png');
     --bg-gradient: linear-gradient(#fa0341, #f85f07);
@@ -28,7 +32,7 @@
 body {
     height: 100%;
     font-family: sans-serif;
-    background: var(--bg), var(--bg-gradient);
+    background: var(--bg-gradient-tr-inv), var(--bg), var(--bg-gradient-bw);
     background-repeat: repeat;
     background-attachment: fixed;
     color: var(--color-txt);    
@@ -43,7 +47,7 @@ body {
     max-width: fit-content;
     font-size: small;
     color: white;
-    background-color: #6c757d;
+    background-color: var(--color-capsule);
     border: none;
     border-radius: 10px;
     padding-left: 7px;
