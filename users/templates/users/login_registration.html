@@ -3,6 +3,10 @@
 
 {% block content %}
 
+<main class="container">
+    <div class="row abs-centered">
+      <div class="col mycard boxed py-4">
+
 {% if page == 'login' %}
 
 <form method="POST" action="{% url 'login' %}">
@@ -50,5 +54,9 @@
 </div>
 
 {% endif %}
+
+</div>
+</div>
+</main>
 
 {% endblock content %}

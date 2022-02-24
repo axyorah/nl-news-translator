@@ -9,14 +9,13 @@ form .row {
     padding: 5px 0 5px 0;
 }
 
-form textarea, input[type="text"] {
+.text-field, form textarea, input[type="text"] {
     width: 100%;
     background-color: var(--color-inpt);
     color: var(--color-inpt-txt);
 }
 
 input[type="checkbox"] {
-    /* transition: visibility 0.3s linear, opacity 0.3s linear; */
     align-self: center;
     margin-right: 5px;
 }   

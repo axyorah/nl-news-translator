@@ -1,6 +1,10 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<main class="container">
+  <div class="row abs-centered">
+    <div class="col mycard boxed p-4">
+
 <h1>Search NL News</h1>
 
 <section class="container box-container boxed" id="box-filter">
@@ -38,5 +42,9 @@
   <a class="btn btn-outline-secondary" href="{% url 'note-create' %}">Make a Note</a>
 
 </section>
+
+</div>
+</div>
+</main>
 
 {% endblock content %}

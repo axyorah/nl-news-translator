@@ -1,22 +1,30 @@
-{% extends 'main.html' %}
-{% load static %}
+{% extends 'main.html' %} 
+{% load static %} 
 
 {% block content %}
 
-<h3>Change Profile Picture</h3>
+<main class="container">
+  <div class="row abs-centered">
+    <div class="col mycard boxed py-4">
+      <h3>Change Profile Picture</h3>
 
-<form method="POST" action="{% url 'profile-update' %}" } enctype="multipart/form-data">
-    {% csrf_token %}
+      <form
+        method="POST"
+        action="{% url 'profile-update' %}"
+        }
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %} {% for field in form %}
+        <div>
+          <label for="form-input#text">{{ field.label }}</label>
+          {{ field }}
+        </div>
+        {% endfor %}
 
-    {% for field in form %}
-    <div>
-        <label for="form-input#text">{{ field.label }}</label>
-        {{ field }}
+        <input type="submit" value="Submit" />
+      </form>
     </div>
-    {% endfor %}
-
-    <input type="submit" value="Submit"/>
-</form>
-
+  </div>
+</main>
 
 {% endblock content %}

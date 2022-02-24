@@ -28,5 +28,5 @@
 }
 
 .list-group-item:hover {
-    background-color: rgba(230,230,250,0.3);
+    background-color: var(--color-inpt-highlight);
 }
