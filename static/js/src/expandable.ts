@@ -47,14 +47,13 @@ export function toggleExpandable(expandable: Expandable): void {
 
 export function toggleGlobalExpandable(expandable: GlobalExpandable): void {
     expandable.addEventListener('click', function(evt) {
-    
         const hiddensElements: NodeListOf<HTMLElement> = document.querySelectorAll('.hidden-global');
         hiddensElements.forEach((hidden: HTMLElement) => {
             if (hidden.style.visibility === '' || hidden.style.visibility === 'visible') {
                 hidden.style.visibility = 'hidden';
             }
             else {
-                hidden.style.visibility = '';
+                hidden.style.visibility = 'visible';
             }
         });
     });    

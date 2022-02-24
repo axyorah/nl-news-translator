@@ -48,3 +48,9 @@ articles.forEach((article) => {
             .catch(err => console.log(err));
     });
 });
+
+window.addEventListener('load', function(evt) {
+    globalExpandables.forEach(expandable => {
+        expandable.click();
+    });
+})

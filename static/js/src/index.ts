@@ -60,3 +60,9 @@ articles.forEach((article: HTMLElement): void => {
         .catch(err => console.log(err));
     })
 });
+
+window.addEventListener('load', function(evt) {
+    globalExpandables.forEach((expandable: GlobalExpandable): void => {
+        expandable.click();
+    });
+})
