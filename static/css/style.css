@@ -19,14 +19,18 @@
 /* :root {
     --color-bg: rgb(117, 13, 65);
     --color-txt: rgb(165, 164, 164);
-    --color-inpt: rgba(129, 79, 98, 0.95);
+    --color-inpt: rgba(170, 118, 137, 0.95);
+    --color-inpt-highlight: rgb(248, 211, 225);
     --color-inpt-txt: white;
-    --color-card: rgb(117, 13, 65);
+    --color-card: rgb(95, 11, 50);
     --color-box-edge: rgba(129, 79, 98, 0.95);
-    --color-capsule: rgb(108, 117, 125);
+    --color-capsule: rgb(54, 45, 48);
 
     --bg: url('../imgs/angelfish5.png');
-    --bg-gradient: linear-gradient(#fa0341, #f85f07);
+    --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.1), rgba(33, 37, 41, 0.5));
+    --bg-gradient-tr-inv: linear-gradient(rgba(33, 37, 41, 0.5), rgba(33, 37, 41, 0.1));
+    --bg-gradient-bw: linear-gradient(#fa0362, #f84b07);
+    --bg-gradient-bw-inv: linear-gradient(#f84b07, #fa0362);
 } */
 
 body {

@@ -1,13 +1,19 @@
-{% if articles %}
 <h3 class="m-3">Search Results</h3>
+
+{% if articles %}
 <ul class="list-group">
   
   {% for article in articles %}
     <li class="list-group-item article expandable">
       
       <div class="li-title li-between">
-        {{ article.title }}
-        <span class="hidden" id="source">
+        <span class="preview">
+          {{ article.title }}
+        </span>
+        <span class="hidden">
+          {{ article.title }}
+        </span>        
+        <span class="hidden" id="source">          
           <a class="capsule-a" href="{{ article.url }}">{{ article.source.name }}</a>
         </span>
       </div>

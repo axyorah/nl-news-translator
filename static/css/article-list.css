@@ -30,3 +30,8 @@
 .list-group-item:hover {
     background-color: var(--color-inpt-highlight);
 }
+
+.article .li-title .preview {
+    height: 25px;
+    overflow: hidden;
+}

@@ -13,33 +13,27 @@
 
 </section>
 
-<section class="container box-container boxed" id="news-overview">
+<div class="row">
+  <div class="col-12 col-lg-4">
+    <section class="container box-container boxed" id="news-overview">
+    
+      {% include './partials/article-list.html' %}
+    
+    </section>
+  </div>
 
-  {% include './partials/article-list.html' %}
+  <div class="col-12 col-lg-8">
+    <section class="container box-container boxed" id="article-selected">
 
-</section>
-
-<section class="container box-container boxed" id="article-selected">
-  {% include './partials/article-selected.html' %}
-
-</section>
+      {% include './partials/article-selected.html' %}
+    
+    </section>
+  </div>
+</div>
 
 <section class="container box-container boxed" id="note">
-  <!-- THIS WILL BE MOVED TO NOTES APP -->
-  <p>Option to add a two-sided note</p>
-  <ul>
-    <li>side A = orgin text, side B = translation+notes</li>
-    <li>An option to create and add multiple tags</li>
-    <li>
-      url of an article will be infered automatically and addded to form (should
-      be updated each time new post is selected)
-    </li>
-    <li>only visible for logged in users</li>
-  </ul>
 
-  <p>TEMPORARY: redirect to separate page to create a note</p>
-
-  <a class="btn btn-outline-secondary" href="{% url 'note-create' %}">Make a Note</a>
+  <a class="btn btn-secondary w-100" href="{% url 'note-create' %}">Make a Note</a>
 
 </section>
 
