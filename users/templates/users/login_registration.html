@@ -5,35 +5,64 @@
 
 <main class="container">
     <div class="row abs-centered">
-      <div class="col mycard boxed py-4">
+      <div class="col-12 col-md-8 col-lg-6 mycard boxed p-4">
 
 {% if page == 'login' %}
+<h3 class="text-center">Login</h3>
 
-<form method="POST" action="{% url 'login' %}">
+<form class="form" method="POST" action="{% url 'login' %}">
   {% csrf_token %}
 
-  <input type="text" name="username" />
-  <input type="password" name="password" />
-  <input type="submit" value="Login" />
+  <div class="row">
+    <div class="form-field col-12">
+      <label for="form-input#text">
+        <b>Username</b>
+      </label>
+      <input type="text" class="form-control" name="username" />
+    </div>
+
+    <div class="form-field col-12">
+      <label for="form-input#text">
+        <b>Password</b>
+      </label>
+      <input type="text" class="form-control" name="password" />
+    </div>
+      
+  </div> 
+  
+  <div class="row">
+    <div class="form-field d-flex justify-content-center">
+      <input
+        type="submit"
+        class="btn btn-secondary w-100 my-3"
+        value="Submit"
+      />
+    </div>
+  </div>
 
 </form>
 
-<div>
-  Don't have an account? <a href="{% url 'register' %}">Register!</a>
+<div class="row">
+    <small class="col text-center">
+        Don't have an account? <a href="{% url 'register' %}">Register!</a>
+    </small>  
 </div>
 
 {% elif page == 'register' %}
+<h3 class="text-center">Register</h3>
+
 <form class="form" action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
 
+    <div class="row">  
     {% for field in form %}
-    <div class="form-field">
+    <div class="form-field col-12">
         <label for="form-input#text"><b>{{ field.label }}: </b></label>
         {{ field }}
 
         {% if field.help_text %}
             <div>
-                <small>{{ field.help_text }}</small>
+                <small class="text-dark">{{ field.help_text }}</small>
             </div>
         {% endif %}
 
@@ -45,12 +74,23 @@
 
     </div>
     {% endfor %}
+    </div>
 
-    <input class="btn btn-outline-secondary" type="submit" value="Submit" />
+    <div class="row">
+        <div class="form-field d-flex justify-content-center">
+          <input
+            type="submit"
+            class="btn btn-secondary w-100 my-3"
+            value="Submit"
+          />
+        </div>
+    </div>
 </form>
 
-<div>
-    Already have an account? <a href="{% url 'login' %}">Login!</a>
+<div class="row">
+    <small class="col text-center">
+        Already have an account? <a href="{% url 'login' %}">Login!</a>
+    </small>
 </div>
 
 {% endif %}
