@@ -82,3 +82,15 @@ body {
 .list-group, .list-group-item, tbody {
     background-color: var(--color-inpt);
 }
+
+@media (max-width: 992px) {
+    .hidden-under-md {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .hidden-under-lg {
+        display: none;
+    }
+}
