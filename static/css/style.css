@@ -1,5 +1,5 @@
-/* DARK THEME */
-:root {
+/* DARK/MEH THEME */
+/* :root {
     --color-txt: rgb(52, 50, 58);
     --color-inpt-highlight: rgb(240, 238, 255);
     --color-inpt: rgb(228, 228, 238);
@@ -8,11 +8,42 @@
     --color-box-edge: rgba(200,200,200,0.8);
     --color-capsule: rgb(108, 117, 125);
 
-    --bg: url('../imgs/angelfish5.png');
+    --bg-pattern: url('../imgs/angelfish5.png');
     --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.7), rgba(33, 37, 41, 1));
     --bg-gradient-bw: linear-gradient(rgb(4, 0, 12), rgb(178, 164, 190));
     --bg-gradient-tr-inv: linear-gradient(rgba(33, 37, 41, 1), rgba(33, 37, 41, 0.7));
     --bg-gradient-bw-inv: linear-gradient(rgb(178, 164, 190), rgb(4, 0, 12));
+
+    --bg: var(--bg-gradient-tr-inv), var(--bg-pattern), var(--bg-gradient-bw);
+    --bg-mycard: var(--bg-pattern), var(--color-card);
+    --bg-mycard: rgb(172, 169, 180);
+    --bg-mycard: rgb(197, 197, 214);
+    --bg-mycard: rgba(33, 37, 41, 0.7);
+    --bg-section: rgb(185, 181, 197);
+
+    --border-radius: 3px;
+} */
+
+/* DARK THEME */
+:root {
+    --color-txt: rgb(228, 228, 238);
+    --color-inpt-highlight: rgb(102 101 111);
+    --color-inpt: rgb(88, 90, 98);
+    --color-inpt-txt: rgb(228, 228, 238);
+    --color-card: rgb(172, 169, 180);
+    --color-box-edge: rgb(73, 73, 80);
+    --color-capsule: rgb(108, 117, 125);
+
+    --bg-pattern: url('../imgs/angelfish5.png');
+    --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.7), rgba(33, 37, 41, 1));
+    --bg-gradient-bw: linear-gradient(rgb(4, 0, 12), rgb(178, 164, 190));
+    --bg-gradient-tr-inv: linear-gradient(rgba(33, 37, 41, 1), rgba(33, 37, 41, 0.7));
+    --bg-gradient-bw-inv: linear-gradient(rgb(178, 164, 190), rgb(4, 0, 12));
+
+    --bg: var(--bg-gradient-tr-inv), var(--bg-pattern), var(--bg-gradient-bw);
+    --bg-mycard: var(--bg-pattern), var(--color-card);
+    --bg-mycard: rgba(63, 63, 72, 1);
+    --bg-section: rgb(185, 181, 197);
 
     --border-radius: 3px;
 }
@@ -28,17 +59,20 @@
     --color-box-edge: rgba(129, 79, 98, 0.95);
     --color-capsule: rgb(54, 45, 48);
 
-    --bg: url('../imgs/angelfish5.png');
-    --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.1), rgba(33, 37, 41, 0.5));
-    --bg-gradient-tr-inv: linear-gradient(rgba(33, 37, 41, 0.5), rgba(33, 37, 41, 0.1));
+    --bg-pattern: url('../imgs/angelfish5.png');
+    --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.5), rgba(33, 37, 41, 1));
+    --bg-gradient-tr-inv: linear-gradient(rgba(33, 37, 41, 1), rgba(33, 37, 41, 0.5));
     --bg-gradient-bw: linear-gradient(#fa0362, #f84b07);
     --bg-gradient-bw-inv: linear-gradient(#f84b07, #fa0362);
+
+    --bg: var(--bg-gradient-tr-inv), var(--bg-pattern), var(--bg-gradient-bw);
+    --bg-mycard: rgba(63, 63, 72, 1);
 } */
 
 body {
     height: 100%;
     font-family: sans-serif;
-    background: var(--bg-gradient-tr-inv), var(--bg), var(--bg-gradient-bw);
+    background: var(--bg);
     background-repeat: repeat;
     background-attachment: fixed;
     color: var(--color-txt);    
@@ -67,7 +101,12 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     padding: 5px;
+    color: var(--color-inpt-txt)
 }
+
+/* .section {
+    background: var(--bg-section);
+} */
 
 .abs-centered {
     height: 100vh;
@@ -77,7 +116,7 @@ body {
 }
 
 .mycard {
-    background: var(--bg), var(--color-card);
+    background: var(--bg-mycard);
     background-repeat: repeat;
     background-attachment: fixed;
     background-blend-mode: lighten;
@@ -87,6 +126,16 @@ body {
 
 .list-group, .list-group-item, tbody {
     background-color: var(--color-inpt);
+    color: var(--color-txt);
+}
+
+thead {
+    color: var(--color-txt);
+}
+
+tbody, td, tfoot, th, thead, tr {
+    /* border-bottom-width: none; */
+    border-style: none;
 }
 
 @media (max-width: 992px) {
@@ -101,9 +150,13 @@ body {
     }
 }
 
+.alert {
+    opacity: 0.7;
+}
+
 #note-btn-container {
     position: sticky;
-    bottom: 50px;
+    bottom: 30px;
     opacity: 0.7;
     width: 100;
     height: 50px;
