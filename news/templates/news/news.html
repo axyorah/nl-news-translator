@@ -5,40 +5,42 @@
   <div class="row abs-centered">
     <div class="col mycard boxed p-4">
 
-<h1>Search NL News</h1>
+      <h1>Search NL News</h1>
+      
+      <section class="container box-container boxed" id="box-filter">
+      
+        {% include './partials/filter.html' %}
+      
+      </section>
+      
+      <div class="row">
+        <div class="col-12 col-lg-4">
+          <section class="container box-container boxed" id="news-overview">
+          
+            {% include './partials/article-list.html' %}
+          
+          </section>
+        </div>
+      
+        <div class="col-12 col-lg-8">
+          <section class="container box-container boxed" id="article-selected">
+      
+            {% include './partials/article-selected.html' %}
+          
+          </section>
+        </div>
+      </div>
 
-<section class="container box-container boxed" id="box-filter">
+      <section id="note-btn-container">
+      
+        <a id="note-btn" class="btn btn-warning" href="{% url 'note-create' %}" target="_blank">Make a Note</a>
+      
+      </section>
 
-  {% include './partials/filter.html' %}
-
-</section>
-
-<div class="row">
-  <div class="col-12 col-lg-4">
-    <section class="container box-container boxed" id="news-overview">
-    
-      {% include './partials/article-list.html' %}
-    
-    </section>
+    </div>
   </div>
-
-  <div class="col-12 col-lg-8">
-    <section class="container box-container boxed" id="article-selected">
-
-      {% include './partials/article-selected.html' %}
-    
-    </section>
-  </div>
-</div>
-
-<section class="container box-container boxed" id="note">
-
-  <a class="btn btn-secondary w-100" href="{% url 'note-create' %}">Make a Note</a>
-
-</section>
-
-</div>
-</div>
+  
 </main>
+
 
 {% endblock content %}

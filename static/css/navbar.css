@@ -20,13 +20,13 @@
 }
 
 .alert-error {
-    background-color: rgba(228, 80, 80, 0.3);
+    background-color: rgba(228, 80, 80, 0.7);
     border: 1px solid rgb(228, 80, 80);
     color: rgb(157, 57, 57);
 }
 
 .alert-debug {
-    background-color: rgba(80, 80, 80, 0.3);
+    background-color: rgba(80, 80, 80, 0.7);
     border: 1px solid rgb(80, 80, 80);
     color: rgb(80, 80, 80);
 }
