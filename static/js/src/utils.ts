@@ -46,4 +46,4 @@ export async function postData<T extends JSONData, U extends JSONData>(
         body: JSON.stringify(data) 
     });
     return response.json() as Promise<U>;
-  }
+}
