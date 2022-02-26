@@ -1,4 +1,4 @@
-import { postData, JSONData } from '../utils';
+import { postData, JSONData, ErrorResponse } from '../utils';
 
 export interface TagJSON {
     id: string;
@@ -7,10 +7,6 @@ export interface TagJSON {
 
 export interface TagResponse extends JSONData {
     tag: TagJSON
-}
-
-export interface ErrorResponse extends JSONData {
-    errors: string
 }
 
 export interface TagsUL extends HTMLUListElement {

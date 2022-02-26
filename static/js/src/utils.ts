@@ -2,6 +2,10 @@ export interface JSONData {
     [name: string]: any;
 }
 
+export interface ErrorResponse extends JSONData {
+    errors: string
+}
+
 export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export function getCookie(name: string): string {
