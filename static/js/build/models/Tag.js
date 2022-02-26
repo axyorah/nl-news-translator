@@ -1,4 +1,4 @@
-import { postData } from './utils.js';
+import { postData } from '../utils.js';
 export class Tag {
     constructor(name) {
         this.name = name;

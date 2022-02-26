@@ -1,4 +1,4 @@
-import { Tag, TagJSON, ErrorResponse, TagsUL } from './Tag';
+import { Tag, TagJSON, ErrorResponse, TagsUL } from './models/Tag';
 
 
 const addPartialTagName: HTMLInputElement = document.querySelector('#add-partial-tag-name');

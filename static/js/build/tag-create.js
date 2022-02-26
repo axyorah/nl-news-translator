@@ -1,4 +1,4 @@
-import { Tag } from './Tag.js';
+import { Tag } from './models/Tag.js';
 const addPartialTagName = document.querySelector('#add-partial-tag-name');
 const addPartialTagBtn = document.querySelector('#add-partial-tag-btn');
 const tagsUl = document.querySelector('#id_tags');

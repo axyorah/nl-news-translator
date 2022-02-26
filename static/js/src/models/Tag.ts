@@ -1,4 +1,4 @@
-import { postData, JSONData } from './utils';
+import { postData, JSONData } from '../utils';
 
 export interface TagJSON {
     id: string;
