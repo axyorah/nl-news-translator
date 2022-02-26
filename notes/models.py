@@ -23,7 +23,7 @@ class Note(models.Model):
             'owner': str(self.owner),
             'side_a': str(self.side_a),
             'side_b': str(self.side_b),
-            'tags': [tag.json() for tag in self.tags]
+            'tags': [tag.json() for tag in self.tags.all()] if self.tags else []
         }
 
     def __str__(self):
