@@ -2,6 +2,10 @@ export interface JSONData {
     [name: string]: any;
 }
 
+export interface APIResponse<T> extends JSONData {
+    data: T
+}
+
 export interface ErrorResponse extends JSONData {
     errors: string
 }

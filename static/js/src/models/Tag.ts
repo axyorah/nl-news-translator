@@ -1,12 +1,8 @@
-import { postData, JSONData, ErrorResponse } from '../utils';
+import { postData, JSONData, ErrorResponse, APIResponse } from '../utils';
 
 export interface TagJSON {
     id: string;
     name: string;
-}
-
-export interface TagResponse extends JSONData {
-    tag: TagJSON
 }
 
 export interface TagsUL extends HTMLUListElement {
@@ -77,14 +73,14 @@ export class Tag implements TagJSON {
          const id = this.id || json.id;
 
         // udpate db        
-        return postData<TagJSON, TagResponse | ErrorResponse>(
+        return postData<TagJSON, APIResponse<TagJSON> | ErrorResponse>(
             `/api/tags/${id}/edit/`, json, 'PUT'
         )
-        .then((res: TagResponse | ErrorResponse): Tag => {
+        .then((res: APIResponse<TagJSON> | ErrorResponse): Tag => {
             // udpate this
-            if (res.tag) {
-                Object.keys(res.tag).forEach((key: string) => {
-                    this[key] = res.tag[key];
+            if (res.data) {
+                Object.keys(res.data).forEach((key: string) => {
+                    this[key] = res.data[key];
                 });
                 return this;
             } else {
@@ -104,11 +100,11 @@ export class Tag implements TagJSON {
             name: this.name
         }
         // post data to db
-        return postData<JSONData, TagResponse>('/api/tags/new/', data, 'POST')
-        .then((res: TagResponse): Tag => {
+        return postData<JSONData, APIResponse<TagJSON>>('/api/tags/new/', data, 'POST')
+        .then((res: APIResponse<TagJSON>): Tag => {
             // update this
-            Object.keys(res.tag).forEach((key: string) => {
-                this[key] = res.tag[key];
+            Object.keys(res.data).forEach((key: string) => {
+                this[key] = res.data[key];
             });
             return this;
         })

@@ -39,9 +39,9 @@ export class Tag {
         return postData(`/api/tags/${id}/edit/`, json, 'PUT')
             .then((res) => {
             // udpate this
-            if (res.tag) {
-                Object.keys(res.tag).forEach((key) => {
-                    this[key] = res.tag[key];
+            if (res.data) {
+                Object.keys(res.data).forEach((key) => {
+                    this[key] = res.data[key];
                 });
                 return this;
             }
@@ -64,8 +64,8 @@ export class Tag {
         return postData('/api/tags/new/', data, 'POST')
             .then((res) => {
             // update this
-            Object.keys(res.tag).forEach((key) => {
-                this[key] = res.tag[key];
+            Object.keys(res.data).forEach((key) => {
+                this[key] = res.data[key];
             });
             return this;
         })
