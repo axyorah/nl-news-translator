@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
-from notes.models import Note, Tag
-
 # Create your models here.
 class Profile(models.Model):
     id = models.UUIDField(
