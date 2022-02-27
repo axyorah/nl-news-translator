@@ -21,8 +21,8 @@ class Profile(models.Model):
     def json(self):
         return {
             'id': str(self.id),
-            'created': str(self.created),
-            'user': str(self.user),
+            'created': self.created.isoformat(),
+            'user': str(self.user.id),
             'username': str(self.username),
             'profile_picture': getattr(self.profile_picture, 'url', 'None') \
                 if self.profile_picture else 'None'

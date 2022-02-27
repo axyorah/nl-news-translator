@@ -19,8 +19,8 @@ class Note(models.Model):
     def json(self):
         return {
             'id': str(self.id),
-            'created': str(self.created),
-            'owner': str(self.owner),
+            'created': self.created.isoformat(),
+            'owner': str(self.owner.id),
             'side_a': str(self.side_a),
             'side_b': str(self.side_b),
             'tags': [tag.json() for tag in self.tags.all()] if self.tags else []
@@ -41,9 +41,9 @@ class Tag(models.Model):
     def json(self):
         return {
             'id': str(self.id),
-            'created': str(self.created),
+            'created': self.created.isoformat(),
             'name': str(self.name),
-            'owner': str(self.owner)
+            'owner': str(self.owner.id)
         }
 
     def __str__(self):
