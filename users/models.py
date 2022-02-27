@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
+from notes.models import Note, Tag
+
 # Create your models here.
 class Profile(models.Model):
     id = models.UUIDField(
@@ -25,7 +27,13 @@ class Profile(models.Model):
             'user': str(self.user.id),
             'username': str(self.username),
             'profile_picture': getattr(self.profile_picture, 'url', 'None') \
-                if self.profile_picture else 'None'
+                if self.profile_picture else 'None',
+            'notes': [
+                note.json() for note in self.notes.all()
+            ] if self.notes else [],
+            'tags': [
+                tag.json() for tag in self.tags.all()                
+            ] if self.tags else []
         }
 
     def __str__(self):
