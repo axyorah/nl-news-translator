@@ -16,14 +16,17 @@ class Note(models.Model):
 
     tags = models.ManyToManyField('Tag', blank=True) #through='Membership', 
 
-    def json(self):
+    def json(self, tag=False):
         return {
             'id': str(self.id),
             'created': self.created.isoformat(),
             'owner': str(self.owner.id),
             'side_a': str(self.side_a),
             'side_b': str(self.side_b),
-            'tags': [tag.json() for tag in self.tags.all()] if self.tags else []
+            'tags': [
+                tagObj.json() if tag else tagObj.id
+                for tagObj in self.tags.all()
+            ] if self.tags else []
         }
 
     def __str__(self):
@@ -38,12 +41,16 @@ class Tag(models.Model):
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
 
-    def json(self):
+    def json(self, note=False):
         return {
             'id': str(self.id),
             'created': self.created.isoformat(),
             'name': str(self.name),
-            'owner': str(self.owner.id)
+            'owner': str(self.owner.id),
+            'notes': [
+                noteObj.json() if note else noteObj.id
+                for noteObj in self.notes.all()
+            ] if self.notes else []
         }
 
     def __str__(self):
