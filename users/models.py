@@ -18,7 +18,7 @@ class Profile(models.Model):
         default='profiles/default-profile-picture.png'
     )
 
-    def json(self):
+    def json(self, note=False, tag=False):
         return {
             'id': str(self.id),
             'created': self.created.isoformat(),
@@ -27,11 +27,13 @@ class Profile(models.Model):
             'profile_picture': getattr(self.profile_picture, 'url', 'None') \
                 if self.profile_picture else 'None',
             'notes': [
-                note.json() for note in self.notes.all()
-            ] if self.notes else [],
+                noteObj.json() if note else noteObj.id 
+                for noteObj in self.note_set.all()
+            ] if self.note_set else [],
             'tags': [
-                tag.json() for tag in self.tags.all()                
-            ] if self.tags else []
+                tagObj.json() if tag else tagObj.id
+                for tagObj in self.tag_set.all()
+            ] if self.tag_set else []
         }
 
     def __str__(self):
