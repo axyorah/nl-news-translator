@@ -1,4 +1,4 @@
-import { postData } from "../utils";
+import { postData } from "../utils.js";
 export class Profile {
     constructor(username) {
         this.username = username;

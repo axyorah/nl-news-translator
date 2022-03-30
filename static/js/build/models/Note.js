@@ -51,6 +51,26 @@ export class Note {
             };
         });
     }
+    add() {
+        /* adds this to db, updates this and returns updated instance */
+        const data = {
+            side_a: this.side_a,
+            side_b: this.side_b
+        };
+        // post data to db
+        return postData('/api/notes/new/', data, 'POST')
+            .then((res) => {
+            // update this
+            Object.keys(res.data).forEach((key) => {
+                this[key] = res.data[key];
+            });
+            return this;
+        })
+            .catch(err => {
+            console.log(err);
+            return { 'errors': err };
+        });
+    }
     delete(id) {
         // deletes note with given id from db; returns promise with success or failure msg
         return postData(`/api/notes/${id}/delete/`, {}, 'DELETE');
