@@ -24,7 +24,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('error/', views.server_error, name='error'),
-    path('api/', include('api.urls')),
+    
+    #path('api/', include('api.urls')),
+    path('api/', include('api.urls.general')),
+    path('api/users/', include('api.urls.users')),
+    path('api/notes/', include('api.urls.notes')),
+    path('api/tags/', include('api.urls.tags')),
+
     path('news/', include('news.urls')),
     path('users/', include('users.urls')),
     path('', include('notes.urls')),
