@@ -3,6 +3,7 @@ from typing import List, Tuple, Set, Dict, Union, Optional
 import requests as rq
 from datetime import datetime
 import time
+import json
 
 def newsform2params(form):
     # TODO: handle dates
@@ -101,7 +102,7 @@ class NewsRequester:
 
             time.sleep(sleep)
 
-        return res.text
+        return {"res": res.text}
 
     def _get_valid(self, params):
         url = (
@@ -124,6 +125,7 @@ class NewsRequester:
         to_date: Optional[datetime.date] = None
     ):  
         """
+        # TODO: make it one category at a time after all...
         fetches news from newsapi filtered by:
         q: [optional str] key word 
         category_list: [optional list[str]]: list of categories 
@@ -132,6 +134,14 @@ class NewsRequester:
         from_date: [optional datetime obj]
         to_date: [optional datetimeobj]
         """
+        # <<< TEMP ...
+        with open('tmp/news.json', 'r') as f:
+            temp = json.load(f)
+        for article in temp['articles']:
+            article['category'] = 'general'
+        return temp
+        # ... TEMP >>>
+
         try:
             self._validate(q, category_list, from_date, to_date)
         except Exception as e:
