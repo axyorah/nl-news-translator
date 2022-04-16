@@ -1,0 +1,10 @@
+django
+python-dotenv
+requests
+djangorestframework
+beautifulsoup4
+torch
+sentencepiece
+transformers
+pillow
+whitenoise
