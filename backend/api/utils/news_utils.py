@@ -19,7 +19,7 @@ class NewsRequester:
     def __init__(self, api_key):
         self.api_key = api_key
         self.url = 'https://newsapi.org/v2/top-headlines?'
-        self.period = 7 # default period [days] over which news would be requested        
+        self.period = 14 # default period [days] over which news would be requested        
 
     def _validate(
         self,
@@ -110,19 +110,19 @@ class NewsRequester:
         from_date: [optional datetime obj]
         to_date: [optional datetimeobj]
         """
-        # <<< TEMP ...
-        with open('./news.json', 'r') as f:
-            temp = json.load(f)
-        for article in temp['articles']:
-            article['category'] = 'general'
-        return temp
-        # ... TEMP >>>
+        # # <<< TEMP ...
+        # with open('news.json', 'r') as f:
+        #     temp = json.load(f)
+        # for article in temp['articles']:
+        #     article['category'] = 'general'
+        # return temp
+        # # ... TEMP >>>
 
         try:
             self._validate(q, category_list, from_date, to_date)
         except Exception as e:
             print(e)
-            return
+            raise e
 
         # use default values for params if no value is provided
         to_date = to_date or datetime.now()

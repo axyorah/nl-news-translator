@@ -2,19 +2,25 @@ from tkinter import E
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.conf import settings
 import json
 
+from api.utils.news_utils import NewsRequester
 from api.utils.translation_utils import NlToEnTranslator
 
 
+news_requester = NewsRequester(settings.NEWSAPI_KEY)
 nl2en = NlToEnTranslator()
+
+def validate_news_query(params):
+    return 
 
 @api_view(['GET'])
 def getRoutes(request):
     routes = [
         {'GET': '/api'},
 
-        # {'GET': '/api/news'},
+        {'GET': '/api/news'},
         {'POST': '/api/translate'},
         
         # {'GET': '/api/tags/'},
@@ -37,6 +43,32 @@ def getRoutes(request):
     ]
 
     return Response(routes)
+
+@api_view(['GET'])
+def getNews(request):
+
+    res = {}
+
+    try:
+        q = request.GET.get('q', None)
+        categories = request.GET.get('category_list', None)
+        
+        params = {
+            'q': q,
+            'category_list': categories.split(',') if categories is not None else None
+        }
+        #params = request.GET.urlencode()
+        print('PARAMS')
+        print(params, type(params))
+        validate_news_query(params)
+        res['data'] = news_requester.get(**params)
+        #res['data'] = {}
+    except Exception as e:
+        print(e)
+        res['errors'] = e.args[0]
+
+    return Response(res)
+
 
 @api_view(['POST'])
 def getTranslations(request):
