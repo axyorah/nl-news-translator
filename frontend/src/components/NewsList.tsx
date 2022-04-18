@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Loader from '../components/Loader';
+
 import { StoreState } from '../types/storeTypes';
 import { NewsListInfo } from '../types/newsTypes';
 
@@ -8,7 +10,7 @@ interface NewsListProps {
     newsListInfo: NewsListInfo
 }
 
-const NewsList = (props: NewsListProps) => {
+const NewsList = (props: NewsListProps): JSX.Element => {
     const { newsListInfo } = props;
     const { loading, errors, newsList } = newsListInfo;
 
@@ -16,7 +18,7 @@ const NewsList = (props: NewsListProps) => {
         <div className="boxed mycard p-5">
             <h3 className="text-center">News Overview</h3>
             { errors ? `Error: ${errors}` : null }
-            { loading ? 'Loading...' : null }
+            { loading ? <Loader /> : null }
             { 
                 newsList && newsList.length  
                 ? <pre><code>{JSON.stringify(newsList, null, 2)}</code></pre>
