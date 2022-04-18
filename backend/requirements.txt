@@ -2,6 +2,7 @@ django
 python-dotenv
 requests
 djangorestframework
+django-cors-headers
 beautifulsoup4
 torch
 sentencepiece
