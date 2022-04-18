@@ -57,17 +57,21 @@ def getNews(request):
             'q': q,
             'category_list': categories.split(',') if categories is not None else None
         }
-        #params = request.GET.urlencode()
+        
         print('PARAMS')
         print(params, type(params))
         validate_news_query(params)
-        res['data'] = news_requester.get(**params)
-        #res['data'] = {}
-    except Exception as e:
-        print(e)
-        res['errors'] = e.args[0]
+        res = news_requester.get(**params)
 
-    return Response(res)
+        print('RES')
+        print(res)
+        res['data'] = res
+        return Response(res)
+
+    except Exception as e:
+        print(f'Error: {e}')
+        res['errors'] = e.args[0]
+        return Response(res, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
@@ -82,9 +86,9 @@ def getTranslations(request):
 
             translations = nl2en.translate(sentences)
             res['translations'] = translations
+            return Response(res)
     
         except Exception as e:
             print(f'Error: {e}')
             res['errors'] = e.args[0]
-
-    return Response(res)
+            return Response(res, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

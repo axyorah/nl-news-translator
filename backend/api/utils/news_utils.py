@@ -159,6 +159,8 @@ class NewsRequester:
                 ]
             else:
                 # TODO: handle errors properly
+                print('Maybe error?')
                 print(res)
+                raise Exception(res['res'])
 
         return final
