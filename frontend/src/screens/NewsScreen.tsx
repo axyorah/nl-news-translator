@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Row, Col } from 'react-bootstrap';
 
 import SearchBar from '../components/SearchBar';
+import NewsList from '../components/NewsList';
 
 interface RootState {};
 interface NewsScreenProps {};
@@ -9,9 +11,19 @@ interface NewsScreenProps {};
 const NewsScreen = (props: NewsScreenProps) => {
     return (
         <div>
-            News
-
-            <SearchBar />
+            <Row className="my-3">
+                <Col>
+                    <SearchBar />
+                </Col>
+            </Row>
+            <Row className="my-3">
+                <Col md={4}>
+                    <NewsList /> 
+                </Col>
+                <Col md={8}>
+                    Selected
+                </Col>
+            </Row>
         </div>
     );
 };

@@ -24,6 +24,7 @@ export const newsListReducers = (
                 ...state,
                 loading: true,
                 errors: null,
+                newsList: []
             };
 
         case NEWS_LIST_SUCCESS:

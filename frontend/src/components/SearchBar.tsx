@@ -15,8 +15,7 @@ interface SearchBarProps {
 const SearchBar = (props: SearchBarProps): JSX.Element => {
 
     console.log(props);
-    const { newsListInfo, getNewsList } = props;
-    const { errors, loading, newsList } = newsListInfo;
+    const { getNewsList } = props;
 
     const [ query, setQuery ] = useState('');
 
@@ -43,14 +42,6 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
                     Search
                 </Button>
             </Form>
-
-            <div>
-                { errors ? `Error: ${errors}` : null }
-                { loading ? "loading..." : null }
-                <pre><code>
-                    Result: {JSON.stringify(newsList, null, 2)}
-                </code></pre>
-            </div>
         </Container>
     );
 };
