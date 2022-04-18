@@ -4,24 +4,28 @@ import {
     NEWS_LIST_FAIL
 } from '../constants/newsConstants';
 
-import { News } from '../types/newsTypes';
-import { RootState } from '../types/generalTypes';
+import {
+    NewsListAction,
+    NewsListInfo
+} from '../types/newsTypes';
 
 
-const initialState = {
-    newsListInfo: {
-        newsList: [] as News[]
-    }
-}
+const initialState: NewsListInfo = {
+    newsList: []
+};
 
-export const newsListReducers = (state: RootState = initialState, action: any) => {
+export const newsListReducers = (
+    state: NewsListInfo = initialState,
+    action: NewsListAction
+) => {
     switch (action.type) {
         case NEWS_LIST_QUERY:
             return {
                 ...state,
-                errors: null,
                 loading: true,
+                errors: null,
             };
+
         case NEWS_LIST_SUCCESS:
             return {
                 ...state,
@@ -29,13 +33,15 @@ export const newsListReducers = (state: RootState = initialState, action: any) =
                 errors: null,
                 newsList: action.payload
             };
+
         case NEWS_LIST_FAIL:
             return {
                 ...state,
                 loading: false,
-                newsList: [],
-                errors: action.payload
+                errors: action.payload,
+                newsList: []
             };
+            
         default:
             return state;
     }

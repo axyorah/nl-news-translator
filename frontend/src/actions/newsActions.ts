@@ -1,3 +1,5 @@
+import { Dispatch } from 'redux';
+
 import {
     NEWS_LIST_QUERY,
     NEWS_LIST_SUCCESS,
@@ -5,38 +7,53 @@ import {
 } from '../constants/newsConstants';
 import backend from '../api/backend';
 
-import { NewsListQueryParams } from '../types/newsTypes';
+import { 
+    News, 
+    NewsListQueryParams ,
+    NewsListQueryAction,
+    NewsListSuccessAction,
+    NewsListFailAction
+} from '../types/newsTypes';
 
+interface NewsApiResponse {
+    data: {
+        status: string,
+        totalResults: Number,
+        articles: News[]
+    }
+}
 
-export const getNewsList = (params: NewsListQueryParams) => async (dispatch: any) => {
+export const getNewsList = (
+    params: NewsListQueryParams
+) => async (dispatch: Dispatch) => {
     const { q } = params;
 
     try {
-        dispatch({
+        dispatch<NewsListQueryAction>({
             type: NEWS_LIST_QUERY
         });
     
-        const { data: { data } } = await backend.get('/news/', {
+        const { data: { data } } = await backend.get<NewsApiResponse>('/news/', {
             params: { q: q }
         });
 
-        dispatch({
+        dispatch<NewsListSuccessAction>({
             type: NEWS_LIST_SUCCESS,
             payload: data.articles
         });
     } catch (e) {
         if (typeof e === 'string') {
-            dispatch({
+            dispatch<NewsListFailAction>({
                 type: NEWS_LIST_FAIL,
                 payload: e
             });
         } else if ( e instanceof Error ) {
-            dispatch({
+            dispatch<NewsListFailAction>({
                 type: NEWS_LIST_FAIL,
                 payload: e.message
             });
         } else {
-            dispatch({
+            dispatch<NewsListFailAction>({
                 type: NEWS_LIST_FAIL,
                 payload: 'Something went wrong while fetching news list...'
             });

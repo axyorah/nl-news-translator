@@ -1,5 +1,5 @@
 import { NewsListInfo } from "./newsTypes"
 
-export interface RootState {
+export interface StoreState {
     newsListInfo: NewsListInfo
 }

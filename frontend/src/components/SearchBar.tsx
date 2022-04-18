@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { RootState } from '../types/generalTypes';
+import { StoreState } from '../types/storeTypes';
 import { NewsListInfo } from '../types/newsTypes';
 import { getNewsList } from '../actions/newsActions';
 
@@ -12,7 +12,7 @@ interface SearchBarProps {
     getNewsList: (params: { q: string }) => {}
 };
 
-const SearchBar = (props: SearchBarProps) => {
+const SearchBar = (props: SearchBarProps): JSX.Element => {
 
     console.log(props);
     const { newsListInfo, getNewsList } = props;
@@ -45,7 +45,7 @@ const SearchBar = (props: SearchBarProps) => {
             </Form>
 
             <div>
-                { errors ? errors : null }
+                { errors ? `Error: ${errors}` : null }
                 { loading ? "loading..." : null }
                 <pre><code>
                     Result: {JSON.stringify(newsList, null, 2)}
@@ -55,7 +55,7 @@ const SearchBar = (props: SearchBarProps) => {
     );
 };
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: StoreState) => {
     return {
         newsListInfo: state.newsListInfo
     };
