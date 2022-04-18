@@ -1,0 +1,3 @@
+export const NEWS_LIST_QUERY = 'NEWS_LIST_QUERY';
+export const NEWS_LIST_SUCCESS = 'NEWS_LIST_SUCCESS';
+export const NEWS_LIST_FAIL = 'NEWS_LIST_FAIL';
