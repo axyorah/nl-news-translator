@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Loader from '../components/Loader';
+import Loader from './Loader';
+import Message from './Message';
 
 import { StoreState } from '../types/storeTypes';
 import { NewsListInfo } from '../types/newsTypes';
@@ -17,13 +18,13 @@ const NewsList = (props: NewsListProps): JSX.Element => {
     return (
         <div className="boxed mycard p-5">
             <h3 className="text-center">News Overview</h3>
-            { errors ? `Error: ${errors}` : null }
+            { errors ? <Message variant='danger'>{errors}</Message> : null }
             { loading ? <Loader /> : null }
             { 
                 newsList && newsList.length  
                 ? <pre><code>{JSON.stringify(newsList, null, 2)}</code></pre>
                 : null
-            }            
+            }
         </div>
     );
 };
