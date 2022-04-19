@@ -110,13 +110,13 @@ class NewsRequester:
         from_date: [optional datetime obj]
         to_date: [optional datetimeobj]
         """
-        # # <<< TEMP ...
-        # with open('news.json', 'r') as f:
-        #     temp = json.load(f)
-        # for article in temp['articles']:
-        #     article['category'] = 'general'
-        # return temp
-        # # ... TEMP >>>
+        # <<< TEMP ...
+        with open('api/utils/news.json', 'r') as f:
+            temp = json.load(f)
+        for article in temp['articles']:
+            article['category'] = 'general'
+        return temp
+        # ... TEMP >>>
 
         try:
             self._validate(q, category_list, from_date, to_date)
