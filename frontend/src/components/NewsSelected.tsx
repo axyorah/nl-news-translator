@@ -7,7 +7,6 @@ import Message from './Message';
 
 import { StoreState } from '../types/storeTypes';
 import { NewsSelectInfo } from '../types/newsTypes';
-import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
 
 interface NewsSelectedProps {
     newsSelectInfo: NewsSelectInfo
@@ -16,16 +15,21 @@ interface NewsSelectedProps {
 const NewsSelected = (props: NewsSelectedProps) => {
 
     const { newsSelectInfo } = props;
-    const { loading, errors, paragraphs } = newsSelectInfo;
+    const { loading, errors, newsSelected } = newsSelectInfo;
+    const { title, paragraphs } = newsSelected || {};
 
     const renderPost = () => {
-        return paragraphs.map((paragraph: string, i: Number) => {
-            return (
-                <ListGroup.Item key={i.toString()}>
-                    { paragraph }
-                </ListGroup.Item>
-            );
-        });
+        if (paragraphs && paragraphs.length) {
+            return paragraphs.map((paragraph: string, i: Number) => {
+                return (
+                    <ListGroup.Item key={i.toString()}>
+                        { paragraph }
+                    </ListGroup.Item>
+                );
+            });
+        } else {
+            return null;
+        }
     };
 
     return (
@@ -33,7 +37,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
             
             <h3 className="text-center">{ 
                 paragraphs && paragraphs.length 
-                    ? "This Should be a Title"
+                    ? title || "Title"
                     : "Select News from the List"
             }</h3>
             { loading ? <Loader /> : null }

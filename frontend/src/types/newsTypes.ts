@@ -13,7 +13,8 @@ export interface News {
     url: string,
     source: {
         name: string,
-    }
+    },
+    paragraphs?: string[]
 }
 
 export interface NewsListQueryParams {
@@ -49,7 +50,7 @@ export type NewsListAction =
     NewsListFailAction;
 
 export interface NewsSelectInfo {
-    paragraphs: string[],
+    newsSelected: News,
     loading?: string,
     errors?: string
 }
@@ -60,7 +61,7 @@ export interface NewsSelectQueryAction {
 
 export interface NewsSelectSuccessAction {
     type: typeof NEWS_SELECT_SUCCESS,
-    payload: string[]
+    payload: News
 }
 
 export interface NewsSelectFailAction {

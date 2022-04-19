@@ -102,7 +102,7 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
 
         dispatch<NewsSelectSuccessAction>({
             type: NEWS_SELECT_SUCCESS,
-            payload: data.paragraphs
+            payload: {...item, paragraphs: data.paragraphs}
         });
 
     } catch (e) {

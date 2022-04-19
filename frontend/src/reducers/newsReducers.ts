@@ -53,8 +53,15 @@ export const newsListReducers = (
     }
 };
 
+const newsInit = {
+    title: '',
+    url: '',
+    description: '',
+    source: { name: '' }
+}
+
 export const newsSelectReducers = (
-    state: NewsSelectInfo = { paragraphs: [] },
+    state: NewsSelectInfo = { newsSelected: newsInit },
     action: NewsSelectAction
 ) => {
     switch (action.type) {
@@ -66,7 +73,7 @@ export const newsSelectReducers = (
         case NEWS_SELECT_SUCCESS:
             return {
                 loading: false,
-                paragraphs: action.payload
+                newsSelected: action.payload
             };
 
         case NEWS_SELECT_FAIL:
