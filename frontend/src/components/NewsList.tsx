@@ -17,14 +17,6 @@ const NewsList = (props: NewsListProps): JSX.Element => {
     const { newsListInfo } = props;
     const { loading, errors, newsList } = newsListInfo;
 
-    // const renderNewsItem = (newsItem: News) => {
-    //     return (
-    //         <ListGroup.Item key={newsItem.}>
-    //             <NewsPreview item={newsItem} />
-    //         </ListGroup.Item>
-    //     );
-    // };
-
     const renderList = () => {
         return (
             <ListGroup variant="flush">

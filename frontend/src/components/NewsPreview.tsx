@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { StoreState } from '../types/storeTypes';
-import { News, NewsSelectAction } from '../types/newsTypes';
+import { News } from '../types/newsTypes';
 
 import { selectNewsItem } from '../actions/newsActions';
 
