@@ -13,6 +13,7 @@ news_requester = NewsRequester(settings.NEWSAPI_KEY)
 nl2en = NlToEnTranslator()
 
 def validate_news_query(params):
+    #TODO: proper param validation
     return 
 
 @api_view(['GET'])
@@ -47,8 +48,6 @@ def getRoutes(request):
 @api_view(['GET'])
 def getNews(request):
 
-    res = {}
-
     try:
         q = request.GET.get('q', None)
         categories = request.GET.get('category_list', None)
@@ -58,17 +57,14 @@ def getNews(request):
             'category_list': categories.split(',') if categories is not None else None
         }
 
-        print(f'PARAMS: {params}')
         validate_news_query(params)
-        data = news_requester.get(**params)
-
-        print(f'RES: {res}')
-        res['data'] = data
+        res = news_requester.get(**params)
+        
         return Response(res)
 
     except Exception as e:
         print(f'ERROR: {e}')
-        res['errors'] = e.args[0]
+        res = {'errors': e.args[0]}
         # TODO: return proper status code 
         # (setting it to default 200, so that that the 
         # custom error msg can be properly intercepted in frontend)
