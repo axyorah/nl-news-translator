@@ -158,9 +158,7 @@ class NewsRequester:
                     for article in res.get('articles', [])
                 ]
             else:
-                # TODO: handle errors properly
-                print('Maybe error?')
-                print(res)
+                print(f'Maybe error: {res}')
                 raise Exception(res['res'])
 
         return final

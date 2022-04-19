@@ -57,21 +57,22 @@ def getNews(request):
             'q': q,
             'category_list': categories.split(',') if categories is not None else None
         }
-        
-        print('PARAMS')
-        print(params, type(params))
-        validate_news_query(params)
-        res = news_requester.get(**params)
 
-        print('RES')
-        print(res)
-        res['data'] = res
+        print(f'PARAMS: {params}')
+        validate_news_query(params)
+        data = news_requester.get(**params)
+
+        print(f'RES: {res}')
+        res['data'] = data
         return Response(res)
 
     except Exception as e:
-        print(f'Error: {e}')
+        print(f'ERROR: {e}')
         res['errors'] = e.args[0]
-        return Response(res, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # TODO: return proper status code 
+        # (setting it to default 200, so that that the 
+        # custom error msg can be properly intercepted in frontend)
+        return Response(res)#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])

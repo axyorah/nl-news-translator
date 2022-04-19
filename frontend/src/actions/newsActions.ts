@@ -17,10 +17,11 @@ import {
 
 interface NewsApiResponse {
     data: {
-        status: string,
         totalResults: Number,
-        articles: News[]
-    }
+        articles: News[],
+        message?: string
+    },
+    errors?: string
 }
 
 export const getNewsList = (
@@ -33,13 +34,19 @@ export const getNewsList = (
             type: NEWS_LIST_QUERY
         });
     
-        const { data: { data } } = await backend.get<NewsApiResponse>('/news/', {
+        const res = await backend.get<NewsApiResponse>('/news/', {
             params: { q: q }
         });
 
+        const { data } = res;
+
+        if (res.status >= 400 || data.errors) {
+            throw new Error( data.errors || (data.data && data.data.message) || 'Something went wrong while fetching news')
+        }
+
         dispatch<NewsListSuccessAction>({
             type: NEWS_LIST_SUCCESS,
-            payload: data.articles
+            payload: data.data.articles
         });
     } catch (e) {
         if (typeof e === 'string') {
