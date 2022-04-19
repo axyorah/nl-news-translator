@@ -1,12 +1,17 @@
 import {
     NEWS_LIST_QUERY,
     NEWS_LIST_SUCCESS,
-    NEWS_LIST_FAIL
+    NEWS_LIST_FAIL,
+    NEWS_SELECT_QUERY,
+    NEWS_SELECT_SUCCESS,
+    NEWS_SELECT_FAIL
 } from '../constants/newsConstants';
 
 import {
     NewsListAction,
-    NewsListInfo
+    NewsListInfo,
+    NewsSelectAction,
+    NewsSelectInfo
 } from '../types/newsTypes';
 
 
@@ -43,6 +48,33 @@ export const newsListReducers = (
                 newsList: []
             };
             
+        default:
+            return state;
+    }
+};
+
+export const newsSelectReducers = (
+    state: NewsSelectInfo = { paragraphs: [] },
+    action: NewsSelectAction
+) => {
+    switch (action.type) {
+        case NEWS_SELECT_QUERY:
+            return {
+                loading: true
+            };
+
+        case NEWS_SELECT_SUCCESS:
+            return {
+                loading: false,
+                paragraphs: action.payload
+            };
+
+        case NEWS_SELECT_FAIL:
+            return {
+                loading: false,
+                errors: action.payload
+            };
+
         default:
             return state;
     }

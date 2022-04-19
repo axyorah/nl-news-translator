@@ -4,11 +4,12 @@ import thunk from 'redux-thunk';
 
 //import { NewsListInfo } from './types/newsTypes';
 //import { StoreState } from './types/storeTypes';
-import { newsListReducers } from './reducers/newsReducers';
+import { newsListReducers, newsSelectReducers } from './reducers/newsReducers';
 
 
 const reducer = combineReducers({
-    newsListInfo: newsListReducers
+    newsListInfo: newsListReducers,
+    newsSelectInfo: newsSelectReducers
 });
 
 const initialState = {

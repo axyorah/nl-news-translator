@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { StoreState } from '../types/storeTypes';
-import { News } from '../types/newsTypes';
+import { News, NewsSelectAction } from '../types/newsTypes';
+
+import { selectNewsItem } from '../actions/newsActions';
 
 interface NewsPreviewProps {
-    item: News
+    item: News,
+    selectNewsItem: Function // thunk messes types up :(
 }
 
-const NewsPreview = (props: NewsPreviewProps) => {
+const NewsPreview = (props: NewsPreviewProps): JSX.Element => {
 
-    const { item } = props;
+    const { item, selectNewsItem } = props;
     const { title, source, description } = item;
 
     const [ hidden, setHidden ] = useState(true);
 
     const onPreviewClick = () => {
-        console.log(`clicked:\n${JSON.stringify(item, null, 2)}`)
+        console.log(`clicked:\n${JSON.stringify(item, null, 2)}`);
+        selectNewsItem(item);
     };
 
     return (
@@ -37,11 +42,7 @@ const NewsPreview = (props: NewsPreviewProps) => {
     );
 };
 
-const mapStateToProps = (state: StoreState) => {
-    return {};
-};
-
 export default connect(
-    mapStateToProps,
-    {}
+    null,
+    { selectNewsItem }
 )(NewsPreview);
