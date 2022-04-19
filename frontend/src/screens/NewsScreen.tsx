@@ -4,6 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import SearchBar from '../components/SearchBar';
 import NewsList from '../components/NewsList';
+import NewsSelected from '../components/NewsSelected';
 
 interface RootState {};
 interface NewsScreenProps {};
@@ -21,7 +22,7 @@ const NewsScreen = (props: NewsScreenProps) => {
                     <NewsList /> 
                 </Col>
                 <Col lg={7}>
-                    Selected
+                    <NewsSelected />
                 </Col>
             </Row>
         </div>

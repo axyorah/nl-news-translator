@@ -1,5 +1,6 @@
-import { NewsListInfo } from "./newsTypes"
+import { NewsListInfo, NewsSelectInfo } from "./newsTypes"
 
 export interface StoreState {
-    newsListInfo: NewsListInfo
+    newsListInfo: NewsListInfo,
+    newsSelectInfo: NewsSelectInfo
 }
