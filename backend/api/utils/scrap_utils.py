@@ -71,5 +71,5 @@ class NOSScrapper(Scrapper):
         return ps
 
 source2paragraphs = {
-    'Nos.nl': NOSScrapper().get_article
+    'nos.nl': NOSScrapper().get_article
 }
