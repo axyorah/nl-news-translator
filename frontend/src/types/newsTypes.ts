@@ -8,7 +8,9 @@ export interface News {
     title: string,
     description: string,
     url: string,
-    source: string
+    source: {
+        name: string,
+    }
 }
 
 export interface NewsListQueryParams {

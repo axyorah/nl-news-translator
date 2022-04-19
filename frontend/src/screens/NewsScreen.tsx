@@ -17,10 +17,10 @@ const NewsScreen = (props: NewsScreenProps) => {
                 </Col>
             </Row>
             <Row className="my-3">
-                <Col md={4}>
+                <Col lg={5}>
                     <NewsList /> 
                 </Col>
-                <Col md={8}>
+                <Col lg={7}>
                     Selected
                 </Col>
             </Row>

@@ -17,19 +17,23 @@ const NewsList = (props: NewsListProps): JSX.Element => {
     const { newsListInfo } = props;
     const { loading, errors, newsList } = newsListInfo;
 
-    const renderNewsItem = (newsItem: News) => {
-        return (
-            <ListGroup.Item>
-                <NewsPreview item={newsItem} />
-            </ListGroup.Item>
-        );
-    };
+    // const renderNewsItem = (newsItem: News) => {
+    //     return (
+    //         <ListGroup.Item key={newsItem.}>
+    //             <NewsPreview item={newsItem} />
+    //         </ListGroup.Item>
+    //     );
+    // };
 
     const renderList = () => {
         return (
             <ListGroup variant="flush">
-                {newsList.map((newsItem: News) => {
-                    return renderNewsItem(newsItem);
+                {newsList.map((newsItem: News, i: Number) => {
+                    return (
+                        <ListGroup.Item key={i.toString()}>
+                            <NewsPreview item={newsItem} />
+                        </ListGroup.Item>
+                    );
                 })}
             </ListGroup>
         );
