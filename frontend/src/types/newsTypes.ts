@@ -55,8 +55,7 @@ export interface NewsListFailAction {
 }
 
 export interface NewsListResetAction {
-    type: typeof NEWS_LIST_RESET,
-    payload: News[]
+    type: typeof NEWS_LIST_RESET
 }
 
 export type NewsListAction = 
@@ -86,8 +85,7 @@ export interface NewsSelectFailAction {
 }
 
 export interface NewsSelectResetAction {
-    type: typeof NEWS_SELECT_RESET,
-    payload: News
+    type: typeof NEWS_SELECT_RESET
 }
 
 export type NewsSelectAction = 
@@ -117,8 +115,7 @@ export interface NewsTranslateFailAction {
 }
 
 export interface NewsTranslateResetAction {
-    type: typeof NEWS_TRANSLATE_RESET,
-    payload: News
+    type: typeof NEWS_TRANSLATE_RESET
 }
 
 export type NewsTranslateAction = 
