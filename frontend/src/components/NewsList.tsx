@@ -17,7 +17,7 @@ const NewsList = (props: NewsListProps): JSX.Element => {
     const { newsListInfo } = props;
     const { loading, errors, newsList } = newsListInfo;
 
-    const renderList = () => {
+    const renderList = (): JSX.Element => {
         return (
             <ListGroup variant="flush">
                 {newsList.map((newsItem: News, i: Number) => {

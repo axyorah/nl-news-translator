@@ -17,7 +17,7 @@ const NewsPreview = (props: NewsPreviewProps): JSX.Element => {
 
     const [ hidden, setHidden ] = useState(true);
 
-    const onPreviewClick = () => {
+    const onPreviewClick = (): void => {
         console.log(`clicked:\n${JSON.stringify(item, null, 2)}`);
         selectNewsItem(item);
     };

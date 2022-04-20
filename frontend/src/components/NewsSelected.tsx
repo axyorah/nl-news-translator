@@ -17,7 +17,7 @@ interface NewsSelectedProps {
     translateNewsItem: Function
 };
 
-const NewsSelected = (props: NewsSelectedProps) => {
+const NewsSelected = (props: NewsSelectedProps): JSX.Element => {
 
     const { 
         newsSelectInfo, newsTranslateInfo,
@@ -33,7 +33,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
     const [ errors, setErrors ] = useState('');
 
 
-    const renderSentences = () => {
+    const renderSentences = (): JSX.Element[] | null => {
         if (sentences && sentences.length) {
             return sentences.map((sentence: string, i: Number) => {
                 return (
@@ -47,7 +47,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
         }
     };
 
-    const renderTranslations = () => {
+    const renderTranslations = (): JSX.Element[] | null => {
         if (sentences && sentences.length && translations && translations.length) {
             if (sentences.length !== translations.length) {
                 setErrors(`
@@ -73,7 +73,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
         }
     };
 
-    const renderButtons = () => {
+    const renderButtons = (): JSX.Element => {
         return (
             <div 
                 className="d-flex justify-content-between mt-4 px-3"

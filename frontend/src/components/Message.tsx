@@ -6,7 +6,7 @@ interface MessageProps {
     children: React.ReactNode
 }
 
-const Message = (props: MessageProps) => {
+const Message = (props: MessageProps): JSX.Element => {
     const { variant='danger', children } = props;
     return (
         <Alert variant={variant}>
