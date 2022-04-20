@@ -96,8 +96,8 @@ h1 {
     flex-direction: row;
     justify-content: center;
     align-content: center;
-    max-height: fit-content;
-    max-width: fit-content;
+    /* max-height: fit-content;
+    max-width: fit-content; */
     font-size: small;
     color: white;
     background-color: var(--color-capsule);
@@ -114,14 +114,14 @@ h1 {
     justify-content: center;
     align-content: center;
     text-align: center;
-    max-height: fit-content;
-    max-width: fit-content;
+    /* max-height: fit-content; */
+    /* max-width: fit-content; */
     color: white;
     background-color: var(--color-capsule);
     border: none;
-    height: 40px;
-    border-radius: 20px;
-    padding: 8px 15px 20px 15px;
+    /* height: 40px; */
+    border-radius: 30px;
+    padding: 15px;
     margin: 5px;
     font-size: medium;
     font-weight: bold;

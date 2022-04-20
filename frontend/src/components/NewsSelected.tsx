@@ -30,6 +30,10 @@ const NewsSelected = (props: NewsSelectedProps) => {
     const { loading: loadingTranslated, errors: errorsTranslated, newsTranslated } = newsTranslateInfo;
     const { sentences, translations } = newsTranslated || {};
 
+    const handleTranslate = () => {
+        translateNewsItem(newsSelected);
+    };
+
     const renderPost = () => {
         if (paragraphs && paragraphs.length) {
             return paragraphs.map((paragraph: string, i: Number) => {
@@ -54,22 +58,31 @@ const NewsSelected = (props: NewsSelectedProps) => {
             }</h3>
             { loadingSelected || loadingTranslated ? <Loader /> : null }
             { errorsSelected || errorsTranslated 
-                ? <Message variant='danger'>{errorsSelected || errorsTranslated}</Message> 
+                ? <Message variant="danger">{ errorsSelected || errorsTranslated }</Message> 
                 : null 
             }
             { paragraphs && paragraphs.length
-                ? <ListGroup variant='flush'>
+                ? <ListGroup variant="flush">
                     { renderPost() }
                 </ListGroup>
                 : null
             }
 
-            { paragraphs && paragraphs.length
-                ? <Button onClick={e => translateNewsItem(newsSelected)}>
-                    Translate
-                </Button>
-                : null
-            }
+            <div className="d-flex justify-content-between mt-5">
+                <div>
+                    { paragraphs && paragraphs.length
+                        ? <button className="capsule-lg" onClick={handleTranslate} >
+                            Translate
+                        </button>
+                        : null
+                    }
+                </div>
+                <div>
+                    <button className="capsule-lg">Make a Note</button>
+                </div>
+            </div>
+
+            
 
             
         </div>
