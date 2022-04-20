@@ -73,6 +73,32 @@ const NewsSelected = (props: NewsSelectedProps) => {
         }
     };
 
+    const renderButtons = () => {
+        return (
+            <div className="d-flex justify-content-between mt-5">
+                <div>
+                    { sentences && sentences.length
+                        ? <button 
+                            className="capsule-lg" 
+                            onClick={e => translateNewsItem(newsSelected)} 
+                        >
+                            Translate
+                        </button>
+                        : null
+                    }
+                </div>
+                <div>
+                    <button 
+                        className="capsule-lg"
+                        onClick={e => console.log('TODO: Make-a-Note!')}
+                    >
+                        Make a Note
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="boxed mycard p-5">
             
@@ -100,27 +126,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
                     : null
             }
 
-            <div className="d-flex justify-content-between mt-5">
-                <div>
-                    { sentences && sentences.length
-                        ? <button 
-                            className="capsule-lg" 
-                            onClick={e => translateNewsItem(newsSelected)} 
-                        >
-                            Translate
-                        </button>
-                        : null
-                    }
-                </div>
-                <div>
-                    <button 
-                        className="capsule-lg"
-                        onClick={e => console.log('TODO: Make-a-Note!')}
-                    >
-                        Make a Note
-                    </button>
-                </div>
-            </div>
+            { renderButtons() }
             
         </div>
     );
