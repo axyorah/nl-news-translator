@@ -6,6 +6,7 @@ import {
     NEWS_SELECT_QUERY,
     NEWS_SELECT_SUCCESS,
     NEWS_SELECT_FAIL,
+    NEWS_SELECT_RESET,
     
     NEWS_TRANSLATE_QUERY,
     NEWS_TRANSLATE_SUCCESS,
@@ -88,6 +89,11 @@ export const newsSelectReducers = (
             return {
                 loading: false,
                 errors: action.payload
+            };
+
+        case NEWS_SELECT_RESET:
+            return {
+                newsSelected: newsSelectedInit
             };
 
         default:
