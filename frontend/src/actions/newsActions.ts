@@ -50,9 +50,13 @@ export const getNewsList = (
     const { q } = params;
 
     try {
-        // clear old selected news item
+        // clear old selected news item and translations
         dispatch<NewsSelectResetAction>({
             type: NEWS_SELECT_RESET
+        });
+
+        dispatch<NewsTranslateResetAction>({
+            type: NEWS_TRANSLATE_RESET
         });
 
         // fetch a new list of news items
@@ -75,6 +79,7 @@ export const getNewsList = (
             type: NEWS_LIST_SUCCESS,
             payload: data.articles || []
         });
+
     } catch (e) {
         if (typeof e === 'string') {
             dispatch<NewsListFailAction>({
