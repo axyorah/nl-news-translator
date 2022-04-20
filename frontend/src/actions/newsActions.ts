@@ -4,14 +4,17 @@ import {
     NEWS_LIST_QUERY,
     NEWS_LIST_SUCCESS,
     NEWS_LIST_FAIL,
+    NEWS_LIST_RESET,
 
     NEWS_SELECT_QUERY,
     NEWS_SELECT_SUCCESS,
     NEWS_SELECT_FAIL,
+    NEWS_SELECT_RESET,
 
     NEWS_TRANSLATE_QUERY,
     NEWS_TRANSLATE_SUCCESS,
     NEWS_TRANSLATE_FAIL,
+    NEWS_TRANSLATE_RESET,
 } from '../constants/newsConstants';
 import backend from '../api/backend';
 
