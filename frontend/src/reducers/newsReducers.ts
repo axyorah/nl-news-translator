@@ -99,7 +99,7 @@ const newsTranslatedInit = {
     url: '',
     description: '',
     source: { name: '' },
-    paragraphs: []
+    sentences: []
 }
 
 export const newsTranslateReducers = (

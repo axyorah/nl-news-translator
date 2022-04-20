@@ -85,7 +85,7 @@ export const getNewsList = (
 };
 
 interface NewsSelectedApiResponse {
-    paragraphs: string[],
+    paragraphs: string[]
     message?: string
     errors?: string
 }
@@ -111,9 +111,19 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
             )
         }
 
+        const sentences: string[] = [];
+        data.paragraphs.forEach((paragraph: string) => {
+            paragraph.split('. ').forEach((sentence: string) =>{
+                sentences.push(sentence);
+            });
+        });
+
         dispatch<NewsSelectSuccessAction>({
             type: NEWS_SELECT_SUCCESS,
-            payload: {...item, paragraphs: data.paragraphs}
+            payload: {
+                ...item,
+                sentences: sentences
+            }
         });
 
     } catch (e) {
@@ -137,25 +147,17 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
 };
 
 interface NewsTranslatedApiResponse {
-    sentences: string[],
     translations: string[],
     message?: string
     errors?: string
 }
 
 export const translateNewsItem = (item: News) => async (dispatch: Dispatch) => {
-    const { url, paragraphs } = item;
+    const { url,sentences } = item;
 
     try {
         dispatch<NewsTranslateQueryAction>({
             type: NEWS_TRANSLATE_QUERY
-        });
-
-        const sentences: string[] = [];
-        paragraphs?.forEach((paragraph: string) => {
-            paragraph.split('. ').forEach((sentence: string) =>{
-                sentences.push(sentence);
-            });
         });
 
         const { data } = await backend.post<NewsTranslatedApiResponse>(
@@ -174,7 +176,6 @@ export const translateNewsItem = (item: News) => async (dispatch: Dispatch) => {
             type: NEWS_TRANSLATE_SUCCESS,
             payload: { 
                 ...item, 
-                sentences: sentences,
                 translations: data.translations
             }
         });

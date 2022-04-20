@@ -25,21 +25,21 @@ const NewsSelected = (props: NewsSelectedProps) => {
     } = props;
 
     const { loading: loadingSelected, errors: errorsSelected, newsSelected } = newsSelectInfo;
-    const { title, paragraphs } = newsSelected || {};
+    const { title, sentences } = newsSelected || {};
 
     const { loading: loadingTranslated, errors: errorsTranslated, newsTranslated } = newsTranslateInfo;
-    const { sentences, translations } = newsTranslated || {};
+    const { translations } = newsTranslated || {};
 
     const handleTranslate = () => {
         translateNewsItem(newsSelected);
     };
 
     const renderPost = () => {
-        if (paragraphs && paragraphs.length) {
-            return paragraphs.map((paragraph: string, i: Number) => {
+        if (sentences && sentences.length) {
+            return sentences.map((sentence: string, i: Number) => {
                 return (
                     <ListGroup.Item key={i.toString()}>
-                        { paragraph }
+                        { sentence }
                     </ListGroup.Item>
                 );
             });
@@ -52,7 +52,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
         <div className="boxed mycard p-5">
             
             <h3 className="text-center">{ 
-                paragraphs && paragraphs.length 
+                sentences && sentences.length 
                     ? title || "Title"
                     : "Select News from the List"
             }</h3>
@@ -61,7 +61,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
                 ? <Message variant="danger">{ errorsSelected || errorsTranslated }</Message> 
                 : null 
             }
-            { paragraphs && paragraphs.length
+            { sentences && sentences.length
                 ? <ListGroup variant="flush">
                     { renderPost() }
                 </ListGroup>
@@ -70,7 +70,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
 
             <div className="d-flex justify-content-between mt-5">
                 <div>
-                    { paragraphs && paragraphs.length
+                    { sentences && sentences.length
                         ? <button className="capsule-lg" onClick={handleTranslate} >
                             Translate
                         </button>
