@@ -16,6 +16,7 @@
     /* --color-box-edge: rgb(73, 73, 80); */
     --color-box-edge: rgb(88, 90, 98);
     --color-capsule: rgb(108, 117, 125);
+    --color-capsule-hover: rgb(92 92 101);
 
     --bg-pattern: url('../../public/imgs/angelfish5.png');
     --bg-gradient-tr: linear-gradient(rgba(33, 37, 41, 0.7), rgba(33, 37, 41, 1));
@@ -130,6 +131,7 @@ h1 {
 
 .capsule-lg:hover, .capsule-a-lg:hover {
     color: white;
+    background-color: var(--color-capsule-hover);
     opacity: 1;
 }
 
