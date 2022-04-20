@@ -1,22 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { ListGroup, Row, Col } from 'react-bootstrap';
+import { ListGroup, Button, Row, Col } from 'react-bootstrap';
 
 import Loader from './Loader';
 import Message from './Message';
 
 import { StoreState } from '../types/storeTypes';
 import { NewsSelectInfo } from '../types/newsTypes';
+import { NewsTranslateInfo } from '../types/newsTypes';
+
+import { translateNewsItem } from '../actions/newsActions';
 
 interface NewsSelectedProps {
-    newsSelectInfo: NewsSelectInfo
+    newsSelectInfo: NewsSelectInfo,
+    newsTranslateInfo: NewsTranslateInfo,
+    translateNewsItem: Function
 };
 
 const NewsSelected = (props: NewsSelectedProps) => {
 
-    const { newsSelectInfo } = props;
-    const { loading, errors, newsSelected } = newsSelectInfo;
+    const { 
+        newsSelectInfo, newsTranslateInfo,
+        translateNewsItem 
+    } = props;
+
+    const { loading: loadingSelected, errors: errorsSelected, newsSelected } = newsSelectInfo;
     const { title, paragraphs } = newsSelected || {};
+
+    const { loading: loadingTranslated, errors: errorsTranslated, newsTranslated } = newsTranslateInfo;
+    const { sentences, translations } = newsTranslated || {};
 
     const renderPost = () => {
         if (paragraphs && paragraphs.length) {
@@ -40,27 +52,39 @@ const NewsSelected = (props: NewsSelectedProps) => {
                     ? title || "Title"
                     : "Select News from the List"
             }</h3>
-            { loading ? <Loader /> : null }
-            { errors ? <Message variant='danger'>{errors}</Message> : null }
-            {
-                paragraphs && paragraphs.length
-                    ? <ListGroup variant='flush'>
-                        { renderPost() }
-                    </ListGroup>
-                    : null
+            { loadingSelected || loadingTranslated ? <Loader /> : null }
+            { errorsSelected || errorsTranslated 
+                ? <Message variant='danger'>{errorsSelected || errorsTranslated}</Message> 
+                : null 
             }
+            { paragraphs && paragraphs.length
+                ? <ListGroup variant='flush'>
+                    { renderPost() }
+                </ListGroup>
+                : null
+            }
+
+            { paragraphs && paragraphs.length
+                ? <Button onClick={e => translateNewsItem(newsSelected)}>
+                    Translate
+                </Button>
+                : null
+            }
+
+            
         </div>
     );
 };
 
 const mapStateToProps = (state: StoreState) => {
     return {
-        newsSelectInfo: state.newsSelectInfo
+        newsSelectInfo: state.newsSelectInfo,
+        newsTranslateInfo: state.newsTranslateInfo
     };
 };
 
 export default connect(
     mapStateToProps,
-    {}
+    { translateNewsItem }
 )(NewsSelected);
 
