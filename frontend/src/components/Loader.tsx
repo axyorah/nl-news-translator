@@ -1,11 +1,11 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 
-const Loader = (): JSX.Element => {
+const Loader = ({ size="70px" }): JSX.Element => {
     return (
         <div className="text-center">
             <Spinner 
-                style={{ width: "70px", height: "70px" }}
+                style={{ width: size, height: size }}
                 animation="border" 
                 variant="light"
             />

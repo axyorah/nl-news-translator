@@ -75,14 +75,18 @@ const NewsSelected = (props: NewsSelectedProps) => {
 
     const renderButtons = () => {
         return (
-            <div className="d-flex justify-content-between mt-5">
+            <div 
+                className="d-flex justify-content-between mt-4 px-3"
+                id="note-btn-container"
+            >
                 <div>
                     { sentences && sentences.length
                         ? <button 
-                            className="capsule-lg" 
+                            className="capsule-lg"
                             onClick={e => translateNewsItem(newsSelected)} 
-                        >
-                            Translate
+                        >                             
+                            { loadingTranslated ? <Loader size="23px"/> : null }
+                            <span>&nbsp;Translate</span>
                         </button>
                         : null
                     }
@@ -108,7 +112,7 @@ const NewsSelected = (props: NewsSelectedProps) => {
                     : "Select News from the List"
             }</h3>
             
-            { loadingSelected || loadingTranslated ? <Loader /> : null }
+            { loadingSelected ? <Loader /> : null }
             
             { errorsSelected || errorsTranslated || errors
                 ? <Message variant="danger">{ 
