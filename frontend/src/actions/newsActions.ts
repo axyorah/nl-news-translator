@@ -32,7 +32,8 @@ import {
 
     NewsTranslateQueryAction,
     NewsTranslateSuccessAction,
-    NewsTranslateFailAction
+    NewsTranslateFailAction,
+    NewsTranslateResetAction
 } from '../types/newsTypes';
 
 interface NewsListApiResponse {
@@ -97,7 +98,13 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
     
     const { source, url } = item;
 
-    try {        
+    try {
+        // reset old new item translations
+        dispatch<NewsTranslateResetAction>({
+            type: NEWS_TRANSLATE_RESET
+        });
+
+        // fetch new new item
         dispatch<NewsSelectQueryAction>({
             type: NEWS_SELECT_QUERY
         });

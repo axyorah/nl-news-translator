@@ -9,7 +9,8 @@ import {
     
     NEWS_TRANSLATE_QUERY,
     NEWS_TRANSLATE_SUCCESS,
-    NEWS_TRANSLATE_FAIL
+    NEWS_TRANSLATE_FAIL,
+    NEWS_TRANSLATE_RESET
 } from '../constants/newsConstants';
 
 import {
@@ -123,6 +124,11 @@ export const newsTranslateReducers = (
                 loading: false,
                 errors: action.payload
             };
+
+        case NEWS_TRANSLATE_RESET:
+            return {
+                newsTranslated: newsTranslatedInit
+            }
 
         default:
             return state;
