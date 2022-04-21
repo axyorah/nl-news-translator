@@ -21,13 +21,20 @@ def getAllUsers(request):
 def registerUser(request):
     data = request.data
 
-    user = User.objects.create(
-        username=data['username'],
-        password=make_password(data['password'])
-    )
-    serializer = UserSerializerWithToken(user, many=False)
-
-    return Response(serializer.data)
+    try:
+        user = User.objects.create(
+            username=data['username'],
+            password=make_password(data['password'])
+        )
+        serializer = UserSerializerWithToken(user, many=False)
+    
+        return Response(serializer.data)
+        
+    except Exception as e:
+        return Response(
+            {'errors': e.args[0]}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
