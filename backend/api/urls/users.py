@@ -5,7 +5,8 @@ from api.views import users as views
 
 
 urlpatterns = [
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('profile/', views.getUserProfile, name='user'),
     path('', views.getAllUsers, name='all-users'),
+    path('new/', views.registerUser, name='user-register'),
+    path('login/', TokenObtainPairView.as_view(), name='user-login'),
+    path('profile/', views.getUserProfile, name='user'),
 ]

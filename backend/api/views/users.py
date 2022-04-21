@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 from api.serializers import UserSerializer, UserSerializerWithToken
 
@@ -13,6 +14,18 @@ from api.serializers import UserSerializer, UserSerializerWithToken
 def getAllUsers(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
+
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+
+    user = User.objects.create(
+        username=data['username'],
+        password=make_password(data['password'])
+    )
+    serializer = UserSerializerWithToken(user, many=False)
 
     return Response(serializer.data)
 

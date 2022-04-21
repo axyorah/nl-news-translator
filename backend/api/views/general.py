@@ -27,7 +27,7 @@ def getRoutes(request):
         {'POST': '/api/translate/'},
         
         # {'GET': '/api/tags/'},
-        # {'POST': '/api/tags/new/'},        
+        # {'POST': '/api/tags/new/'},
         # {'PUT': '/api/tags/<pk>/edit/'},
         # {'DELETE': '/api/tags/<pk>/delete/'},
         # {'GET': '/api/tags/<pk>/'},
@@ -38,9 +38,9 @@ def getRoutes(request):
         # {'DELETE': '/api/notes/<pk>/delete/'},
         # {'GET': '/api/notes/<pk>/'},
 
-        {'POST': '/api/users/login/'},
         {'GET': '/api/users/'}, # admin only
-        # {'POST': '/api/users/new/'}, # admin only
+        {'POST': '/api/users/new/'},
+        {'POST': '/api/users/login/'},
         # {'PUT': '/api/users/<pk>/edit/'}, # self only
         # {'DELETE': '/api/users/<pk>/delete/'}, # self only
         {'GET': '/api/users/profile/'} # self only
