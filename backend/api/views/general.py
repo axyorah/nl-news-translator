@@ -38,6 +38,7 @@ def getRoutes(request):
         # {'DELETE': '/api/notes/<pk>/delete/'},
         # {'GET': '/api/notes/<pk>/'},
 
+        {'POST': '/api/users/login/'},
         # {'GET': '/api/users/'}, # admin only
         # {'POST': '/api/users/new/'}, # admin only
         # {'PUT': '/api/users/<pk>/edit/'}, # self only

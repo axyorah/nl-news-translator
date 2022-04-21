@@ -1,8 +1,9 @@
+PyJWT==v1.7.1 # have to downgrade it for djangorestframwork-simplejwt to work properly
 django
 python-dotenv
 requests
 djangorestframework
-djangorestframework-simplejwt
+djangorestframework-simplejwt==4.4.0
 django-cors-headers
 beautifulsoup4
 torch
