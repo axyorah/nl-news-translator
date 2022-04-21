@@ -4,11 +4,11 @@ from rest_framework import status
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from api.serializers import UserSerializer
+from api.serializers import UserSerializer, UserSerializerWithToken
 
 @api_view(['GET'])
 def getUserProfile(request):
     user = request.user # fetched using provided JWT token!
-    serializer = UserSerializer(user, many=False)
+    serializer = UserSerializerWithToken(user, many=False)
 
     return Response(serializer.data)
