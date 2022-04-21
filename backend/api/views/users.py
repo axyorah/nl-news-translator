@@ -7,6 +7,15 @@ from django.contrib.auth.models import User
 
 from api.serializers import UserSerializer, UserSerializerWithToken
 
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAllUsers(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+
+    return Response(serializer.data)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):

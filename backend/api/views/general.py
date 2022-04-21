@@ -23,7 +23,7 @@ def getRoutes(request):
         {'GET': '/api/'},
 
         {'GET': '/api/news/'},
-        {'GET': '/api/news/:url/'},
+        {'GET': '/api/news/selected/?source=<source>&url=<url>'},
         {'POST': '/api/translate/'},
         
         # {'GET': '/api/tags/'},
@@ -39,11 +39,11 @@ def getRoutes(request):
         # {'GET': '/api/notes/<pk>/'},
 
         {'POST': '/api/users/login/'},
-        # {'GET': '/api/users/'}, # admin only
+        {'GET': '/api/users/'}, # admin only
         # {'POST': '/api/users/new/'}, # admin only
         # {'PUT': '/api/users/<pk>/edit/'}, # self only
         # {'DELETE': '/api/users/<pk>/delete/'}, # self only
-        # {'GET': '/api/users/<pk>/'} # self only
+        {'GET': '/api/users/profile/'} # self only
     ]
 
     return Response(routes)
