@@ -16,7 +16,7 @@ const reducer = combineReducers({
     newsListInfo: newsListReducers,
     newsSelectInfo: newsSelectReducers,
     newsTranslateInfo: newsTranslateReducers,
-    userLogin: userLoginReducers
+    userLoginInfo: userLoginReducers
 });
 
 const userDetailFromStorage = localStorage.getItem('userDetail')

@@ -3,9 +3,11 @@ import {
     NewsSelectInfo, 
     NewsTranslateInfo 
 } from "./newsTypes"
+import { UserLoginInfo } from "./userTypes"
 
 export interface StoreState {
     newsListInfo: NewsListInfo,
     newsSelectInfo: NewsSelectInfo,
-    newsTranslateInfo: NewsTranslateInfo
+    newsTranslateInfo: NewsTranslateInfo,
+    userLoginInfo: UserLoginInfo
 }

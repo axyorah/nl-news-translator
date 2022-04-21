@@ -12,7 +12,7 @@ export interface User {
     token: string
 }
 
-export interface UserInfo {
+export interface UserLoginInfo {
     userDetail: User,
     loading?: string,
     errors?: string
