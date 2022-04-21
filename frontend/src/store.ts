@@ -9,16 +9,23 @@ import {
     newsSelectReducers,
     newsTranslateReducers 
 } from './reducers/newsReducers';
+import { userLoginReducers } from './reducers/userReducers';
 
 
 const reducer = combineReducers({
     newsListInfo: newsListReducers,
     newsSelectInfo: newsSelectReducers,
-    newsTranslateInfo: newsTranslateReducers
+    newsTranslateInfo: newsTranslateReducers,
+    userLogin: userLoginReducers
 });
 
+const userDetailFromStorage = localStorage.getItem('userDetail')
+    ? JSON.parse(localStorage.getItem('userDetail') || '')
+    : null;
+
 const initialState = {
-    newsListInfo: undefined//{ newsList: [] } as NewsListInfo
+    newsListInfo: undefined,//{ newsList: [] } as NewsListInfo
+    userDetail: userDetailFromStorage
 };
 
 const middleware = [thunk];
