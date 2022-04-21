@@ -13,7 +13,7 @@ export interface User {
 }
 
 export interface UserLoginInfo {
-    userDetail: User,
+    userDetail?: User,
     loading?: string,
     errors?: string
 }
