@@ -26,7 +26,7 @@ export interface UserTokens {
 
 export interface UserLoginInfo {
     userDetail?: UserDetail,
-    loading?: string,
+    loading?: boolean,
     errors?: string
 }
 

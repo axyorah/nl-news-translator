@@ -36,7 +36,7 @@ export interface NewsListQueryParams {
 
 export interface NewsListInfo {
     newsList: News[],
-    loading?: string,
+    loading?: boolean,
     errors?: string
 }
 
@@ -65,8 +65,8 @@ export type NewsListAction =
     NewsListResetAction;
 
 export interface NewsSelectInfo {
-    newsSelected: News,
-    loading?: string,
+    newsSelected: News | null,
+    loading?: boolean,
     errors?: string
 }
 
@@ -95,8 +95,8 @@ export type NewsSelectAction =
     NewsSelectResetAction;
 
 export interface NewsTranslateInfo {
-    newsTranslated: News,
-    loading?: string,
+    newsTranslated: News | null,
+    loading?: boolean,
     errors?: string
 }
 
