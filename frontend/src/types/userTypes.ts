@@ -12,8 +12,20 @@ export interface User {
     token: string
 }
 
+export interface UserDetail {
+    id: number,
+    username: string,
+    isAdmin: boolean,
+    token: string
+}
+
+export interface UserTokens {
+    refresh: string,
+    access: string
+}
+
 export interface UserLoginInfo {
-    userDetail?: User,
+    userDetail?: UserDetail,
     loading?: string,
     errors?: string
 }

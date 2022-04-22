@@ -7,10 +7,11 @@ import {
     USER_LOGIN_FAIL,
     USER_LOGOUT,
 } from '../constants/userConstants';
-import { User, UserLoginFailAction } from '../types/userTypes';
+import { UserTokens, UserDetail, UserLoginFailAction, UserLoginSuccessAction } from '../types/userTypes';
 
 
-type UserLoginApiResponse = User & { errors?: string }
+type UserLoginApiResponse = UserTokens & { errors?: string };
+type UserProfileApiResponse = UserDetail & { errors?: string };
 
 export const loginUser = (username: string, password: string) => async (dispatch: Dispatch) => {
     
@@ -19,17 +20,24 @@ export const loginUser = (username: string, password: string) => async (dispatch
             type: USER_LOGIN_QUERY
         });
     
-        const { data } = await backend.post<UserLoginApiResponse>(
+        // get tokens
+        const { data: { access } } = await backend.post<UserLoginApiResponse>(
             '/users/login/', 
             { username: username, password: password },
             { headers: { 'Content-Type': 'application/json' } }
+        );
+
+        // get account details
+        const { data } = await backend.get<UserProfileApiResponse>(
+            '/users/profile/',
+            { headers: { Authorization: `Bearer ${access}` } }
         );
 
         if (data.errors) {
             throw new Error(data.errors || 'Something went wrong while loggin in...');
         }
 
-        dispatch({
+        dispatch<UserLoginSuccessAction>({
             type: USER_LOGIN_SUCCESS,
             payload: data
         });
