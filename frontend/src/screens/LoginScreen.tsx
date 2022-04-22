@@ -19,13 +19,13 @@ interface LoginScreenState {
     userLoginInfo: UserLoginInfo
 }
 
-interface LoginScreenProps {
+interface LoginScreenDispatch {
     loginUser: Function
 }
 
 
 const LoginScreen = (
-    props: RouteComponentProps & LoginScreenState & LoginScreenProps
+    props: RouteComponentProps & LoginScreenState & LoginScreenDispatch
 ): JSX.Element => {
 
     const { 

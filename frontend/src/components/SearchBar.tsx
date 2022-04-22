@@ -7,12 +7,15 @@ import { NewsListInfo } from '../types/newsTypes';
 import { getNewsList } from '../actions/newsActions';
 
 
-interface SearchBarProps {
-    newsListInfo: NewsListInfo,
-    getNewsList: (params: { q: string }) => {}
-};
+interface SearchBarState {
+    newsListInfo: NewsListInfo
+}
 
-const SearchBar = (props: SearchBarProps): JSX.Element => {
+interface SearchBarDispatch {
+    getNewsList: (params: { q: string }) => {}
+}
+
+const SearchBar = (props: SearchBarState & SearchBarDispatch): JSX.Element => {
 
     console.log(props);
     const { getNewsList } = props;
@@ -46,7 +49,7 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: StoreState) => {
+const mapStateToProps = (state: StoreState): SearchBarState => {
     return {
         newsListInfo: state.newsListInfo
     };

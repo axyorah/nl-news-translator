@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
+import { RouteComponentProps } from 'react-router';
 
+import { StoreState } from '../types/storeTypes';
 import SearchBar from '../components/SearchBar';
 import NewsList from '../components/NewsList';
 import NewsSelected from '../components/NewsSelected';
 
-interface RootState {};
-interface NewsScreenProps {};
+interface NewsScreenState {};
 
-const NewsScreen = (props: NewsScreenProps) => {
+const NewsScreen = (props: RouteComponentProps & NewsScreenState): JSX.Element => {
     return (
         <div>
             <Row className="my-3">
@@ -29,7 +30,7 @@ const NewsScreen = (props: NewsScreenProps) => {
     );
 };
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: StoreState): NewsScreenState => {
     console.log(state);
     return {};
 };

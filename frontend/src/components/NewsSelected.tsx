@@ -11,13 +11,16 @@ import { NewsTranslateInfo } from '../types/newsTypes';
 
 import { translateNewsItem } from '../actions/newsActions';
 
-interface NewsSelectedProps {
+interface NewsSelectedState {
     newsSelectInfo: NewsSelectInfo,
-    newsTranslateInfo: NewsTranslateInfo,
-    translateNewsItem: Function
+    newsTranslateInfo: NewsTranslateInfo
 };
 
-const NewsSelected = (props: NewsSelectedProps): JSX.Element => {
+interface NewsSelectedDispatch {
+    translateNewsItem: Function
+}
+
+const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Element => {
 
     const { 
         newsSelectInfo, newsTranslateInfo,
@@ -136,7 +139,7 @@ const NewsSelected = (props: NewsSelectedProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: StoreState) => {
+const mapStateToProps = (state: StoreState): NewsSelectedState => {
     return {
         newsSelectInfo: state.newsSelectInfo,
         newsTranslateInfo: state.newsTranslateInfo

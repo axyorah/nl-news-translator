@@ -9,11 +9,12 @@ import NewsPreview from './NewsPreview';
 import { StoreState } from '../types/storeTypes';
 import { News, NewsListInfo } from '../types/newsTypes';
 
-interface NewsListProps {
+interface NewsListState {
     newsListInfo: NewsListInfo
 }
 
-const NewsList = (props: NewsListProps): JSX.Element => {
+const NewsList = (props: NewsListState): JSX.Element => {
+    
     const { newsListInfo } = props;
     const { loading, errors, newsList } = newsListInfo;
 
@@ -45,7 +46,7 @@ const NewsList = (props: NewsListProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: StoreState) => {
+const mapStateToProps = (state: StoreState): NewsListState => {
     return {
         newsListInfo: state.newsListInfo
     };

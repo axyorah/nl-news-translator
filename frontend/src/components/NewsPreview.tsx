@@ -6,11 +6,14 @@ import { News } from '../types/newsTypes';
 import { selectNewsItem } from '../actions/newsActions';
 
 interface NewsPreviewProps {
-    item: News,
+    item: News
+}
+
+interface NewsPreviewDispatch {
     selectNewsItem: Function // thunk messes types up :(
 }
 
-const NewsPreview = (props: NewsPreviewProps): JSX.Element => {
+const NewsPreview = (props: NewsPreviewProps & NewsPreviewDispatch): JSX.Element => {
 
     const { item, selectNewsItem } = props;
     const { title, source, description } = item;
