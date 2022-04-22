@@ -2,17 +2,36 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
-//import { NewsListInfo } from './types/newsTypes';
-//import { StoreState } from './types/storeTypes';
+import {
+    NewsListAction, NewsSelectAction, NewsTranslateAction
+} from './types/newsTypes';
+import { UserLoginAction } from './types/userTypes';
+import { StoreState } from './types/storeTypes';
+
 import { 
     newsListReducers, 
     newsSelectReducers,
     newsTranslateReducers 
 } from './reducers/newsReducers';
-import { userLoginReducers } from './reducers/userReducers';
+import { 
+    userLoginReducers 
+} from './reducers/userReducers';
+
+const initNews = {
+    title: '',
+    url: '',
+    source: { name: '' },
+    description: ''
+};
+
+type Action = 
+    NewsListAction | 
+    NewsSelectAction | 
+    NewsTranslateAction | 
+    UserLoginAction;
 
 
-const reducer = combineReducers({
+const reducer = combineReducers<StoreState>({
     newsListInfo: newsListReducers,
     newsSelectInfo: newsSelectReducers,
     newsTranslateInfo: newsTranslateReducers,
@@ -21,16 +40,18 @@ const reducer = combineReducers({
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
     ? JSON.parse(localStorage.getItem('userDetail') || '')
-    : null;
+    : {};
 
-const initialState = {
-    newsListInfo: undefined,//{ newsList: [] } as NewsListInfo
-    userDetail: userDetailFromStorage
+const initialState: StoreState = {
+    newsListInfo: { newsList: [] },
+    newsSelectInfo: { newsSelected: initNews },
+    newsTranslateInfo: { newsTranslated: initNews },
+    userLoginInfo: { userDetail: userDetailFromStorage }
 };
 
 const middleware = [thunk];
 
-const store = createStore(
+const store = createStore<StoreState, Action, unknown, unknown>(
     reducer,
     initialState,
     composeWithDevTools(applyMiddleware(...middleware))
