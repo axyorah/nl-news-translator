@@ -13,8 +13,6 @@ import {
 export const userLoginReducers = (
     state: UserLoginInfo = {}, action: UserLoginAction
 ) => {
-    console.log(state)
-    console.log(action)
     switch (action.type) {
         case USER_LOGIN_QUERY:
             return {

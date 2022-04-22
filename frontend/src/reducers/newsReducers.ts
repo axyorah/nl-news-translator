@@ -2,6 +2,7 @@ import {
     NEWS_LIST_QUERY,
     NEWS_LIST_SUCCESS,
     NEWS_LIST_FAIL,
+    NEWS_LIST_RESET,
 
     NEWS_SELECT_QUERY,
     NEWS_SELECT_SUCCESS,
@@ -35,27 +36,27 @@ export const newsListReducers = (
     switch (action.type) {
         case NEWS_LIST_QUERY:
             return {
-                ...state,
                 loading: true,
-                errors: null,
                 newsList: []
             };
 
         case NEWS_LIST_SUCCESS:
             return {
-                ...state,
                 loading: false,
-                errors: null,
                 newsList: action.payload
             };
 
         case NEWS_LIST_FAIL:
             return {
-                ...state,
                 loading: false,
                 errors: action.payload,
                 newsList: []
             };
+        
+        case NEWS_LIST_RESET:
+            return {
+                newsList: []
+            }
             
         default:
             return state;
@@ -76,7 +77,8 @@ export const newsSelectReducers = (
     switch (action.type) {
         case NEWS_SELECT_QUERY:
             return {
-                loading: true
+                loading: true,
+                newsSelected: newsSelectedInit
             };
 
         case NEWS_SELECT_SUCCESS:
@@ -88,7 +90,8 @@ export const newsSelectReducers = (
         case NEWS_SELECT_FAIL:
             return {
                 loading: false,
-                errors: action.payload
+                errors: action.payload,
+                newsSelected: newsSelectedInit
             };
 
         case NEWS_SELECT_RESET:
@@ -106,7 +109,8 @@ const newsTranslatedInit = {
     url: '',
     description: '',
     source: { name: '' },
-    sentences: []
+    sentences: [],
+    translations: []
 }
 
 export const newsTranslateReducers = (
@@ -116,7 +120,8 @@ export const newsTranslateReducers = (
     switch (action.type) {
         case NEWS_TRANSLATE_QUERY:
             return {
-                loading: true
+                loading: true,
+                newsTranslated: newsTranslatedInit
             };
 
         case NEWS_TRANSLATE_SUCCESS:
@@ -128,7 +133,8 @@ export const newsTranslateReducers = (
         case NEWS_TRANSLATE_FAIL:
             return {
                 loading: false,
-                errors: action.payload
+                errors: action.payload,
+                newsTranslated: newsTranslatedInit
             };
 
         case NEWS_TRANSLATE_RESET:

@@ -65,7 +65,7 @@ export type NewsListAction =
     NewsListResetAction;
 
 export interface NewsSelectInfo {
-    newsSelected: News | null,
+    newsSelected: News,
     loading?: boolean,
     errors?: string
 }
@@ -95,7 +95,7 @@ export type NewsSelectAction =
     NewsSelectResetAction;
 
 export interface NewsTranslateInfo {
-    newsTranslated: News | null,
+    newsTranslated: News,
     loading?: boolean,
     errors?: string
 }
