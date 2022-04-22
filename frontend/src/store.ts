@@ -40,7 +40,7 @@ const reducer = combineReducers<StoreState>({
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
     ? JSON.parse(localStorage.getItem('userDetail') || '')
-    : {};
+    : null;
 
 const initialState: StoreState = {
     newsListInfo: { newsList: [] },
