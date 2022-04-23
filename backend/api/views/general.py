@@ -26,13 +26,13 @@ def getRoutes(request):
         {'GET': '/api/news/selected/?source=<source>&url=<url>'},
         {'POST': '/api/translate/'},
         
-        # {'GET': '/api/tags/'},
+        {'GET': '/api/tags/'},
         # {'POST': '/api/tags/new/'},
         # {'PUT': '/api/tags/<pk>/edit/'},
         # {'DELETE': '/api/tags/<pk>/delete/'},
         # {'GET': '/api/tags/<pk>/'},
         
-        # {'GET': '/api/notes/'},
+        {'GET': '/api/notes/[?page=<page_num>&tag=<tag_id>]'},
         # {'POST': '/api/notes/new/'},
         # {'PUT': '/api/notes/<pk>/edit/'},
         # {'DELETE': '/api/notes/<pk>/delete/'},
