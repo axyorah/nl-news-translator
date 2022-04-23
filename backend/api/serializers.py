@@ -37,9 +37,18 @@ class UserSerializerWithToken(UserSerializer):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
 
-class NoteSerializer(serializers.ModelSerializer):
-    tags = serializers.SerializerMethodField()
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = [
+            'id',
+            'created',
+            'name',
+            'owner'
+        ]
 
+class NoteSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(read_only=True, many=True)
     class Meta:
         model = Note
         fields = [
@@ -53,16 +62,3 @@ class NoteSerializer(serializers.ModelSerializer):
 
     def get_created(self, obj: Note):
         return obj.created.isoformat()
-
-    def get_tags(self, obj: Note):
-        return obj.tags.all() or []
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = [
-            'id',
-            'created',
-            'name',
-            'owner'
-        ]
