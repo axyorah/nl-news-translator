@@ -61,7 +61,13 @@ export const loginUser = (username: string, password: string) => async (dispatch
                 payload: 'Something went wrong while loggin in...'
             });
         }
-
     }
+};
 
+export const logout = () => {
+    localStorage.removeItem('userDetail');
+
+    return {
+        type: USER_LOGOUT
+    }
 };
