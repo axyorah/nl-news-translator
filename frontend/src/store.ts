@@ -17,6 +17,7 @@ import {
     userLoginReducers,
     userRegisterReducers 
 } from './reducers/userReducers';
+import { tagListReducers } from './reducers/tagReducers';
 
 const initNews = {
     title: '',
@@ -38,7 +39,8 @@ const reducer = combineReducers<StoreState>({
     newsSelectInfo: newsSelectReducers,
     newsTranslateInfo: newsTranslateReducers,
     userLoginInfo: userLoginReducers,
-    userRegisterInfo: userRegisterReducers
+    userRegisterInfo: userRegisterReducers,
+    tagListInfo: tagListReducers,
 });
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
@@ -50,7 +52,8 @@ const initialState: StoreState = {
     newsSelectInfo: { newsSelected: initNews },
     newsTranslateInfo: { newsTranslated: initNews },
     userLoginInfo: { userDetail: userDetailFromStorage },
-    userRegisterInfo: {}
+    userRegisterInfo: {},
+    tagListInfo: { tagList: [] }
 };
 
 const middleware = [thunk];
