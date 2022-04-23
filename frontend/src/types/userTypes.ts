@@ -3,6 +3,10 @@ import {
     USER_LOGIN_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGOUT,
+
+    USER_REGISTER_QUERY,
+    USER_REGISTER_SUCCESS,
+    USER_REGISTER_FAIL,
 } from '../constants/userConstants';
 
 export interface User {
@@ -48,9 +52,29 @@ export interface UserLogoutAction {
     type: typeof USER_LOGOUT
 }
 
-
 export type UserLoginAction = 
     UserLoginQueryAction | 
     UserLoginSuccessAction | 
     UserLoginFailAction |
     UserLogoutAction;
+
+
+export interface UserRegisterQueryAction {
+    type: typeof USER_REGISTER_QUERY
+}
+
+export interface UserRegisterSuccessAction {
+    type: typeof USER_REGISTER_SUCCESS,
+    payload: User
+}
+
+export interface UserRegisterFailAction {
+    type: typeof USER_REGISTER_FAIL,
+    payload: string
+}
+
+export type UserRegisterAction = 
+    UserRegisterQueryAction | 
+    UserRegisterSuccessAction | 
+    UserRegisterFailAction;
+    
