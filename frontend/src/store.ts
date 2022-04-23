@@ -6,6 +6,8 @@ import {
     NewsListAction, NewsSelectAction, NewsTranslateAction
 } from './types/newsTypes';
 import { UserLoginAction, UserRegisterAction } from './types/userTypes';
+import { TagListAction } from './types/tagTypes';
+import { NoteListAction } from './types/noteTypes';
 import { StoreState } from './types/storeTypes';
 
 import { 
@@ -18,6 +20,7 @@ import {
     userRegisterReducers 
 } from './reducers/userReducers';
 import { tagListReducers } from './reducers/tagReducers';
+import { noteListReducers } from './reducers/noteReducers';
 
 const initNews = {
     title: '',
@@ -31,7 +34,9 @@ type Action =
     NewsSelectAction | 
     NewsTranslateAction | 
     UserLoginAction |
-    UserRegisterAction;
+    UserRegisterAction |
+    TagListAction |
+    NoteListAction;
 
 
 const reducer = combineReducers<StoreState>({
@@ -41,6 +46,7 @@ const reducer = combineReducers<StoreState>({
     userLoginInfo: userLoginReducers,
     userRegisterInfo: userRegisterReducers,
     tagListInfo: tagListReducers,
+    noteListInfo: noteListReducers
 });
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
@@ -53,7 +59,8 @@ const initialState: StoreState = {
     newsTranslateInfo: { newsTranslated: initNews },
     userLoginInfo: { userDetail: userDetailFromStorage },
     userRegisterInfo: {},
-    tagListInfo: { tagList: [] }
+    tagListInfo: { tagList: [] },
+    noteListInfo: { noteList: [] }
 };
 
 const middleware = [thunk];

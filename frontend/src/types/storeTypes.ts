@@ -5,6 +5,7 @@ import {
 } from "./newsTypes"
 import { UserLoginInfo } from "./userTypes";
 import { TagListInfo } from "./tagTypes";
+import { NoteListInfo } from "./noteTypes";
 
 export interface StoreState {
     newsListInfo: NewsListInfo,
@@ -12,5 +13,6 @@ export interface StoreState {
     newsTranslateInfo: NewsTranslateInfo,
     userLoginInfo: UserLoginInfo,
     userRegisterInfo: UserLoginInfo,
-    tagListInfo: TagListInfo
+    tagListInfo: TagListInfo,
+    noteListInfo: NoteListInfo
 }
