@@ -10,9 +10,13 @@ from api.serializers import TagSerializer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getAllUserTags(request):
-    user = request.user
+    try:
+        user = request.user
 
-    tags = Tag.objects.filter(owner=user)
-    serializer = TagSerializer(tags, many=True)
+        tags = Tag.objects.filter(owner=user)
+        serializer = TagSerializer(tags, many=True)
+    
+        return Response({ 'tags': serializer.data })
 
-    return Response(serializer.data)
+    except Exception as e:
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
