@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { StoreState } from '../types/storeTypes';
@@ -20,19 +20,12 @@ interface HeaderDispatch {
 
 const Header = (props: HeaderState & HeaderDispatch): JSX.Element => {
 
-    console.log(props)
-
     const { userLoginInfo, logout } = props;
     const { userDetail } = userLoginInfo || {};
-
-    useEffect(() => {
-        console.log(userDetail)
-    }, [ userLoginInfo ]);
 
     const logoutHandler = () => {
         logout()
     };
-
 
     return (
         <Navbar bg="dark" variant="dark" expand="md">
