@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import {
     NewsListAction, NewsSelectAction, NewsTranslateAction
 } from './types/newsTypes';
-import { UserLoginAction } from './types/userTypes';
+import { UserLoginAction, UserRegisterAction } from './types/userTypes';
 import { StoreState } from './types/storeTypes';
 
 import { 
@@ -14,7 +14,8 @@ import {
     newsTranslateReducers 
 } from './reducers/newsReducers';
 import { 
-    userLoginReducers 
+    userLoginReducers,
+    userRegisterReducers 
 } from './reducers/userReducers';
 
 const initNews = {
@@ -28,14 +29,16 @@ type Action =
     NewsListAction | 
     NewsSelectAction | 
     NewsTranslateAction | 
-    UserLoginAction;
+    UserLoginAction |
+    UserRegisterAction;
 
 
 const reducer = combineReducers<StoreState>({
     newsListInfo: newsListReducers,
     newsSelectInfo: newsSelectReducers,
     newsTranslateInfo: newsTranslateReducers,
-    userLoginInfo: userLoginReducers
+    userLoginInfo: userLoginReducers,
+    userRegisterInfo: userRegisterReducers
 });
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
@@ -46,7 +49,8 @@ const initialState: StoreState = {
     newsListInfo: { newsList: [] },
     newsSelectInfo: { newsSelected: initNews },
     newsTranslateInfo: { newsTranslated: initNews },
-    userLoginInfo: { userDetail: userDetailFromStorage }
+    userLoginInfo: { userDetail: userDetailFromStorage },
+    userRegisterInfo: {}
 };
 
 const middleware = [thunk];

@@ -9,5 +9,6 @@ export interface StoreState {
     newsListInfo: NewsListInfo,
     newsSelectInfo: NewsSelectInfo,
     newsTranslateInfo: NewsTranslateInfo,
-    userLoginInfo: UserLoginInfo
+    userLoginInfo: UserLoginInfo,
+    userRegisterInfo: UserLoginInfo
 }
