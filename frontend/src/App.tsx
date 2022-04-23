@@ -6,6 +6,7 @@ import Header from './components/Header';
 import NewsScreen from './screens/NewsScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import TagListScreen from './screens/TagListScreen';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" exact component={NewsScreen} />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
+          <Route path="/tags" exact component={TagListScreen} />
         </Container>
       </Switch>
 
