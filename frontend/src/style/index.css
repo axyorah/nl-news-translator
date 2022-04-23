@@ -97,8 +97,8 @@ h1 {
     flex-direction: row;
     justify-content: center;
     align-content: center;
-    /* max-height: fit-content;
-    max-width: fit-content; */
+    /* max-height: fit-content;*/
+    max-width: fit-content;
     font-size: small;
     color: white;
     background-color: var(--color-capsule);
@@ -116,7 +116,7 @@ h1 {
     align-content: center;
     text-align: center;
     /* max-height: fit-content; */
-    /* max-width: fit-content; */
+    max-width: fit-content;
     color: white;
     background-color: var(--color-capsule);
     border: none;
