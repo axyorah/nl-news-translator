@@ -106,6 +106,11 @@ export const registerUser = (username: string, password: string) => async (dispa
             payload: data
         });
 
+        dispatch<UserLoginSuccessAction>({
+            type: USER_LOGIN_SUCCESS,
+            payload: data
+        });
+
         localStorage.setItem('userDetail', JSON.stringify(data));
 
     } catch (e) {
