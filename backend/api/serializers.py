@@ -4,7 +4,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth.models import User
 
-from backend.api.models import Note, Tag
+from api.models import Note, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from backend.api.models import Note, Tag
+from api.models import Note, Tag
 
 # Register your models here.
 admin.site.register(Note)
