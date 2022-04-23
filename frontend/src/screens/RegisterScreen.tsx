@@ -82,7 +82,8 @@ const RegisterScreen = (
 
                 <Form.Group className='my-3'>
                     <Form.Label>Username</Form.Label>
-                    <Form.Control 
+                    <Form.Control
+                        required 
                         type='text'
                         value={username}
                         onChange={e => setUsername(e.target.value)}
@@ -91,7 +92,8 @@ const RegisterScreen = (
 
                 <Form.Group className='my-3'>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control 
+                    <Form.Control
+                        required 
                         type='password'
                         value={password}
                         onChange={e => setPassword(e.target.value)}
@@ -100,7 +102,8 @@ const RegisterScreen = (
 
                 <Form.Group className='my-3'>
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control 
+                    <Form.Control
+                        required 
                         type='password'
                         value={confirmPassword}
                         onChange={e => setConfirmPassword(e.target.value)}

@@ -75,7 +75,8 @@ const LoginScreen = (
 
                 <Form.Group className='my-3'>
                     <Form.Label>Username</Form.Label>
-                    <Form.Control 
+                    <Form.Control
+                        required 
                         type='text'
                         value={username}
                         onChange={e => setUsername(e.target.value)}
@@ -84,7 +85,8 @@ const LoginScreen = (
 
                 <Form.Group className='my-3'>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control 
+                    <Form.Control
+                        required 
                         type='password'
                         value={password}
                         onChange={e => setPassword(e.target.value)}
