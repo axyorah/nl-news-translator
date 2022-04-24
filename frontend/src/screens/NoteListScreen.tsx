@@ -27,12 +27,17 @@ const NoteListScreen = (
     props: RouteComponentProps & NoteListScreenState & NoteListScreenDispatch
 ): JSX.Element => {
 
-    const { noteListInfo, getAllUserNotes } = props;
+    const { location, noteListInfo, getAllUserNotes } = props;
     const { loading, errors, noteList } = noteListInfo || {};
 
     useEffect(() => {
-        getAllUserNotes();
-    }, [ getAllUserNotes ]);
+        const pagePattern = /page=(?<page>[0-9]*)/;
+        const pageRgx = location.search.match(pagePattern);
+        const page = pageRgx && pageRgx.groups ? pageRgx.groups.page : 1;
+
+        getAllUserNotes(page);
+
+    }, [ getAllUserNotes, location.search ]);
 
     const renderNote = (note: Note): JSX.Element => {
         
