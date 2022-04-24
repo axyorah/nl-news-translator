@@ -87,7 +87,7 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
                         ? <button 
                             className="capsule-lg"
                             onClick={e => translateNewsItem(newsSelected)} 
-                        >                             
+                        >
                             { loadingTranslated ? <Loader size="23px"/> : null }
                             <span>&nbsp;Translate</span>
                         </button>

@@ -71,9 +71,15 @@ const NoteListScreen = (
 
                 <Col md={3} sm={12}>
                     {note.tags.map((tag: Tag) => {
-                        return (<span className='capsule'>
-                            {tag.name}
-                        </span>);
+                        return (
+                            <div 
+                                key={tag.name}
+                                className='capsule' 
+                                style={{ width: 'fit-content' }}
+                            >
+                                {tag.name}
+                            </div>
+                        );
                     })}
                 </Col>
             </Row>
