@@ -5,6 +5,7 @@ import {
 } from '../constants/noteConstants';
 import {
     Note,
+    NoteListDetail,
     NoteListInfo,
     NoteListAction
 } from '../types/noteTypes';
@@ -20,28 +21,34 @@ const initNote: Note = {
     tags: []
 };
 
+const initNoteListDetail: NoteListDetail = {
+    noteList: [],
+    page: 0,
+    numPages: 0
+};
+
 
 export const noteListReducers = (
-    state: NoteListInfo = { noteList: []}, action: NoteListAction
+    state: NoteListInfo = { noteListDetail: initNoteListDetail }, action: NoteListAction
 ) => {
     switch (action.type) {
         case NOTE_LIST_QUERY:
             return {
                 loading: true,
-                noteList: []
+                noteListDetail: initNoteListDetail
             };
 
         case NOTE_LIST_SUCCESS:
             return {
                 loading: false,
-                noteList: action.payload
+                noteListDetail: action.payload
             };
 
         case NOTE_LIST_FAIL:
             return {
                 loading: false,
                 errors: action.payload,
-                noteList: []
+                noteListDetail: initNoteListDetail
             };
 
         default:

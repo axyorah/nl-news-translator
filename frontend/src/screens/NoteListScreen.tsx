@@ -28,7 +28,7 @@ const NoteListScreen = (
 ): JSX.Element => {
 
     const { location, noteListInfo, getAllUserNotes } = props;
-    const { loading, errors, noteList } = noteListInfo || {};
+    const { loading, errors, noteListDetail } = noteListInfo || {};
 
     useEffect(() => {
         const pagePattern = /page=(?<page>[0-9]*)/;
@@ -92,7 +92,7 @@ const NoteListScreen = (
     };
 
     const renderNotes = (): JSX.Element | null => {
-        if (!noteList) {
+        if (!noteListDetail) {
             return null;
         }
 
@@ -109,7 +109,7 @@ const NoteListScreen = (
 
 
 
-                { noteList.map((note: Note) => {
+                { noteListDetail.noteList.map((note: Note) => {
                     return (<ListGroup.Item key={note.id}>
                         {renderNote(note)}
                     </ListGroup.Item>);
@@ -124,7 +124,7 @@ const NoteListScreen = (
 
             { loading ? <Loader /> : null }
             { errors ? <Message variant='danger'>{errors}</Message> : null }
-            { noteList ? renderNotes() : null }
+            { noteListDetail ? renderNotes() : null }
 
         </div>
     );

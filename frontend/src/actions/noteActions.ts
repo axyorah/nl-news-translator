@@ -18,6 +18,8 @@ import {
 
 interface NoteListApiResponse {
     notes: Note[],
+    page: Number,
+    num_pages: Number,
     errors? : string,
     detail?: string
 }
@@ -43,7 +45,11 @@ export const getAllUserNotes = (page: number = 1) => async (dispatch: Dispatch) 
     
         dispatch<NoteListSuccessAction>({
             type: NOTE_LIST_SUCCESS,
-            payload: data.notes
+            payload: {
+                noteList: data.notes,
+                page: data.page,
+                numPages: data.num_pages
+            }
         });
 
     } catch (e) {

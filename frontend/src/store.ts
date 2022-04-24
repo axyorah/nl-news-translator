@@ -60,7 +60,7 @@ const initialState: StoreState = {
     userLoginInfo: { userDetail: userDetailFromStorage },
     userRegisterInfo: {},
     tagListInfo: { tagList: [] },
-    noteListInfo: { noteList: [] }
+    noteListInfo: { noteListDetail: { noteList: [], page: 0, numPages: 0 } }
 };
 
 const middleware = [thunk];

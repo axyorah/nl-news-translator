@@ -16,8 +16,14 @@ export interface Note {
     tags: Tag[]
 }
 
-export interface NoteListInfo {
+export interface NoteListDetail {
     noteList: Note[],
+    page: Number,
+    numPages: Number
+}
+
+export interface NoteListInfo {
+    noteListDetail: NoteListDetail,
     loading?: boolean,
     errors?: string
 }
@@ -28,7 +34,7 @@ export interface NoteListQueryAction {
 
 export interface NoteListSuccessAction {
     type: typeof NOTE_LIST_SUCCESS,
-    payload: Note[]
+    payload: NoteListDetail
 }
 
 export interface NoteListFailAction {
