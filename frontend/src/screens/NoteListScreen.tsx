@@ -98,6 +98,7 @@ const NoteListScreen = (
 
         return (
             <ListGroup variant='flush'>
+                
                 <ListGroup.Item style={{ backgroundColor: 'rgb(50, 50, 55)'}}>
                     <Row>
                         <Col md={2} sm={12}><h5>Date</h5></Col>
@@ -106,8 +107,6 @@ const NoteListScreen = (
                         <Col md={3} sm={12}><h5>Tags</h5></Col>
                     </Row>
                 </ListGroup.Item>
-
-
 
                 { noteListDetail.noteList.map((note: Note) => {
                     return (<ListGroup.Item key={note.id}>
@@ -118,13 +117,70 @@ const NoteListScreen = (
         );
     };
 
+    const renderPagination = (): JSX.Element | null => {
+        if (!noteListDetail) {
+            return null;
+        }
+
+        const { page: currentPage, numPages } = noteListDetail;
+        const start = Math.max(1, currentPage - 3);
+        const end = Math.min(currentPage + 3, numPages);
+        const numCapsules = end - start + 1;
+
+        return (
+            <div className='d-flex justify-content-center mt-5'>
+
+                { currentPage > 1 
+                    ? <span className='capsule'>
+                        <Link 
+                            to={`/notes/?page=${currentPage - 1}`} 
+                            style={{ color: 'white' }}
+                        >&lt;</Link>
+                    </span>
+                    : null
+                }                
+
+                { [...Array(numCapsules)].map((v,i) => {
+                    return (
+                        <span key={i} className='capsule'>   
+                            { i + start === currentPage 
+                                ? <b>{i + start}</b>
+                                : <Link 
+                                    to={`/notes/?page=${i+1}`} 
+                                    style={{ color: 'white' }}
+                                >{i + 1}</Link>
+                            }                            
+                        </span>
+                    );
+                }) }
+
+                { currentPage < numPages 
+                    ? <span className='capsule'>
+                        <Link 
+                            to={`/notes/?page=${currentPage + 1}`} 
+                            style={{ color: 'white' }}
+                        >&gt;</Link>
+                    </span>
+                    : null
+                }   
+
+            </div>
+        );
+    };
+
     return (
         <div className='boxed mycard mt-5 p-5'>
             <h3 className='text-center mb-4'>My Notes</h3>
 
             { loading ? <Loader /> : null }
             { errors ? <Message variant='danger'>{errors}</Message> : null }
-            { noteListDetail ? renderNotes() : null }
+            { noteListDetail 
+                ? <div>
+                    <div>{ renderNotes() }</div>
+                    <div>{ renderPagination() }</div>
+                </div> 
+                : null 
+            }
 
         </div>
     );

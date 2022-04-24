@@ -93,12 +93,13 @@ h1 {
 
 /* DETAILS */
 .capsule, .capsule-a {
-    display: flex;
-    flex-direction: row;
+    /* display: flex;
+    flex-direction: row; */
+    display: inline-block;
     justify-content: center;
     align-content: center;
     /* max-height: fit-content;*/
-    /* max-width: fit-content; */
+    max-width: fit-content;
     font-size: small;
     color: white;
     background-color: var(--color-capsule);
@@ -110,8 +111,9 @@ h1 {
 }
 
 .capsule-lg, .capsule-a-lg {
-    display: flex;
-    flex-direction: row;
+    /* display: flex;
+    flex-direction: row; */
+    display: inline-block;
     justify-content: center;
     align-content: center;
     text-align: center;
