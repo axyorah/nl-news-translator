@@ -18,8 +18,8 @@ import {
 
 interface NoteListApiResponse {
     notes: Note[],
-    page: Number,
-    num_pages: Number,
+    page: number,
+    num_pages: number,
     errors? : string,
     detail?: string
 }

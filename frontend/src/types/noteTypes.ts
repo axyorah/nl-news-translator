@@ -10,7 +10,7 @@ import { Tag } from './tagTypes';
 export interface Note {
     id: string,
     created: string,
-    owner: Number,
+    owner: number,
     side_a: string,
     side_b: string,
     tags: Tag[]
@@ -18,8 +18,8 @@ export interface Note {
 
 export interface NoteListDetail {
     noteList: Note[],
-    page: Number,
-    numPages: Number
+    page: number,
+    numPages: number
 }
 
 export interface NoteListInfo {
