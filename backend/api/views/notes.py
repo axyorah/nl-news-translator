@@ -123,3 +123,26 @@ def updateUserNote(request: HttpRequest, pk):
         print(e)
         return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteUserNote(request: HttpRequest, pk):
+    try:
+        user = request.user
+        note = user.note_set.get(id=pk)
+        note.delete()
+        
+        return Response({'id': pk})
+    
+    except Note.DoesNotExist as e:
+        print(e)
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
+
+    except exceptions.APIException as e:
+        print(e)
+        return Response({ 'errors': e.detail }, status=e.status_code)
+
+    except Exception as e:
+        print(e)
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
