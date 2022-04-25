@@ -1,9 +1,11 @@
+from urllib.error import HTTPError
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from django.core.paginator import Paginator
+from rest_framework import exceptions
 
 from api.models import Note
 from api.serializers import NoteSerializer
@@ -44,8 +46,32 @@ def getAllUserNotes(request):
             'page': page,
             'num_pages': paginator.num_pages
         })
+
+    except exceptions.APIException as e:
+        return Response({ 'errors': e.detail }, status=e.status_code)
     
     except Exception as e:
         print(e)
         return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserNote(request, pk):
+    try:
+        user = request.user
+        note = user.note_set.get(id=pk)
+        serializer = NoteSerializer(note, many=False)
+
+        return Response(serializer.data)
+
+    except Note.DoesNotExist as e:
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
+
+    except exceptions.APIException as e:
+        return Response({ 'errors': e.detail }, status=e.status_code)
+
+    except Exception as e:
+        print(e)
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
