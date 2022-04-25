@@ -27,7 +27,7 @@ interface NoteListScreenDispatch {
 }
 
 interface TagState {
-    [name: string]: boolean
+    [tagId: string]: boolean
 }
 
 
@@ -36,7 +36,7 @@ const NoteListScreen = (
 ): JSX.Element => {
 
     const { 
-        location, 
+        location, history,
         noteListInfo, tagListInfo,
         getAllUserNotes, getAllUserTags 
     } = props;
@@ -48,66 +48,62 @@ const NoteListScreen = (
 
     const [ tags, setTags ] = useState<TagState>({});
 
+    // on load
     useEffect(() => {
+        // reset url
+        history.push('/notes/')
+
+        // load all (unfiltered)
+        getAllUserNotes();
+        getAllUserTags();
+    }, [ getAllUserNotes, getAllUserTags, history ])
+
+    // on `page` or `tags` change
+    useEffect(() => {
+        // get actual page from query string
         const pagePattern = /page=(?<page>[0-9]*)/;
         const pageRgx = location.search.match(pagePattern);
         const page = pageRgx && pageRgx.groups ? pageRgx.groups.page : 1;
 
-        getAllUserNotes(page);
-        getAllUserTags();
-
-    }, [ getAllUserNotes, getAllUserTags, location.search ]);
-
-    useEffect(() => {
+        // get tagIds
         const tagIds = Object.keys(tags).filter(
             (tagId: string) => tags[tagId]
         );
-        console.log(tags);
-        console.log(tagIds);
-        
-    }, [ tags ]);
+
+        // update noteList
+        getAllUserNotes(page, tagIds);
+
+    }, [ getAllUserNotes, getAllUserTags, location.search, tags ]);
+
+
+    const renderTag = (tag: Tag) => {
+        return (
+            <Col 
+                key={tag.id}
+                className='capsule' 
+                style={{ display: 'flex', flexDirection: 'row' }}                                
+            >
+                <Form.Check 
+                    className='m-0' 
+                    onClick={e => {
+                        e.currentTarget.checked = !tags[tag.id];
+                        setTags({
+                            ...tags,
+                            [tag.id]: tags[tag.id] ? false : true 
+                        });
+                    }}
+                />
+                <Form.Label className='m-0' >{tag.name}</Form.Label>
+            </Col>
+        );
+    };
 
     const renderTags = () => {
         return (
             <div className='m-3'>
-                <Row>
-                    { tagList.map((tag: Tag) => {
-                        return (
-                            <Col 
-                                key={tag.name}
-                                className='capsule' 
-                                style={{ display: 'flex', flexDirection: 'row' }}                                
-                            >
-                                <Form.Check 
-                                    className='m-0' 
-                                    onClick={e => {
-                                        setTags({
-                                            ...tags,
-                                            [tag.id]: tags[tag.id] ? false : true 
-                                        });
-                                    }}
-                                />
-                                <Form.Label className='m-0' >{tag.name}</Form.Label>
-                            </Col>
-                        );
-                    })}
-                </Row>
+                <Row> { tagList.map((tag: Tag) => renderTag(tag)) }</Row>
             </div>
         );
-        // return (
-        //     <div className='m-3'>
-        //         <Form as={Row}>
-        //             { tagList.map((tag: Tag) => {
-        //                 return (
-        //                     <Form.Group as={Col} className='capsule' style={{ display: 'flex', flexDirection: 'row' }}>
-        //                         <Form.Check className='m-0' />
-        //                         <Form.Label className='m-0' >{tag.name}</Form.Label>
-        //                     </Form.Group>
-        //                 );
-        //             })}
-        //         </Form>
-        //     </div>
-        // );
     };
 
     return (
@@ -115,13 +111,13 @@ const NoteListScreen = (
 
             <h3 className='text-center mb-4'>My Notes</h3>
 
-            { loadingNotes || loadingTags ? <Loader /> : null }
-            { errorsNotes || errorsTags 
-                ? <Message variant='danger'>{errorsNotes || errorsTags}</Message> 
-                : null 
-            }
+            { loadingTags ? <Loader /> : null }
+            { errorsTags ? <Message variant='danger'>{errorsTags}</Message> : null }
 
-            { renderTags() }
+            { tagList ? renderTags() : null }
+
+            { loadingNotes ? <Loader /> : null }
+            { errorsNotes ? <Message variant='danger'>{errorsNotes}</Message> : null }
 
             { noteListDetail
                 ? (<div>

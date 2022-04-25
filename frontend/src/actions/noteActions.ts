@@ -24,7 +24,7 @@ interface NoteListApiResponse {
     detail?: string
 }
 
-export const getAllUserNotes = (page: number = 1) => async (dispatch: Dispatch) => {
+export const getAllUserNotes = (page: number = 1, tags: string[] = []) => async (dispatch: Dispatch) => {
 
     try {
         dispatch<NoteListQueryAction>({
@@ -38,8 +38,13 @@ export const getAllUserNotes = (page: number = 1) => async (dispatch: Dispatch) 
         const { data } = await backend.get<NoteListApiResponse>(
             '/notes/',
             { 
-                params: { page: page },
-                headers: { Authorization: `Bearer ${userDetail.token}` } 
+                headers: { 
+                    Authorization: `Bearer ${userDetail.token}` 
+                },
+                params: { 
+                    page: page, 
+                    tags: tags && tags.length ? tags.join(',') : [] 
+                } 
             }
         );
     
