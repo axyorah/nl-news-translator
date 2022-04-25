@@ -1,7 +1,11 @@
 import {
     NOTE_LIST_QUERY,
     NOTE_LIST_SUCCESS,
-    NOTE_LIST_FAIL
+    NOTE_LIST_FAIL,
+
+    NOTE_SELECT_QUERY,
+    NOTE_SELECT_SUCCESS,
+    NOTE_SELECT_FAIL,
 } from '../constants/noteConstants';
 
 import { Tag } from './tagTypes';
@@ -46,3 +50,29 @@ export type NoteListAction =
     NoteListQueryAction | 
     NoteListSuccessAction | 
     NoteListFailAction;
+
+
+export interface NoteSelectInfo {
+    noteSelect: Note,
+    loading?: boolean,
+    errors?: string
+}
+
+export interface NoteSelectQueryAction {
+    type: typeof NOTE_SELECT_QUERY
+}
+
+export interface NoteSelectSuccessAction {
+    type: typeof NOTE_SELECT_SUCCESS,
+    payload: Note
+}
+
+export interface NoteSelectFailAction {
+    type: typeof NOTE_SELECT_FAIL,
+    payload: string
+}
+
+export type NoteSelectAction = 
+    NoteSelectQueryAction | 
+    NoteSelectSuccessAction | 
+    NoteSelectFailAction;
