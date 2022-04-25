@@ -23,7 +23,7 @@ def getAllUserNotes(request):
 
         # notes with specific tags (if specified)
         if tags:
-            notes = user.note_set.filter(tags__in=tags)
+            notes = user.note_set.filter(tags__in=tags).distinct()
         else:
             notes = user.note_set.all()
 
