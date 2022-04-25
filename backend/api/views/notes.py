@@ -15,12 +15,15 @@ def getAllUserNotes(request):
         user = request.user
 
         # params
-        tag_id = request.GET.get('tag', None)
-        page = request.GET.get('page', 1)
+        page_string = request.GET.get('page')
+        tags_string = request.GET.get('tags', None)
 
-        # notes with specific tag (if specified)
-        if tag_id is not None:
-            notes = user.note_set.filter(tags__id=tag_id)
+        page = int(page_string) if page_string is not None and page_string.isnumeric() else 1
+        tags = tags_string.split(',') if tags_string is not None else []
+
+        # notes with specific tags (if specified)
+        if tags:
+            notes = user.note_set.filter(tags__in=tags)
         else:
             notes = user.note_set.all()
 
@@ -28,13 +31,10 @@ def getAllUserNotes(request):
         paginator = Paginator(notes, 5)
 
         # adjust page number if needed
-        if isinstance(page, str) and not page.isnumeric():
+        if page <= 0:
             page = 1
-        elif int(page) <= 0:
-            page = 1
-        elif int(page) > int(paginator.num_pages):
+        elif page > int(paginator.num_pages):
             page = paginator.num_pages
-        page = int(page)
         
         # serialize
         serializer = NoteSerializer(paginator.page(page), many=True)
@@ -47,5 +47,5 @@ def getAllUserNotes(request):
     
     except Exception as e:
         print(e)
-        return Response({ 'errors': e.args[0] })        
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
 
