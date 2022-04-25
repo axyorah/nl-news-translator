@@ -86,7 +86,7 @@ const NoteListScreen = (
                 <Form.Check 
                     className='m-0' 
                     onClick={e => {
-                        e.currentTarget.checked = !tags[tag.id];
+                        e.currentTarget.checked = tags[tag.id] ? false : true;
                         setTags({
                             ...tags,
                             [tag.id]: tags[tag.id] ? false : true 
