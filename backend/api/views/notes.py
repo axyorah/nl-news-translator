@@ -17,7 +17,7 @@ from api.forms import NoteForm, TagForm
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getAllUserNotes(request):
+def getAllUserNotes(request: HttpRequest):
     try: 
         user = request.user
 
@@ -62,7 +62,7 @@ def getAllUserNotes(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getUserNote(request, pk):
+def getUserNote(request: HttpRequest, pk: int):
     try:
         user = request.user
         note = user.note_set.get(id=pk)
@@ -81,9 +81,51 @@ def getUserNote(request, pk):
         return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createUserNote(request: HttpRequest):
+    try:
+        user = request.user
+
+        # make sure that we're updating existing note instead of creating new
+        noteForm = NoteForm(request.data)
+
+        # fugly constraint on tags visible for `this` note:
+        # this constraint should be added during model creation via `Membership`,
+        # but that creates errors for some reason...
+        noteForm.fields['tags'].queryset = user.tag_set.all()
+
+        if noteForm.is_valid():
+            # update form fields
+            note = noteForm.save(commit=False)
+            note.owner = user
+
+            # update m2m
+            note.save()
+            noteForm.save_m2m()
+
+        else:
+            raise Exception('Note update failed')
+
+        serializer = NoteSerializer(note, many=False)
+        return Response(serializer.data)
+    
+    except Note.DoesNotExist as e:
+        print(e)
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
+
+    except exceptions.APIException as e:
+        print(e)
+        return Response({ 'errors': e.detail }, status=e.status_code)
+
+    except Exception as e:
+        print(e)
+        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def updateUserNote(request: HttpRequest, pk):
+def updateUserNote(request: HttpRequest, pk: int):
     try:
         user = request.user
         note = user.note_set.get(id=pk)
@@ -126,12 +168,12 @@ def updateUserNote(request: HttpRequest, pk):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def deleteUserNote(request: HttpRequest, pk):
+def deleteUserNote(request: HttpRequest, pk: int):
     try:
         user = request.user
         note = user.note_set.get(id=pk)
         note.delete()
-        
+
         return Response({'id': pk})
     
     except Note.DoesNotExist as e:

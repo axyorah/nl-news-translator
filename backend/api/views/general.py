@@ -33,10 +33,10 @@ def getRoutes(request):
         # {'GET': '/api/tags/<pk>/'},
         
         {'GET': '/api/notes/[?page=<page_num>&tag=<tag_id>]'},
-        # {'POST': '/api/notes/new/'},
-        # {'PUT': '/api/notes/<pk>/edit/'},
-        # {'DELETE': '/api/notes/<pk>/delete/'},
-        # {'GET': '/api/notes/<pk>/'},
+        {'POST': '/api/notes/new/'},
+        {'PUT': '/api/notes/<pk>/edit/'},
+        {'DELETE': '/api/notes/<pk>/delete/'},
+        {'GET': '/api/notes/<pk>/'},
 
         {'GET': '/api/users/'}, # admin only
         {'POST': '/api/users/new/'},
