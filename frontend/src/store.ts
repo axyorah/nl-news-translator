@@ -2,13 +2,19 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
+import { StoreState } from './types/storeTypes';
 import {
     News, NewsListAction, NewsSelectAction, NewsTranslateAction
 } from './types/newsTypes';
 import { UserLoginAction, UserRegisterAction } from './types/userTypes';
 import { TagListAction } from './types/tagTypes';
-import { Note, NoteListAction, NoteSelectAction } from './types/noteTypes';
-import { StoreState } from './types/storeTypes';
+import { 
+    Note, 
+    NoteListAction, 
+    NoteSelectAction,
+    NoteUpdateAction,
+    NoteDeleteAction
+} from './types/noteTypes';
 
 import { 
     newsListReducers, 
@@ -20,7 +26,12 @@ import {
     userRegisterReducers 
 } from './reducers/userReducers';
 import { tagListReducers } from './reducers/tagReducers';
-import { noteListReducers, noteSelectReducers } from './reducers/noteReducers';
+import { 
+    noteListReducers, 
+    noteSelectReducers,
+    noteUpdateReducers,
+    noteDeleteReducers 
+} from './reducers/noteReducers';
 
 const initNews: News = {
     title: '',
@@ -46,7 +57,9 @@ type Action =
     UserRegisterAction |
     TagListAction |
     NoteListAction | 
-    NoteSelectAction;
+    NoteSelectAction |
+    NoteUpdateAction |
+    NoteDeleteAction;
 
 
 const reducer = combineReducers<StoreState>({
@@ -57,7 +70,9 @@ const reducer = combineReducers<StoreState>({
     userRegisterInfo: userRegisterReducers,
     tagListInfo: tagListReducers,
     noteListInfo: noteListReducers,
-    noteSelectInfo: noteSelectReducers
+    noteSelectInfo: noteSelectReducers,
+    noteUpdateInfo: noteUpdateReducers,
+    noteDeleteInfo: noteDeleteReducers
 });
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
@@ -72,7 +87,9 @@ const initialState: StoreState = {
     userRegisterInfo: {},
     tagListInfo: { tagList: [] },
     noteListInfo: { noteListDetail: { noteList: [], page: 0, numPages: 0 } },
-    noteSelectInfo: { noteSelect: initNote }
+    noteSelectInfo: { noteSelect: initNote },
+    noteUpdateInfo: {},
+    noteDeleteInfo: {}
 };
 
 const middleware = [thunk];

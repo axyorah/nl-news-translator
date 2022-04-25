@@ -5,7 +5,15 @@ import {
 
     NOTE_SELECT_QUERY,
     NOTE_SELECT_SUCCESS,
-    NOTE_SELECT_FAIL
+    NOTE_SELECT_FAIL,
+
+    NOTE_UPDATE_QUERY,
+    NOTE_UPDATE_SUCCESS,
+    NOTE_UPDATE_FAIL,
+
+    NOTE_DELETE_QUERY,
+    NOTE_DELETE_SUCCESS,
+    NOTE_DELETE_FAIL
 } from '../constants/noteConstants';
 import {
     Note,
@@ -13,7 +21,11 @@ import {
     NoteListInfo,
     NoteListAction,
     NoteSelectInfo,
-    NoteSelectAction
+    NoteSelectAction,
+    NoteUpdateInfo,
+    NoteUpdateAction,
+    NoteDeleteInfo,
+    NoteDeleteAction
 } from '../types/noteTypes';
 import { Tag }  from '../types/tagTypes';
 
@@ -84,6 +96,62 @@ export const noteSelectReducers = (
             return {
                 loading: false,
                 noteSelect: initNote,
+                errors: action.payload
+            };
+
+        default:
+            return state;
+    }
+};
+
+
+export const noteUpdateReducers = (
+    state: NoteUpdateInfo = { noteUpdate: initNote }, 
+    action: NoteUpdateAction
+): NoteUpdateInfo => {
+    switch (action.type) {
+        case NOTE_UPDATE_QUERY:
+            return {
+                loading: true
+            };
+
+        case NOTE_UPDATE_SUCCESS:
+            return {
+                loading: false,
+                noteUpdate: action.payload
+            };
+
+        case NOTE_UPDATE_FAIL:
+            return {
+                loading: false,
+                errors: action.payload
+            };
+
+        default:
+            return state;
+    }
+};
+
+
+export const noteDeleteReducers = (
+    state: NoteDeleteInfo = { noteDelete: { id: '' } }, 
+    action: NoteDeleteAction
+): NoteDeleteInfo => {
+    switch (action.type) {
+        case NOTE_DELETE_QUERY:
+            return {
+                loading: true
+            };
+
+        case NOTE_DELETE_SUCCESS:
+            return {
+                loading: false,
+                noteDelete: action.payload
+            };
+
+        case NOTE_DELETE_FAIL:
+            return {
+                loading: false,
                 errors: action.payload
             };
 

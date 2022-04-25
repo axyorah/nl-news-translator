@@ -87,7 +87,7 @@ export type NoteSelectAction =
 
 
 export interface NoteUpdateInfo {
-    noteUpdate: Note,
+    noteUpdate?: Note,
     loading?: boolean,
     errors?: string
 }
@@ -113,7 +113,7 @@ export type NoteUpdateAction =
 
 
 export interface NoteDeleteInfo {
-    noteDelete: { id: string },
+    noteDelete?: { id: string },
     loading?: boolean,
     errors?: string
 }
@@ -124,7 +124,7 @@ export interface NoteDeleteQueryAction {
 
 export interface NoteDeleteSuccessAction {
     type: typeof NOTE_DELETE_SUCCESS,
-    payload: NoteDeleteInfo
+    payload: { id: string }
 }
 
 export interface NoteDeleteFailAction {

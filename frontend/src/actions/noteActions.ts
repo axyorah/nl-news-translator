@@ -11,6 +11,14 @@ import {
     NOTE_SELECT_QUERY,
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL, 
+
+    NOTE_UPDATE_QUERY,
+    NOTE_UPDATE_SUCCESS,
+    NOTE_UPDATE_FAIL, 
+
+    NOTE_DELETE_QUERY,
+    NOTE_DELETE_SUCCESS,
+    NOTE_DELETE_FAIL, 
 } from '../constants/noteConstants';
 import {
     Note,
@@ -20,7 +28,17 @@ import {
 
     NoteSelectQueryAction,
     NoteSelectSuccessAction,
-    NoteSelectFailAction
+    NoteSelectFailAction,
+
+    NoteUpdateQueryAction,
+    NoteUpdateSuccessAction,
+    NoteUpdateFailAction,
+
+    NoteDeleteQueryAction,
+    NoteDeleteSuccessAction,
+    NoteDeleteFailAction,
+
+    NoteDeleteInfo
 } from '../types/noteTypes';
 
 
@@ -121,6 +139,89 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
             dispatch<NoteSelectFailAction>({
                 type: NOTE_SELECT_FAIL,
                 payload: `Something went wrong while fetching note ${noteId}...`
+            });
+        }
+    }
+};
+
+
+export const updatetUserNote = (noteUpdate: Note) => async (dispatch: Dispatch) => {
+    try {
+        dispatch<NoteUpdateQueryAction>({
+            type: NOTE_UPDATE_QUERY
+        });
+
+        const userDetail: UserDetail = localStorage.getItem('userDetail') 
+            ? JSON.parse(localStorage.getItem('userDetail') || '')
+            : null;
+
+        const { data } = await backend.post<Note>(
+            `/notes/${noteUpdate.id}/edit/`,
+            { ...noteUpdate },
+            { headers: { Authorization: `Bearer ${userDetail.token}` } }
+        );
+
+        dispatch<NoteUpdateSuccessAction>({
+            type: NOTE_UPDATE_SUCCESS,
+            payload: data
+        });
+
+    } catch (e) {
+        if (typeof e === 'string') {
+            dispatch<NoteUpdateFailAction>({
+                type: NOTE_UPDATE_FAIL,
+                payload: e
+            });
+        } else if ( e instanceof Error ) {
+            dispatch<NoteUpdateFailAction>({
+                type: NOTE_UPDATE_FAIL,
+                payload: e.message
+            });
+        } else {
+            dispatch<NoteUpdateFailAction>({
+                type: NOTE_UPDATE_FAIL,
+                payload: `Something went wrong while updating note ${noteUpdate.id}...`
+            });
+        }
+    }
+};
+
+
+export const deleteUserNote = (noteId: string) => async (dispatch: Dispatch) => {
+    try {
+        dispatch<NoteDeleteQueryAction>({
+            type: NOTE_DELETE_QUERY
+        });
+
+        const userDetail: UserDetail = localStorage.getItem('userDetail') 
+            ? JSON.parse(localStorage.getItem('userDetail') || '')
+            : null;
+
+        const { data } = await backend.delete<{ id: string }>(
+            `/notes/${noteId}/delete/`,
+            { headers: { Authorization: `Bearer ${userDetail.token}` } }
+        );
+
+        dispatch<NoteDeleteSuccessAction>({
+            type: NOTE_DELETE_SUCCESS,
+            payload: data
+        });
+
+    } catch (e) {
+        if (typeof e === 'string') {
+            dispatch<NoteDeleteFailAction>({
+                type: NOTE_DELETE_FAIL,
+                payload: e
+            });
+        } else if ( e instanceof Error ) {
+            dispatch<NoteDeleteFailAction>({
+                type: NOTE_DELETE_FAIL,
+                payload: e.message
+            });
+        } else {
+            dispatch<NoteDeleteFailAction>({
+                type: NOTE_DELETE_FAIL,
+                payload: `Something went wrong while deleting note ${noteId}...`
             });
         }
     }
