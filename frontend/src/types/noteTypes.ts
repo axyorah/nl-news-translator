@@ -6,6 +6,14 @@ import {
     NOTE_SELECT_QUERY,
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL,
+
+    NOTE_UPDATE_QUERY,
+    NOTE_UPDATE_SUCCESS,
+    NOTE_UPDATE_FAIL,
+
+    NOTE_DELETE_QUERY,
+    NOTE_DELETE_SUCCESS,
+    NOTE_DELETE_FAIL,
 } from '../constants/noteConstants';
 
 import { Tag } from './tagTypes';
@@ -76,3 +84,55 @@ export type NoteSelectAction =
     NoteSelectQueryAction | 
     NoteSelectSuccessAction | 
     NoteSelectFailAction;
+
+
+export interface NoteUpdateInfo {
+    noteUpdate: Note,
+    loading?: boolean,
+    errors?: string
+}
+
+export interface NoteUpdateQueryAction {
+    type: typeof NOTE_UPDATE_QUERY
+}
+
+export interface NoteUpdateSuccessAction {
+    type: typeof NOTE_UPDATE_SUCCESS,
+    payload: Note
+}
+
+export interface NoteUpdateFailAction {
+    type: typeof NOTE_UPDATE_FAIL,
+    payload: string
+}
+
+export type NoteUpdateAction = 
+    NoteUpdateQueryAction | 
+    NoteUpdateSuccessAction | 
+    NoteUpdateFailAction;
+
+
+export interface NoteDeleteInfo {
+    noteDelete: { id: string },
+    loading?: boolean,
+    errors?: string
+}
+
+export interface NoteDeleteQueryAction {
+    type: typeof NOTE_DELETE_QUERY
+}
+
+export interface NoteDeleteSuccessAction {
+    type: typeof NOTE_DELETE_SUCCESS,
+    payload: NoteDeleteInfo
+}
+
+export interface NoteDeleteFailAction {
+    type: typeof NOTE_DELETE_FAIL,
+    payload: string
+}
+
+export type NoteDeleteAction = 
+    NoteDeleteQueryAction | 
+    NoteDeleteSuccessAction | 
+    NoteDeleteFailAction;
