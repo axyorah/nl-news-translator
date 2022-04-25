@@ -1,13 +1,19 @@
 import {
     NOTE_LIST_QUERY,
     NOTE_LIST_SUCCESS,
-    NOTE_LIST_FAIL
+    NOTE_LIST_FAIL,
+
+    NOTE_SELECT_QUERY,
+    NOTE_SELECT_SUCCESS,
+    NOTE_SELECT_FAIL
 } from '../constants/noteConstants';
 import {
     Note,
     NoteListDetail,
     NoteListInfo,
-    NoteListAction
+    NoteListAction,
+    NoteSelectInfo,
+    NoteSelectAction
 } from '../types/noteTypes';
 import { Tag }  from '../types/tagTypes';
 
@@ -29,8 +35,9 @@ const initNoteListDetail: NoteListDetail = {
 
 
 export const noteListReducers = (
-    state: NoteListInfo = { noteListDetail: initNoteListDetail }, action: NoteListAction
-) => {
+    state: NoteListInfo = { noteListDetail: initNoteListDetail }, 
+    action: NoteListAction
+): NoteListInfo => {
     switch (action.type) {
         case NOTE_LIST_QUERY:
             return {
@@ -56,3 +63,31 @@ export const noteListReducers = (
     }
 }
 
+export const noteSelectReducers = (
+    state: NoteSelectInfo = { noteSelect: initNote }, 
+    action: NoteSelectAction
+): NoteSelectInfo => {
+    switch (action.type) {
+        case NOTE_SELECT_QUERY:
+            return {
+                loading: true,
+                noteSelect: initNote
+            };
+
+        case NOTE_SELECT_SUCCESS:
+            return {
+                loading: false,
+                noteSelect: action.payload
+            };
+
+        case NOTE_SELECT_FAIL:
+            return {
+                loading: false,
+                noteSelect: initNote,
+                errors: action.payload
+            };
+
+        default:
+            return state;
+    }
+};
