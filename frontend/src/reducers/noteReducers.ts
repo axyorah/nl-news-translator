@@ -10,6 +10,7 @@ import {
     NOTE_UPDATE_QUERY,
     NOTE_UPDATE_SUCCESS,
     NOTE_UPDATE_FAIL,
+    NOTE_UPDATE_RESET,
 
     NOTE_DELETE_QUERY,
     NOTE_DELETE_SUCCESS,
@@ -126,6 +127,9 @@ export const noteUpdateReducers = (
                 loading: false,
                 errors: action.payload
             };
+
+        case NOTE_UPDATE_RESET:
+            return {};
 
         default:
             return state;

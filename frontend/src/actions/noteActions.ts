@@ -18,7 +18,8 @@ import {
 
     NOTE_DELETE_QUERY,
     NOTE_DELETE_SUCCESS,
-    NOTE_DELETE_FAIL, 
+    NOTE_DELETE_FAIL,
+    NOTE_UPDATE_RESET, 
 } from '../constants/noteConstants';
 import {
     Note,
@@ -40,7 +41,8 @@ import {
     NoteDeleteSuccessAction,
     NoteDeleteFailAction,
 
-    NoteDeleteInfo
+    NoteDeleteInfo,
+    NoteUpdateResetAction
 } from '../types/noteTypes';
 
 
@@ -186,6 +188,13 @@ export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Disp
             });
         }
     }
+};
+
+
+export const resetUserNote = (): NoteUpdateResetAction => {
+    return {
+        type: NOTE_UPDATE_RESET
+    };
 };
 
 
