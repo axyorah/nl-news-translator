@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 
-import '../style/forms.css';
-
 import Message  from '../components/Message';
 import Loader from '../components/Loader';
 
@@ -45,6 +43,7 @@ const RegisterScreen = (
         // redirect user if registered
         if (userDetail) {
             history.push(redirect);
+            // noteUpdateReset
         }
     }, [ history, userDetail, redirect ]);
 
@@ -69,7 +68,7 @@ const RegisterScreen = (
         <div className="boxed mycard p-5">
 
 
-            <h3 className='text-center'>Login</h3>
+            <h3 className='text-center'>Register</h3>
 
             { errors || formError 
                 ? <Message variant='danger'>{ errors || formError }</Message>

@@ -4,8 +4,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 
-import './style/index.css';
 import store from './store';
+
+import './style/index.css';
+import './style/forms.css';
 
 ReactDOM.render(
   <React.StrictMode>
