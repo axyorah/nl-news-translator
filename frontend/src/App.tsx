@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import TagListScreen from './screens/TagListScreen';
 import NoteListScreen from './screens/NoteListScreen';
+import NoteUpdateScreen from './screens/NoteUpdateScreen';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/register" component={RegisterScreen} />
           <Route path="/tags" exact component={TagListScreen} />
           <Route path="/notes" exact component={NoteListScreen} />
+          <Route path="/notes/:id" exact component={NoteUpdateScreen} />
         </Container>
       </Switch>
 
