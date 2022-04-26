@@ -43,7 +43,7 @@ const NoteList = (props: NoteListProps) => {
                 }}
             >   
                 <Col md={2} sm={12} className='note-created'>
-                    <Link to={`/notes/${note.id}`}>{ note.created.split('T')[0] }</Link>
+                    <Link to={`/notes/${note.id}/edit`}>{ note.created.split('T')[0] }</Link>
                 </Col>
     
                 <Col md={3} sm={6} className='note-side-a'>
@@ -84,7 +84,7 @@ const NoteList = (props: NoteListProps) => {
             { renderNoteHeader()}
             { noteList.map((note: Note) => {
                 return (<ListGroup.Item key={note.id}>
-                    {renderNote(note)}
+                    { renderNote(note) }
                 </ListGroup.Item>);
             }) }
         </ListGroup>

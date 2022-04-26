@@ -21,7 +21,7 @@ function App() {
           <Route path="/register" component={RegisterScreen} />
           <Route path="/tags" exact component={TagListScreen} />
           <Route path="/notes" exact component={NoteListScreen} />
-          <Route path="/notes/:id" exact component={NoteUpdateScreen} />
+          <Route path="/notes/:id/edit" exact component={NoteUpdateScreen} />
         </Container>
       </Switch>
 
