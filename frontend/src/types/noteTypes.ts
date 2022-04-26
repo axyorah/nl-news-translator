@@ -10,6 +10,7 @@ import {
     NOTE_UPDATE_QUERY,
     NOTE_UPDATE_SUCCESS,
     NOTE_UPDATE_FAIL,
+    NOTE_UPDATE_RESET,
 
     NOTE_DELETE_QUERY,
     NOTE_DELETE_SUCCESS,
@@ -115,10 +116,15 @@ export interface NoteUpdateFailAction {
     payload: string
 }
 
+export interface NoteUpdateResetAction {
+    type: typeof NOTE_UPDATE_RESET,
+}
+
 export type NoteUpdateAction = 
     NoteUpdateQueryAction | 
     NoteUpdateSuccessAction | 
-    NoteUpdateFailAction;
+    NoteUpdateFailAction |
+    NoteUpdateResetAction;
 
 
 export interface NoteDeleteInfo {
