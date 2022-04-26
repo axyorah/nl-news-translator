@@ -28,6 +28,15 @@ export interface Note {
     tags: Tag[]
 }
 
+export interface NoteMinimal {
+    id: string,
+    created?: string,
+    owner: number,
+    side_a: string,
+    side_b: string,
+    tags: string[]
+}
+
 export interface NoteListDetail {
     noteList: Note[],
     page: number,

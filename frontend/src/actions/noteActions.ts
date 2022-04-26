@@ -22,6 +22,8 @@ import {
 } from '../constants/noteConstants';
 import {
     Note,
+    NoteMinimal,
+
     NoteListQueryAction,
     NoteListSuccessAction,
     NoteListFailAction,
@@ -145,7 +147,7 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
 };
 
 
-export const updatetUserNote = (noteUpdate: Note) => async (dispatch: Dispatch) => {
+export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Dispatch) => {
     try {
         dispatch<NoteUpdateQueryAction>({
             type: NOTE_UPDATE_QUERY
@@ -155,7 +157,7 @@ export const updatetUserNote = (noteUpdate: Note) => async (dispatch: Dispatch) 
             ? JSON.parse(localStorage.getItem('userDetail') || '')
             : null;
 
-        const { data } = await backend.post<Note>(
+        const { data } = await backend.put<Note>(
             `/notes/${noteUpdate.id}/edit/`,
             { ...noteUpdate },
             { headers: { Authorization: `Bearer ${userDetail.token}` } }
