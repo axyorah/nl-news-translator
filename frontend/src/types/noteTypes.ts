@@ -6,6 +6,7 @@ import {
     NOTE_SELECT_QUERY,
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL,
+    NOTE_SELECT_RESET,
 
     NOTE_CREATE_QUERY,
     NOTE_CREATE_SUCCESS,
@@ -20,6 +21,7 @@ import {
     NOTE_DELETE_QUERY,
     NOTE_DELETE_SUCCESS,
     NOTE_DELETE_FAIL,
+    NOTE_DELETE_RESET
 } from '../constants/noteConstants';
 
 import { Tag } from './tagTypes';
@@ -93,10 +95,15 @@ export interface NoteSelectFailAction {
     payload: string
 }
 
+export interface NoteSelectResetAction {
+    type: typeof NOTE_SELECT_RESET
+}
+
 export type NoteSelectAction = 
     NoteSelectQueryAction | 
     NoteSelectSuccessAction | 
-    NoteSelectFailAction;
+    NoteSelectFailAction |
+    NoteSelectResetAction;
 
 
 export interface NoteCreateInfo {
@@ -181,7 +188,12 @@ export interface NoteDeleteFailAction {
     payload: string
 }
 
+export interface NoteDeleteResetAction {
+    type: typeof NOTE_DELETE_RESET
+}
+
 export type NoteDeleteAction = 
     NoteDeleteQueryAction | 
     NoteDeleteSuccessAction | 
-    NoteDeleteFailAction;
+    NoteDeleteFailAction |
+    NoteDeleteResetAction;

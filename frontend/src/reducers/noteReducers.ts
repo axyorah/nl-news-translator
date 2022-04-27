@@ -6,6 +6,7 @@ import {
     NOTE_SELECT_QUERY,
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL,
+    NOTE_SELECT_RESET,
 
     NOTE_CREATE_QUERY,
     NOTE_CREATE_SUCCESS,
@@ -19,7 +20,8 @@ import {
 
     NOTE_DELETE_QUERY,
     NOTE_DELETE_SUCCESS,
-    NOTE_DELETE_FAIL
+    NOTE_DELETE_FAIL,
+    NOTE_DELETE_RESET
 } from '../constants/noteConstants';
 import {
     Note,
@@ -35,7 +37,6 @@ import {
     NoteDeleteInfo,
     NoteDeleteAction
 } from '../types/noteTypes';
-import { Tag }  from '../types/tagTypes';
 
 
 const initNote: Note = {
@@ -105,6 +106,11 @@ export const noteSelectReducers = (
                 loading: false,
                 noteSelect: initNote,
                 errors: action.payload
+            };
+
+        case NOTE_SELECT_RESET: 
+            return {
+                noteSelect: initNote
             };
 
         default:
@@ -196,6 +202,9 @@ export const noteDeleteReducers = (
                 loading: false,
                 errors: action.payload
             };
+
+        case NOTE_DELETE_RESET:
+            return {};
 
         default:
             return state;

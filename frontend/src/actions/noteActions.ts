@@ -11,19 +11,22 @@ import {
     NOTE_SELECT_QUERY,
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL, 
+    NOTE_SELECT_RESET,
 
     NOTE_CREATE_QUERY,
     NOTE_CREATE_SUCCESS,
     NOTE_CREATE_FAIL, 
+    NOTE_CREATE_RESET,
 
     NOTE_UPDATE_QUERY,
     NOTE_UPDATE_SUCCESS,
     NOTE_UPDATE_FAIL, 
+    NOTE_UPDATE_RESET, 
 
     NOTE_DELETE_QUERY,
     NOTE_DELETE_SUCCESS,
     NOTE_DELETE_FAIL,
-    NOTE_UPDATE_RESET, 
+    NOTE_DELETE_RESET
 } from '../constants/noteConstants';
 import {
     Note,
@@ -36,21 +39,22 @@ import {
     NoteSelectQueryAction,
     NoteSelectSuccessAction,
     NoteSelectFailAction,
+    NoteSelectResetAction,
 
     NoteCreateQueryAction,
     NoteCreateSuccessAction,
     NoteCreateFailAction,
+    NoteCreateResetAction,
 
     NoteUpdateQueryAction,
     NoteUpdateSuccessAction,
     NoteUpdateFailAction,
+    NoteUpdateResetAction,
 
     NoteDeleteQueryAction,
     NoteDeleteSuccessAction,
     NoteDeleteFailAction,
-
-    NoteDeleteInfo,
-    NoteUpdateResetAction
+    NoteDeleteResetAction
 } from '../types/noteTypes';
 
 
@@ -156,6 +160,12 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
     }
 };
 
+export const resetSelectUserNote = (): NoteSelectResetAction => {
+    return {
+        type: NOTE_SELECT_RESET
+    };
+};
+
 
 export const createUserNote = (noteCreate: NoteMinimal) => async (dispatch: Dispatch) => {
     try {
@@ -196,6 +206,12 @@ export const createUserNote = (noteCreate: NoteMinimal) => async (dispatch: Disp
             });
         }
     }
+};
+
+export const resetCreateUserNote = (): NoteCreateResetAction => {
+    return {
+        type: NOTE_CREATE_RESET
+    };
 };
 
 
@@ -244,8 +260,7 @@ export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Disp
     }
 };
 
-
-export const resetUserNote = (): NoteUpdateResetAction => {
+export const resetUpdateUserNote = (): NoteUpdateResetAction => {
     return {
         type: NOTE_UPDATE_RESET
     };
@@ -290,4 +305,10 @@ export const deleteUserNote = (noteId: string) => async (dispatch: Dispatch) => 
             });
         }
     }
+};
+
+export const resetDeleteUserNote = (): NoteDeleteResetAction => {
+    return {
+        type: NOTE_DELETE_RESET
+    };
 };
