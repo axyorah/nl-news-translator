@@ -7,7 +7,14 @@ import {
     News, NewsListAction, NewsSelectAction, NewsTranslateAction
 } from './types/newsTypes';
 import { UserLoginAction, UserRegisterAction } from './types/userTypes';
-import { TagListAction } from './types/tagTypes';
+import { 
+    Tag, 
+    TagListAction, 
+    TagSelectAction,
+    TagCreateAction,
+    TagUpdateAction,
+    TagDeleteAction 
+} from './types/tagTypes';
 import { 
     Note, 
     NoteListAction, 
@@ -26,7 +33,6 @@ import {
     userLoginReducers,
     userRegisterReducers 
 } from './reducers/userReducers';
-import { tagListReducers } from './reducers/tagReducers';
 import { 
     noteListReducers, 
     noteSelectReducers,
@@ -34,6 +40,13 @@ import {
     noteUpdateReducers,
     noteDeleteReducers 
 } from './reducers/noteReducers';
+import { 
+    tagListReducers, 
+    tagSelectReducers,
+    tagCreateReducers,
+    tagUpdateReducers,
+    tagDeleteReducers 
+} from './reducers/tagReducers';
 
 const initNews: News = {
     title: '',
@@ -51,31 +64,53 @@ const initNote: Note = {
     tags: []
 }
 
+const initTag: Tag = {
+    id: '',
+    owner: 0,
+    created: '',
+    name: ''
+};
+
 type Action = 
     NewsListAction | 
     NewsSelectAction | 
     NewsTranslateAction | 
+    
     UserLoginAction |
     UserRegisterAction |
-    TagListAction |
+    
     NoteListAction | 
     NoteSelectAction |
+    NoteCreateAction |
     NoteUpdateAction |
-    NoteDeleteAction;
+    NoteDeleteAction |
+    
+    TagListAction | 
+    TagSelectAction |
+    TagCreateAction |
+    TagUpdateAction |
+    TagDeleteAction;
 
 
 const reducer = combineReducers<StoreState>({
     newsListInfo: newsListReducers,
     newsSelectInfo: newsSelectReducers,
     newsTranslateInfo: newsTranslateReducers,
+    
     userLoginInfo: userLoginReducers,
     userRegisterInfo: userRegisterReducers,
-    tagListInfo: tagListReducers,
+
     noteListInfo: noteListReducers,
     noteSelectInfo: noteSelectReducers,
     noteCreateInfo: noteCreateReducers,
     noteUpdateInfo: noteUpdateReducers,
-    noteDeleteInfo: noteDeleteReducers
+    noteDeleteInfo: noteDeleteReducers,
+
+    tagListInfo: tagListReducers,
+    tagSelectInfo: tagSelectReducers,
+    tagCreateInfo: tagCreateReducers,
+    tagUpdateInfo: tagUpdateReducers,
+    tagDeleteInfo: tagDeleteReducers,
 });
 
 const userDetailFromStorage = localStorage.getItem('userDetail')
@@ -86,14 +121,21 @@ const initialState: StoreState = {
     newsListInfo: { newsList: [] },
     newsSelectInfo: { newsSelected: initNews },
     newsTranslateInfo: { newsTranslated: initNews },
+    
     userLoginInfo: { userDetail: userDetailFromStorage },
     userRegisterInfo: {},
-    tagListInfo: { tagList: [] },
+    
     noteListInfo: { noteListDetail: { noteList: [], page: 0, numPages: 0 } },
     noteSelectInfo: { noteSelect: initNote },
     noteCreateInfo: {},
     noteUpdateInfo: {},
-    noteDeleteInfo: {}
+    noteDeleteInfo: {},
+
+    tagListInfo: { tagList: [] },
+    tagSelectInfo: { tagSelect: initTag },
+    tagCreateInfo: {},
+    tagUpdateInfo: {},
+    tagDeleteInfo: {},
 };
 
 const middleware = [thunk];
