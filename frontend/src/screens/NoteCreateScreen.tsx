@@ -12,7 +12,7 @@ import { TagListInfo } from '../types/tagTypes';
 
 import {
     createUserNote,
-    resetUserNote 
+    resetCreateUserNote 
 } from '../actions/noteActions';
 import { getAllUserTags } from '../actions/tagActions';
 
@@ -51,7 +51,7 @@ const NoteCreateScreen = (
     // on successful submit
     useEffect(() => {
         if (noteCreate) {
-            resetUserNote();
+            resetCreateUserNote();
             history.push('/notes');
         }
     }, [ noteCreate, resetUserNote, history ]);
@@ -86,5 +86,5 @@ const mapStateToProps = (state: StoreState) => {
 
 export default connect(
     mapStateToProps,
-    { createUserNote, resetUserNote, getAllUserTags }
+    { createUserNote, resetCreateUserNote, getAllUserTags }
 )(NoteCreateScreen);

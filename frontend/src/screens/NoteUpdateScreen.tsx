@@ -14,7 +14,8 @@ import {
     selectUserNote, 
     updateUserNote,
     deleteUserNote,
-    resetUserNote 
+    resetUpdateUserNote,
+    resetDeleteUserNote 
 } from '../actions/noteActions';
 import { getAllUserTags } from '../actions/tagActions';
 
@@ -30,7 +31,8 @@ interface NoteUpdateScreenDispatch {
     selectUserNote: Function,
     updateUserNote: Function,
     deleteUserNote: Function,
-    resetUserNote: Function,
+    resetUpdateUserNote: Function,
+    resetDeleteUserNote: Function,
     getAllUserTags: Function
 }
 
@@ -43,7 +45,8 @@ const NoteUpdateScreen = (
     const {
         history,
         noteSelectInfo, noteUpdateInfo, noteDeleteInfo, tagListInfo,
-        selectUserNote, updateUserNote, deleteUserNote, resetUserNote,
+        selectUserNote, updateUserNote, deleteUserNote, 
+        resetUpdateUserNote, resetDeleteUserNote,
         getAllUserTags
     } = props;
     const { loading: loadingSelect, errors: errorsSelect, noteSelect } = noteSelectInfo || {};
@@ -60,18 +63,18 @@ const NoteUpdateScreen = (
     // on successful submit
     useEffect(() => {
         if (noteUpdate) {
-            resetUserNote();
+            resetUpdateUserNote();
             history.push('/notes');
         }
-    }, [ noteUpdate, resetUserNote, history ]);
+    }, [ noteUpdate, resetUpdateUserNote, history ]);
 
     // on successful delete
     useEffect(() => {
         if (noteDelete) {
-            resetUserNote();
+            resetDeleteUserNote();
             history.push('/notes');
         }
-    }, [ noteDelete, resetUserNote, history]);
+    }, [ noteDelete, resetDeleteUserNote, history]);
 
     return (
         <div className='boxed mycard p-5'>
@@ -110,5 +113,9 @@ const mapStateToProps = (state: StoreState) => {
 
 export default connect(
     mapStateToProps,
-    { selectUserNote, updateUserNote, deleteUserNote, resetUserNote, getAllUserTags }
+    { 
+        selectUserNote, updateUserNote, deleteUserNote, 
+        resetUpdateUserNote, resetDeleteUserNote,
+        getAllUserTags 
+    }
 )(NoteUpdateScreen);
