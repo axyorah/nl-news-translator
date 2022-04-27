@@ -7,7 +7,8 @@ import { Tag } from '../types/tagTypes';
 interface NoteFormProps {
     noteInit?: Note,
     tagList: Tag[],
-    updateOrCreateNote: Function //update or create action
+    updateOrCreateNote: Function, //update or create action
+    deleteNote?: Function // delete action
 }
 
 interface TagState {
@@ -17,7 +18,7 @@ interface TagState {
 
 const NoteForm = (props: NoteFormProps): JSX.Element => {
 
-    const { noteInit, tagList, updateOrCreateNote } = props;
+    const { noteInit, tagList, updateOrCreateNote, deleteNote } = props;
     
     const [ sideA, setSideA ] = useState('');
     const [ sideB, setSideB ] = useState('');
@@ -82,7 +83,29 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         );
     };
 
-    const submitHandler = (e: React.SyntheticEvent) => {
+    const renderButtons = () => {
+        return (
+            <div className='d-flex justify-content-between'>
+                <Button type='submit' className='mx-3 my-2'>
+                    Save
+                </Button>
+
+                { deleteNote 
+                    ? <Button 
+                        type='button' 
+                        variant='danger' 
+                        className='mx-3 my-2'
+                        onClick={e => deleteNote()}
+                    >
+                        Delete
+                    </Button>
+                    : null 
+                }                
+            </div>
+        );
+    };
+
+    const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         
         const note: NoteMinimal = {
@@ -99,20 +122,20 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
     };
 
     return (
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={handleSubmit}>
             <Row>
                 { renderNoteText('Side A', sideA, setSideA)}
                 { renderNoteText('Side B', sideB, setSideB)}
             </Row>
+
             <Row>
                 { tagList  
                     ? tagList.map((tag: Tag) => renderTag(tag)) 
                     : null 
                 }
             </Row>
-            <Button type='submit' className='mx-3 my-2'>
-                Save
-            </Button>
+
+            { renderButtons() }
         </Form>
     );
 };

@@ -7,12 +7,13 @@ import Message from '../components/Message';
 import NoteForm from '../components/NoteForm';
 
 import { StoreState } from '../types/storeTypes';
-import { NoteSelectInfo, NoteUpdateInfo } from '../types/noteTypes';
+import { NoteSelectInfo, NoteUpdateInfo, NoteDeleteInfo } from '../types/noteTypes';
 import { TagListInfo } from '../types/tagTypes';
 
 import { 
     selectUserNote, 
     updateUserNote,
+    deleteUserNote,
     resetUserNote 
 } from '../actions/noteActions';
 import { getAllUserTags } from '../actions/tagActions';
@@ -21,12 +22,14 @@ import { getAllUserTags } from '../actions/tagActions';
 interface NoteUpdateScreenState {
     noteSelectInfo: NoteSelectInfo,
     noteUpdateInfo: NoteUpdateInfo,
+    noteDeleteInfo: NoteDeleteInfo,
     tagListInfo: TagListInfo
 }
 
 interface NoteUpdateScreenDispatch {
     selectUserNote: Function,
     updateUserNote: Function,
+    deleteUserNote: Function,
     resetUserNote: Function,
     getAllUserTags: Function
 }
@@ -39,12 +42,13 @@ const NoteUpdateScreen = (
     const params = useParams<{id: string}>();
     const {
         history,
-        noteSelectInfo, noteUpdateInfo, tagListInfo,
-        selectUserNote, updateUserNote, resetUserNote,
+        noteSelectInfo, noteUpdateInfo, noteDeleteInfo, tagListInfo,
+        selectUserNote, updateUserNote, deleteUserNote, resetUserNote,
         getAllUserTags
     } = props;
     const { loading: loadingSelect, errors: errorsSelect, noteSelect } = noteSelectInfo || {};
     const { loading: loadingUpdate, errors: errorsUpdate, noteUpdate } = noteUpdateInfo || {};
+    const { loading: loadingDelete, errors: errorsDelete, noteDelete } = noteDeleteInfo || {};
     const { loading: loadingTags, errors: errorsTags, tagList } = tagListInfo || {};    
 
     // on load
@@ -61,17 +65,25 @@ const NoteUpdateScreen = (
         }
     }, [ noteUpdate, resetUserNote, history ]);
 
+    // on successful delete
+    useEffect(() => {
+        if (noteDelete) {
+            resetUserNote();
+            history.push('/notes');
+        }
+    }, [ noteDelete, resetUserNote, history]);
+
     return (
         <div className='boxed mycard p-5'>
             <h3 className='text-center'>Edit Note</h3>
 
-            { loadingSelect || loadingUpdate || loadingTags 
+            { loadingSelect || loadingUpdate || loadingDelete || loadingTags 
                 ? <Loader /> 
                 : null 
             }
-            { errorsSelect || errorsUpdate || errorsTags
+            { errorsSelect || errorsUpdate || errorsDelete || errorsTags
                 ? <Message variant='danger'>{
-                    errorsSelect || errorsUpdate || errorsTags
+                    errorsSelect || errorsUpdate || errorsDelete || errorsTags
                 }</Message> 
                 : null
             }
@@ -80,6 +92,7 @@ const NoteUpdateScreen = (
                 noteInit={noteSelect} 
                 tagList={tagList} 
                 updateOrCreateNote={updateUserNote} 
+                deleteNote={() => deleteUserNote(params.id)}
             />
             
         </div>
@@ -90,11 +103,12 @@ const mapStateToProps = (state: StoreState) => {
     return {
         noteSelectInfo: state.noteSelectInfo,
         noteUpdateInfo: state.noteUpdateInfo,
+        noteDeleteInfo: state.noteDeleteInfo,
         tagListInfo: state.tagListInfo
     };
 };
 
 export default connect(
     mapStateToProps,
-    { selectUserNote, updateUserNote, resetUserNote, getAllUserTags }
+    { selectUserNote, updateUserNote, deleteUserNote, resetUserNote, getAllUserTags }
 )(NoteUpdateScreen);
