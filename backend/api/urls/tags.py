@@ -4,5 +4,6 @@ from api.views import tags as views
 
 
 urlpatterns = [
-    path('', views.getAllUserTags, name='all-user-tags'),
+    path('', views.TagList.as_view()),
+    path('<str:pk>/', views.TagDetail.as_view())
 ]

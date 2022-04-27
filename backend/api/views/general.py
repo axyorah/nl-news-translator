@@ -27,22 +27,20 @@ def getRoutes(request):
         {'POST': '/api/translate/'},
         
         {'GET': '/api/tags/'},
-        # {'POST': '/api/tags/new/'},
-        # {'PUT': '/api/tags/<pk>/edit/'},
-        # {'DELETE': '/api/tags/<pk>/delete/'},
-        # {'GET': '/api/tags/<pk>/'},
+        {'POST': '/api/tags/'},
+        {'GET': '/api/tags/<pk>/'},
+        {'PUT': '/api/tags/<pk>/'},
+        {'DELETE': '/api/tags/<pk>/'},
         
-        {'GET': '/api/notes/[?page=<page_num>&tag=<tag_id>]'},
-        {'POST': '/api/notes/new/'},
-        {'PUT': '/api/notes/<pk>/edit/'},
-        {'DELETE': '/api/notes/<pk>/delete/'},
+        {'GET': '/api/notes/[?page=<page_num>&tags=<tag_id1>,<tag_id2>]'},
+        {'POST': '/api/notes/'},
         {'GET': '/api/notes/<pk>/'},
+        {'PUT': '/api/notes/<pk>/'},
+        {'DELETE': '/api/notes/<pk>/'},
 
         {'GET': '/api/users/'}, # admin only
         {'POST': '/api/users/new/'},
         {'POST': '/api/users/login/'},
-        # {'PUT': '/api/users/<pk>/edit/'}, # self only
-        # {'DELETE': '/api/users/<pk>/delete/'}, # self only
         {'GET': '/api/users/profile/'} # self only
     ]
 
@@ -111,21 +109,19 @@ def getSelectedNews(request):
 @api_view(['POST'])
 def getTranslations(request):
 
-    if request.method == 'POST':
-        try:
-            body = request.data 
-            sentences = body['sentences']
+    try:
+        body = request.data 
+        sentences = body['sentences']
+        translations = nl2en.translate(sentences)
+        res = { 'translations': translations }
+        return Response(res)
 
-            translations = nl2en.translate(sentences)
-            res = { 'translations': translations }
-            return Response(res)
-    
-        except Exception as e:
-            print(f'ERROR: {e}')
-            res = { 'errors': e.args[0] }
-            # TODO: return proper status code 
-            # (setting it to default 200, so that that the 
-            # custom error msg can be properly intercepted in frontend)
-            return Response(res)#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        print(f'ERROR: {e}')
+        res = { 'errors': e.args[0] }
+        # TODO: return proper status code 
+        # (setting it to default 200, so that that the 
+        # custom error msg can be properly intercepted in frontend)
+        return Response(res)#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-    return Response({ 'errors': 'only `POST` method is supported for this route'})
+    
