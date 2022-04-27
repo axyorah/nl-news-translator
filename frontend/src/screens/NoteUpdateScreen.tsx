@@ -42,7 +42,7 @@ const NoteUpdateScreen = (
 
     const params = useParams<{id: string}>();
     const {
-        history, location,
+        history,
         noteSelectInfo, noteUpdateInfo, tagListInfo,
         selectUserNote, updateUserNote, resetUserNote,
         getAllUserTags
@@ -131,7 +131,6 @@ const NoteUpdateScreen = (
         e.preventDefault();
         
         const note: NoteMinimal = {
-            ...noteSelect,
             id: params.id,
             side_a: sideA,
             side_b: sideB,

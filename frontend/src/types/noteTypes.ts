@@ -30,9 +30,7 @@ export interface Note {
 }
 
 export interface NoteMinimal {
-    id: string,
-    created?: string,
-    owner: number,
+    id?: string,
     side_a: string,
     side_b: string,
     tags: string[]

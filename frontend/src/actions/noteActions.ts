@@ -151,6 +151,10 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
 
 export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Dispatch) => {
     try {
+        if (!noteUpdate.id) {
+            throw new Error('Cannot update note with unknown id');
+        }
+
         dispatch<NoteUpdateQueryAction>({
             type: NOTE_UPDATE_QUERY
         });
