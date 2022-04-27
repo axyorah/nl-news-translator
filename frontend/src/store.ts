@@ -12,6 +12,7 @@ import {
     Note, 
     NoteListAction, 
     NoteSelectAction,
+    NoteCreateAction,
     NoteUpdateAction,
     NoteDeleteAction
 } from './types/noteTypes';
@@ -29,6 +30,7 @@ import { tagListReducers } from './reducers/tagReducers';
 import { 
     noteListReducers, 
     noteSelectReducers,
+    noteCreateReducers,
     noteUpdateReducers,
     noteDeleteReducers 
 } from './reducers/noteReducers';
@@ -71,6 +73,7 @@ const reducer = combineReducers<StoreState>({
     tagListInfo: tagListReducers,
     noteListInfo: noteListReducers,
     noteSelectInfo: noteSelectReducers,
+    noteCreateInfo: noteCreateReducers,
     noteUpdateInfo: noteUpdateReducers,
     noteDeleteInfo: noteDeleteReducers
 });
@@ -88,6 +91,7 @@ const initialState: StoreState = {
     tagListInfo: { tagList: [] },
     noteListInfo: { noteListDetail: { noteList: [], page: 0, numPages: 0 } },
     noteSelectInfo: { noteSelect: initNote },
+    noteCreateInfo: {},
     noteUpdateInfo: {},
     noteDeleteInfo: {}
 };

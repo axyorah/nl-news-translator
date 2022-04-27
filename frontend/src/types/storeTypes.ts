@@ -8,6 +8,7 @@ import { TagListInfo } from "./tagTypes";
 import { 
     NoteListInfo, 
     NoteSelectInfo,
+    NoteCreateInfo,
     NoteUpdateInfo,
     NoteDeleteInfo 
 } from "./noteTypes";
@@ -21,6 +22,7 @@ export interface StoreState {
     tagListInfo: TagListInfo,
     noteListInfo: NoteListInfo,
     noteSelectInfo: NoteSelectInfo,
+    noteCreateInfo: NoteCreateInfo,
     noteUpdateInfo: NoteUpdateInfo,
     noteDeleteInfo: NoteDeleteInfo
 }

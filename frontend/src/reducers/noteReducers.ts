@@ -7,6 +7,11 @@ import {
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL,
 
+    NOTE_CREATE_QUERY,
+    NOTE_CREATE_SUCCESS,
+    NOTE_CREATE_FAIL,
+    NOTE_CREATE_RESET,
+
     NOTE_UPDATE_QUERY,
     NOTE_UPDATE_SUCCESS,
     NOTE_UPDATE_FAIL,
@@ -23,6 +28,8 @@ import {
     NoteListAction,
     NoteSelectInfo,
     NoteSelectAction,
+    NoteCreateInfo,
+    NoteCreateAction,
     NoteUpdateInfo,
     NoteUpdateAction,
     NoteDeleteInfo,
@@ -99,6 +106,37 @@ export const noteSelectReducers = (
                 noteSelect: initNote,
                 errors: action.payload
             };
+
+        default:
+            return state;
+    }
+};
+
+
+export const noteCreateReducers = (
+    state: NoteCreateInfo = {}, 
+    action: NoteCreateAction
+): NoteCreateInfo => {
+    switch (action.type) {
+        case NOTE_CREATE_QUERY:
+            return {
+                loading: true
+            };
+
+        case NOTE_CREATE_SUCCESS:
+            return {
+                loading: false,
+                noteCreate: action.payload
+            };
+
+        case NOTE_CREATE_FAIL:
+            return {
+                loading: false,
+                errors: action.payload
+            };
+
+        case NOTE_CREATE_RESET:
+            return {};
 
         default:
             return state;

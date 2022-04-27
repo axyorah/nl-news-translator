@@ -12,6 +12,10 @@ import {
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL, 
 
+    NOTE_CREATE_QUERY,
+    NOTE_CREATE_SUCCESS,
+    NOTE_CREATE_FAIL, 
+
     NOTE_UPDATE_QUERY,
     NOTE_UPDATE_SUCCESS,
     NOTE_UPDATE_FAIL, 
@@ -32,6 +36,10 @@ import {
     NoteSelectQueryAction,
     NoteSelectSuccessAction,
     NoteSelectFailAction,
+
+    NoteCreateQueryAction,
+    NoteCreateSuccessAction,
+    NoteCreateFailAction,
 
     NoteUpdateQueryAction,
     NoteUpdateSuccessAction,
@@ -143,6 +151,48 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
             dispatch<NoteSelectFailAction>({
                 type: NOTE_SELECT_FAIL,
                 payload: `Something went wrong while fetching note ${noteId}...`
+            });
+        }
+    }
+};
+
+
+export const createUserNote = (noteCreate: NoteMinimal) => async (dispatch: Dispatch) => {
+    try {
+        dispatch<NoteCreateQueryAction>({
+            type: NOTE_CREATE_QUERY
+        });
+
+        const userDetail: UserDetail = localStorage.getItem('userDetail') 
+            ? JSON.parse(localStorage.getItem('userDetail') || '')
+            : null;
+
+        const { data } = await backend.post<Note>(
+            `/notes/new/`,
+            { ...noteCreate },
+            { headers: { Authorization: `Bearer ${userDetail.token}` } }
+        );
+
+        dispatch<NoteCreateSuccessAction>({
+            type: NOTE_CREATE_SUCCESS,
+            payload: data
+        });
+
+    } catch (e) {
+        if (typeof e === 'string') {
+            dispatch<NoteCreateFailAction>({
+                type: NOTE_CREATE_FAIL,
+                payload: e
+            });
+        } else if ( e instanceof Error ) {
+            dispatch<NoteCreateFailAction>({
+                type: NOTE_CREATE_FAIL,
+                payload: e.message
+            });
+        } else {
+            dispatch<NoteCreateFailAction>({
+                type: NOTE_CREATE_FAIL,
+                payload: `Something went wrong while creating note...`
             });
         }
     }
