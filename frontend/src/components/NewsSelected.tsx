@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { ListGroup, Row, Col } from 'react-bootstrap';
 
 import Loader from './Loader';
@@ -86,6 +87,7 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
                     { sentences && sentences.length
                         ? <button 
                             className="capsule-lg"
+                            style={{ display: 'flex', flexDirection: 'row' }}
                             onClick={e => translateNewsItem(newsSelected)} 
                         >
                             { loadingTranslated ? <Loader size="23px"/> : null }
@@ -95,12 +97,9 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
                     }
                 </div>
                 <div>
-                    <button 
-                        className="capsule-lg"
-                        onClick={e => console.log('TODO: Make-a-Note!')}
-                    >
-                        Make a Note
-                    </button>
+                    <Link to='/notes/new' className='capsule-lg'>
+                        Add Note
+                    </Link>
                 </div>
             </div>
         );
