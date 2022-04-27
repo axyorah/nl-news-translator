@@ -7,6 +7,11 @@ import {
     NOTE_SELECT_SUCCESS,
     NOTE_SELECT_FAIL,
 
+    NOTE_CREATE_QUERY,
+    NOTE_CREATE_SUCCESS,
+    NOTE_CREATE_FAIL,
+    NOTE_CREATE_RESET,
+
     NOTE_UPDATE_QUERY,
     NOTE_UPDATE_SUCCESS,
     NOTE_UPDATE_FAIL,
@@ -92,6 +97,37 @@ export type NoteSelectAction =
     NoteSelectQueryAction | 
     NoteSelectSuccessAction | 
     NoteSelectFailAction;
+
+
+export interface NoteCreateInfo {
+    noteCreate?: Note,
+    loading?: boolean,
+    errors?: string
+}
+
+export interface NoteCreateQueryAction {
+    type: typeof NOTE_CREATE_QUERY
+}
+
+export interface NoteCreateSuccessAction {
+    type: typeof NOTE_CREATE_SUCCESS,
+    payload: Note
+}
+
+export interface NoteCreateFailAction {
+    type: typeof NOTE_CREATE_FAIL,
+    payload: string
+}
+
+export interface NoteCreateResetAction {
+    type: typeof NOTE_CREATE_RESET,
+}
+
+export type NoteCreateAction = 
+    NoteCreateQueryAction | 
+    NoteCreateSuccessAction | 
+    NoteCreateFailAction |
+    NoteCreateResetAction;
 
 
 export interface NoteUpdateInfo {
