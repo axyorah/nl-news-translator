@@ -178,7 +178,7 @@ export const createUserNote = (noteCreate: NoteMinimal) => async (dispatch: Disp
             : null;
 
         const { data } = await backend.post<Note>(
-            `/notes/new/`,
+            `/notes/`,
             { ...noteCreate },
             { headers: { Authorization: `Bearer ${userDetail.token}` } }
         );
@@ -230,7 +230,7 @@ export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Disp
             : null;
 
         const { data } = await backend.put<Note>(
-            `/notes/${noteUpdate.id}/edit/`,
+            `/notes/${noteUpdate.id}/`,
             { ...noteUpdate },
             { headers: { Authorization: `Bearer ${userDetail.token}` } }
         );
@@ -278,7 +278,7 @@ export const deleteUserNote = (noteId: string) => async (dispatch: Dispatch) => 
             : null;
 
         const { data } = await backend.delete<{ id: string }>(
-            `/notes/${noteId}/delete/`,
+            `/notes/${noteId}/`,
             { headers: { Authorization: `Bearer ${userDetail.token}` } }
         );
 

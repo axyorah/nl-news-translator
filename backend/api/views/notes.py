@@ -1,10 +1,11 @@
 from urllib.error import HTTPError
 from typing import List, Dict, Optional, Union
 from django.forms import ValidationError
-from django.http import HttpRequest
+from django.http import HttpRequest, Http404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
 from django.conf import settings
 from django.core.paginator import Paginator
@@ -15,10 +16,31 @@ from api.serializers import NoteSerializer, TagSerializer
 from api.forms import NoteForm, TagForm
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getAllUserNotes(request: HttpRequest):
-    try: 
+def try_except(view):
+    def helper(*args, **kwargs):
+        try:
+            return view(*args, **kwargs)
+
+        except Note.DoesNotExist as e:
+            print(e)
+            return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
+    
+        except exceptions.APIException as e:
+            print(e)
+            return Response({ 'errors': e.detail }, status=e.status_code)
+    
+        except Exception as e:
+            print(e)
+            return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return helper
+
+
+class NoteList(APIView):
+    """get list of all user note or create a new note"""
+    @permission_classes([IsAuthenticated])
+    @try_except
+    def get(self, request: HttpRequest):
         user = request.user
 
         # params
@@ -51,140 +73,79 @@ def getAllUserNotes(request: HttpRequest):
             'page': page,
             'num_pages': paginator.num_pages
         })
-
-    except exceptions.APIException as e:
-        return Response({ 'errors': e.detail }, status=e.status_code)
     
-    except Exception as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getUserNote(request: HttpRequest, pk: int):
-    try:
+    @permission_classes([IsAuthenticated])
+    @try_except
+    def post(self, request: HttpRequest):
         user = request.user
-        note = user.note_set.get(id=pk)
-        serializer = NoteSerializer(note, many=False)
-
-        return Response(serializer.data)
-
-    except Note.DoesNotExist as e:
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
-
-    except exceptions.APIException as e:
-        return Response({ 'errors': e.detail }, status=e.status_code)
-
-    except Exception as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def createUserNote(request: HttpRequest):
-    try:
-        user = request.user
-
-        # make sure that we're updating existing note instead of creating new
-        noteForm = NoteForm(request.data)
+        
+        # create new note
+        note_form = NoteForm(request.data)
 
         # fugly constraint on tags visible for `this` note:
         # this constraint should be added during model creation via `Membership`,
         # but that creates errors for some reason...
-        noteForm.fields['tags'].queryset = user.tag_set.all()
+        note_form.fields['tags'].queryset = user.tag_set.all()
 
-        if noteForm.is_valid():
+        if note_form.is_valid():
             # update form fields
-            note = noteForm.save(commit=False)
+            note = note_form.save(commit=False)
             note.owner = user
 
             # update m2m
             note.save()
-            noteForm.save_m2m()
+            note_form.save_m2m()
 
         else:
-            raise Exception('Note update failed')
+            raise Exception('Note creation failed')
 
         serializer = NoteSerializer(note, many=False)
         return Response(serializer.data)
-    
-    except Note.DoesNotExist as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
 
-    except exceptions.APIException as e:
-        print(e)
-        return Response({ 'errors': e.detail }, status=e.status_code)
+class NoteDetail(APIView):
+    """get, update, delete user note"""
+    @permission_classes([IsAuthenticated])
+    @try_except
+    def get(self, request: HttpRequest, pk: str):
+        user = request.user
+        note = user.note_set.get(id=pk)
+        serializer = NoteSerializer(note, many=False)
+        return Response(serializer.data)    
 
-    except Exception as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def updateUserNote(request: HttpRequest, pk: int):
-    try:
+    @permission_classes([IsAuthenticated])
+    @try_except
+    def put(self, request: HttpRequest, pk: str):
         user = request.user
         note = user.note_set.get(id=pk)
         note_orig = user.note_set.get(id=pk)
 
         # make sure that we're updating existing note instead of creating new
-        noteForm = NoteForm(request.data, instance=note_orig)
+        note_form = NoteForm(request.data, instance=note_orig)
 
         # fugly constraint on tags visible for `this` note:
         # this constraint should be added during model creation via `Membership`,
         # but that creates errors for some reason...
-        noteForm.fields['tags'].queryset = user.tag_set.all()
+        note_form.fields['tags'].queryset = user.tag_set.all()
 
-        if noteForm.is_valid():
+        if note_form.is_valid():
             # update form fields
-            note = noteForm.save(commit=False)
+            note = note_form.save(commit=False)
 
             # update m2m
             note.save()
-            noteForm.save_m2m()
+            note_form.save_m2m()
 
         else:
             raise Exception('Note update failed')
 
         serializer = NoteSerializer(note, many=False)
         return Response(serializer.data)
-    
-    except Note.DoesNotExist as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
 
-    except exceptions.APIException as e:
-        print(e)
-        return Response({ 'errors': e.detail }, status=e.status_code)
-
-    except Exception as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def deleteUserNote(request: HttpRequest, pk: int):
-    try:
+    @permission_classes([IsAuthenticated])
+    @try_except
+    def delete(self, request: HttpRequest, pk: str,):
         user = request.user
         note = user.note_set.get(id=pk)
         note.delete()
 
         return Response({'id': pk})
-    
-    except Note.DoesNotExist as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
-
-    except exceptions.APIException as e:
-        print(e)
-        return Response({ 'errors': e.detail }, status=e.status_code)
-
-    except Exception as e:
-        print(e)
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
