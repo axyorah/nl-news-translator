@@ -45,7 +45,7 @@ const Header = (props: HeaderState & HeaderDispatch): JSX.Element => {
                     { userDetail && userDetail.username 
                         ? <Nav className="ms-auto">
                             <Nav.Link as={Link} to="/profile">{userDetail.username}</Nav.Link>
-                            <Nav.Link as={Link} to="#" onClick={logoutHandler}>Logout</Nav.Link>
+                            <Nav.Link as={Link} to="/" onClick={logoutHandler}>Logout</Nav.Link>
                         </Nav>
                         : <Nav className="ms-auto">
                             <Nav.Link as={Link} to="/login">Login/Sign Up</Nav.Link>
