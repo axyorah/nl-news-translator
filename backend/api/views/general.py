@@ -1,7 +1,8 @@
 from tkinter import E
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from django.http import HttpRequest, Http404
+from rest_framework import status, exceptions
 from django.conf import settings
 import json
 
@@ -18,7 +19,7 @@ def validate_news_query(params):
     return 
 
 @api_view(['GET'])
-def getRoutes(request):
+def getRoutes(request: HttpRequest):
     routes = [
         {'GET': '/api/'},
 
@@ -47,7 +48,7 @@ def getRoutes(request):
     return Response(routes)
 
 @api_view(['GET'])
-def getAllNews(request):
+def getAllNews(request: HttpRequest):
 
     try:
         q = request.GET.get('q', None)
@@ -63,16 +64,21 @@ def getAllNews(request):
         
         return Response(res)
 
+    except exceptions.APIException as e:
+            print(e)
+            return Response(
+                { 'errors': e.detail }, 
+                status=e.status_code
+            )    
+
     except Exception as e:
-        print(f'ERROR: {e}')
-        res = {'errors': e.args[0]}
-        # TODO: return proper status code 
-        # (setting it to default 200, so that that the 
+        print(e)
+        # (setting status code to default 200, so that that the 
         # custom error msg can be properly intercepted in frontend)
-        return Response(res)#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'errors': e.args[0]})#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
-def getSelectedNews(request):
+def getSelectedNews(request: HttpRequest):
 
     try:
         source = request.GET.get('source', None)
@@ -92,22 +98,25 @@ def getSelectedNews(request):
                 f'Please choose one of: {", ".join(list(source2paragraphs.keys()))}'
             )
 
-        paragraphs = source2paragraphs[source](url)
-        res = { 'paragraphs': paragraphs }
-        
-        return Response(res)
+        paragraphs = source2paragraphs[source](url)        
+        return Response({ 'paragraphs': paragraphs })
+
+    except exceptions.APIException as e:
+        print(e)
+        return Response(
+            { 'errors': e.detail }, 
+            status=e.status_code
+        )
 
     except Exception as e:
-        print(f'ERROR: {e}')
-        res = {'errors': e.args[0]}
-        # TODO: return proper status code 
+        print(e)
         # (setting it to default 200, so that that the 
         # custom error msg can be properly intercepted in frontend)
-        return Response(res)#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'errors': e.args[0]})#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
-def getTranslations(request):
+def getTranslations(request: HttpRequest):
 
     try:
         body = request.data 
@@ -116,12 +125,17 @@ def getTranslations(request):
         res = { 'translations': translations }
         return Response(res)
 
+    except exceptions.APIException as e:
+        print(e)
+        return Response(
+            { 'errors': e.detail }, 
+            status=e.status_code
+        )    
+
     except Exception as e:
-        print(f'ERROR: {e}')
-        res = { 'errors': e.args[0] }
-        # TODO: return proper status code 
+        print(e)
         # (setting it to default 200, so that that the 
         # custom error msg can be properly intercepted in frontend)
-        return Response(res)#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({ 'errors': e.args[0] })#, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     
