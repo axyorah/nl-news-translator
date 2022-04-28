@@ -152,7 +152,7 @@ export const tagUpdateReducers = (
         case TAG_UPDATE_SUCCESS:
             return {
                 loading: false,
-                tagCreate: action.payload
+                tagUpdate: action.payload
             };
 
         case TAG_UPDATE_FAIL:
