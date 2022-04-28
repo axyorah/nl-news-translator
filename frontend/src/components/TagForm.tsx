@@ -36,23 +36,25 @@ const TagForm = (props: TagFormProps): JSX.Element => {
     };
 
     return (
-        <Form 
-            onSubmit={handleSubmit} 
-            style={{ display: 'flex', flexDirection: 'row' }}
-        >
+        <Form style={{ display: 'flex', flexDirection: 'row' }} >
             <InputGroup >
                 <Form.Control 
                     placeholder='Add New Tag'
                     value={name}
                     onChange={e => setName(e.target.value)}
                 />
-                <Button type='submit'variant='secondary'>
+                <Button 
+                    type='button'
+                    variant='secondary'
+                    onClick={handleSubmit}
+                >
                     Save
                 </Button>
             </InputGroup>
 
             { deleteTag
-                ? <Button 
+                ? <Button
+                    type='button' 
                     className='ms-4'
                     variant='danger'
                     onClick={e => deleteTag()}
