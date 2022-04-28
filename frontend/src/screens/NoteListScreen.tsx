@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Form, Row, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
@@ -106,6 +107,16 @@ const NoteListScreen = (
         );
     };
 
+    const renderButtons = (): JSX.Element => {
+        return (
+            <div className='w-100 d-flex justify-content-end'>
+                <Link to='/notes/new' className='capsule-lg'>
+                    Add Note
+                </Link>
+            </div>
+        );
+    };
+
     return (
         <div className='boxed mycard mt-5 p-5'>
 
@@ -131,6 +142,8 @@ const NoteListScreen = (
                 </div>)
                 : null
             }
+
+            { renderButtons() }
 
         </div>
     );
