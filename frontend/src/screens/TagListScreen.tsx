@@ -105,6 +105,7 @@ const TagListScreen = (
                 { tagList.map((tag: Tag) => {
                     return (
                         <Col 
+                            key={tag.id}
                             className='capsule'
                             onClick={e => selectUserTag(tag.id)}
                         >{tag.name}</Col>
