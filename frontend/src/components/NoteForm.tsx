@@ -4,12 +4,15 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import { Note, NoteMinimal } from '../types/noteTypes';
 import { Tag } from '../types/tagTypes';
 
+import TagForm from './TagForm';
+
 
 interface NoteFormProps {
     noteInit?: Note,
     tagList: Tag[],
     updateOrCreateNote: Function, //update or create action
     deleteNote?: Function // delete action
+    createTag?: Function
 }
 
 interface TagState {
@@ -19,8 +22,11 @@ interface TagState {
 
 const NoteForm = (props: NoteFormProps): JSX.Element => {
 
-    const { noteInit, tagList, updateOrCreateNote, deleteNote } = props;
-    
+    const { 
+        noteInit, updateOrCreateNote, deleteNote, 
+        tagList, createTag 
+    } = props;
+
     const [ sideA, setSideA ] = useState('');
     const [ sideB, setSideB ] = useState('');
     const [ tags, setTags ] = useState<TagState>({});
@@ -50,7 +56,7 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         return (
             <Col sm={12} md={6} >
                 <Form.Group>
-                    <Form.Label>{name}</Form.Label>
+                    <Form.Label><h5>{name}</h5></Form.Label>
                     <Form.Control 
                         as='textarea'
                         value={val}
@@ -81,6 +87,23 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
                 />
                 <Form.Label className='m-0' >{tag.name}</Form.Label>
             </Col>
+        );
+    };
+
+    const renderTagForm = () => {
+        return (                
+            <Row className='py-3'>
+                <Col>
+                    { createTag
+                        ? <TagForm updateOrCreateTag={createTag} />
+                        : null
+                    }
+            
+                    <Link to='/tags' target='_blank' rel='noopener noreferrer'>
+                        Add, Change or Delete Tags
+                    </Link>
+                </Col>
+            </Row>
         );
     };
 
@@ -129,16 +152,13 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
                 { renderNoteText('Side B', sideB, setSideB)}
             </Row>
 
-            <Row>
+            <Row className='boxed m-3 p-3'>
+                <h5>Tags</h5>
                 { tagList  
                     ? tagList.map((tag: Tag) => renderTag(tag)) 
-                    : null 
+                    : <small>You have't added any tags yet</small> 
                 }
-
-                <Link to='/tags' target='_blank' rel='noopener noreferrer'>
-                    Add or Change Tags
-                </Link>
-
+                { renderTagForm() }
             </Row>
 
             { renderButtons() }
