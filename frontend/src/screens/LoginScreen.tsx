@@ -34,11 +34,11 @@ const LoginScreen = (
     } = props;
     const { loading, errors, userDetail } = userLoginInfo;
 
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ formError, setFormError ] = useState('');
+    const [ username, setUsername ] = useState<string>('');
+    const [ password, setPassword ] = useState<string>('');
+    const [ formError, setFormError ] = useState<string>('');
 
-    const redirect = location.search ? location.search.split('=')[1] : '/';
+    const redirect: string = location.search ? location.search.split('=')[1] : '/';
 
     useEffect(() => {
         // redirect user if already logged in
@@ -114,7 +114,7 @@ const mapStateToProps = (state: StoreState): LoginScreenState => {
     };
 };
 
-export default connect(
+export default connect<LoginScreenState, LoginScreenDispatch, {}, StoreState>(
     mapStateToProps,
     { loginUser }
 )(LoginScreen);

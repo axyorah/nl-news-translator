@@ -95,7 +95,7 @@ const NoteCreateScreen = (
     );
 };
 
-const mapStateToProps = (state: StoreState) => {
+const mapStateToProps = (state: StoreState): NoteCreateScreenState => {
     return {
         noteCreateInfo: state.noteCreateInfo,
         tagListInfo: state.tagListInfo,

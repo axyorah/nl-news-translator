@@ -76,7 +76,7 @@ const NoteListScreen = (
     }, [ getAllUserNotes, getAllUserTags, location.search, tags ]);
 
 
-    const renderTag = (tag: Tag) => {
+    const renderTag = (tag: Tag): JSX.Element => {
         return (
             <Col 
                 key={tag.id}
@@ -98,7 +98,7 @@ const NoteListScreen = (
         );
     };
 
-    const renderTags = () => {
+    const renderTags = (): JSX.Element => {
         return (
             <div className='m-3'>
                 <Row> { tagList.map((tag: Tag) => renderTag(tag)) }</Row>

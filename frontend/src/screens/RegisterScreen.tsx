@@ -32,18 +32,17 @@ const RegisterScreen = (
     } = props;
     const { loading, errors, userDetail } = userRegisterInfo;
 
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ confirmPassword, setConfirmPassword ] = useState('');
-    const [ formError, setFormError ] = useState('');
+    const [ username, setUsername ] = useState<string>('');
+    const [ password, setPassword ] = useState<string>('');
+    const [ confirmPassword, setConfirmPassword ] = useState<string>('');
+    const [ formError, setFormError ] = useState<string>('');
 
-    const redirect = location.search ? location.search.split('=')[1] : '/';
+    const redirect: string = location.search ? location.search.split('=')[1] : '/';
 
+    // on successful registraion
     useEffect(() => {
-        // redirect user if registered
         if (userDetail) {
             history.push(redirect);
-            // noteUpdateReset
         }
     }, [ history, userDetail, redirect ]);
 
@@ -64,53 +63,58 @@ const RegisterScreen = (
         registerUser(username, password);
     };
 
+    const renderForm = (): JSX.Element => {
+        return (
+            <Form onSubmit={onFormSubmit}>
+            
+            <Form.Group className='my-3'>
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                    required 
+                    type='text'
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
+            </Form.Group>
+            
+            <Form.Group className='my-3'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                    required 
+                    type='password'
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                />
+            </Form.Group>
+            
+            <Form.Group className='my-3'>
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                    required 
+                    type='password'
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                />
+            </Form.Group>
+            
+            <Button type='submit'>Submit</Button>
+            </Form>
+        );
+    };
+
     return (
         <div className="boxed mycard p-5">
 
 
             <h3 className='text-center'>Register</h3>
 
+            { loading ? <Loader /> : null }
             { errors || formError 
                 ? <Message variant='danger'>{ errors || formError }</Message>
                 : null
             }
-            { loading ? <Loader /> : null }
 
-
-            <Form onSubmit={onFormSubmit}>
-
-                <Form.Group className='my-3'>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                        required 
-                        type='text'
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                    />
-                </Form.Group>
-
-                <Form.Group className='my-3'>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        required 
-                        type='password'
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </Form.Group>
-
-                <Form.Group className='my-3'>
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                        required 
-                        type='password'
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
-                </Form.Group>
-
-                <Button type='submit'>Submit</Button>
-            </Form>
+            { renderForm() }
 
             <div className='text-center'>
                 <small className='text-muted'>
@@ -130,7 +134,7 @@ const mapStateToProps = (state: StoreState): RegisterScreenState => {
     };
 };
 
-export default connect(
+export default connect<RegisterScreenState, RegisterScreenDispatch, {}, StoreState>(
     mapStateToProps,
     { registerUser }
 )(RegisterScreen);

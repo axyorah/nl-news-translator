@@ -56,7 +56,7 @@ const NoteUpdateScreen = (
         noteSelectInfo, noteUpdateInfo, noteDeleteInfo, 
         tagListInfo, tagCreateInfo,
         selectUserNote, updateUserNote, deleteUserNote, 
-        resetSelectUserNote, resetUpdateUserNote, resetDeleteUserNote,
+        resetUpdateUserNote, resetDeleteUserNote,
         getAllUserTags, createUserTag, resetCreateUserTag
     } = props;
     const { loading: loadingSelect, errors: errorsSelect, noteSelect } = noteSelectInfo || {};
@@ -125,7 +125,7 @@ const NoteUpdateScreen = (
     );
 };
 
-const mapStateToProps = (state: StoreState) => {
+const mapStateToProps = (state: StoreState): NoteUpdateScreenState => {
     return {
         noteSelectInfo: state.noteSelectInfo,
         noteUpdateInfo: state.noteUpdateInfo,

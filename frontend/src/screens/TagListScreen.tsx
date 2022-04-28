@@ -99,7 +99,7 @@ const TagListScreen = (
     }, [ tagDelete, resetSelectUserTag, resetDeleteUserTag, getAllUserTags ]);
 
 
-    const renderTags = () => {
+    const renderTags = (): JSX.Element => {
         return (
             <Row className='my-3'>
                 { tagList.map((tag: Tag) => {
@@ -114,7 +114,7 @@ const TagListScreen = (
         );
     };
 
-    const renderTagForms = () => {
+    const renderTagForms = (): JSX.Element => {
         return (
             <Row className='my-3'>
                 <Col md={6} className='boxed p-4'>

@@ -9,8 +9,11 @@ import NewsList from '../components/NewsList';
 import NewsSelected from '../components/NewsSelected';
 
 interface NewsScreenState {};
+interface NewsScreenDispatch {};
 
-const NewsScreen = (props: RouteComponentProps & NewsScreenState): JSX.Element => {
+const NewsScreen = (
+    props: RouteComponentProps & NewsScreenState & NewsScreenDispatch
+): JSX.Element => {
     return (
         <div>
             <Row className="my-3">
@@ -31,11 +34,10 @@ const NewsScreen = (props: RouteComponentProps & NewsScreenState): JSX.Element =
 };
 
 const mapStateToProps = (state: StoreState): NewsScreenState => {
-    console.log(state);
     return {};
 };
 
-export default connect(
+export default connect<NewsScreenState, NewsScreenDispatch, {}, StoreState>(
     mapStateToProps,
     {}
 )(NewsScreen);
