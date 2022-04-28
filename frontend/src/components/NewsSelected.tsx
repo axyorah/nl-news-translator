@@ -34,7 +34,7 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
     const { loading: loadingTranslated, errors: errorsTranslated, newsTranslated } = newsTranslateInfo;
     const { translations } = newsTranslated || {};
 
-    const [ errors, setErrors ] = useState('');
+    const [ errors, setErrors ] = useState<string>('');
 
 
     const renderSentences = (): JSX.Element[] | null => {
@@ -145,8 +145,7 @@ const mapStateToProps = (state: StoreState): NewsSelectedState => {
     };
 };
 
-export default connect(
+export default connect<NewsSelectedState, NewsSelectedDispatch, {}, StoreState>(
     mapStateToProps,
     { translateNewsItem }
 )(NewsSelected);
-

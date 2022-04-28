@@ -13,7 +13,9 @@ export interface PaginatorProps<Params extends MinimalParams> {
     numPages: number
 }
 
-function Paginator<Params extends MinimalParams>(props: PaginatorProps<Params>): JSX.Element {
+function Paginator<Params extends MinimalParams>(
+    props: PaginatorProps<Params>
+): JSX.Element {
 
     const { baseURL, params, page, numPages } = props;
 
@@ -21,7 +23,9 @@ function Paginator<Params extends MinimalParams>(props: PaginatorProps<Params>):
     const end = Math.min(page + 3, numPages);
     const numCapsules = end - start + 1;
 
-    const makeURL = (baseURL: string, params: Params, page: number) => {
+    const makeURL = (
+        baseURL: string, params: Params, page: number
+    ): string => {
         params.page = page;
 
         const queryArray: string[] = [];

@@ -27,8 +27,8 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         tagList, createTag 
     } = props;
 
-    const [ sideA, setSideA ] = useState('');
-    const [ sideB, setSideB ] = useState('');
+    const [ sideA, setSideA ] = useState<string>('');
+    const [ sideB, setSideB ] = useState<string>('');
     const [ tags, setTags ] = useState<TagState>({});
 
     // initialize (if updating)
@@ -68,7 +68,7 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         );
     };
 
-    const renderTag = (tag: Tag) => {
+    const renderTag = (tag: Tag): JSX.Element => {
         return (
             <Col 
                 key={tag.id}
@@ -90,7 +90,7 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         );
     };
 
-    const renderTagForm = () => {
+    const renderTagForm = (): JSX.Element => {
         return (                
             <Row className='py-3'>
                 <Col>
@@ -107,7 +107,7 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         );
     };
 
-    const renderButtons = () => {
+    const renderButtons = (): JSX.Element => {
         return (
             <div className='d-flex justify-content-between'>
                 <Button type='submit' variant='secondary' className='mx-3 my-2'>
@@ -129,7 +129,7 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         );
     };
 
-    const handleSubmit = (e: React.SyntheticEvent) => {
+    const handleSubmit = (e: React.SyntheticEvent): void => {
         e.preventDefault();
         
         const note: NoteMinimal = {

@@ -23,7 +23,7 @@ const Header = (props: HeaderState & HeaderDispatch): JSX.Element => {
     const { userLoginInfo, logout } = props;
     const { userDetail } = userLoginInfo || {};
 
-    const logoutHandler = () => {
+    const handleLogout = () => {
         logout()
     };
 
@@ -45,7 +45,7 @@ const Header = (props: HeaderState & HeaderDispatch): JSX.Element => {
                     { userDetail && userDetail.username 
                         ? <Nav className="ms-auto">
                             <Nav.Link as={Link} to="/profile">{userDetail.username}</Nav.Link>
-                            <Nav.Link as={Link} to="/" onClick={logoutHandler}>Logout</Nav.Link>
+                            <Nav.Link as={Link} to="/" onClick={handleLogout}>Logout</Nav.Link>
                         </Nav>
                         : <Nav className="ms-auto">
                             <Nav.Link as={Link} to="/login">Login/Sign Up</Nav.Link>
@@ -64,7 +64,7 @@ const mapStateToProps = (state: StoreState): HeaderState => {
     }
 };
 
-export default connect(
+export default connect<HeaderState, HeaderDispatch, {}, StoreState>(
     mapStateToProps,
     { logout }
 )(Header);

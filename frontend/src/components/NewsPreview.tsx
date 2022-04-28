@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
+import { StoreState } from '../types/storeTypes';
 import { News } from '../types/newsTypes';
 
 import { selectNewsItem } from '../actions/newsActions';
@@ -9,27 +10,24 @@ interface NewsPreviewProps {
     item: News
 }
 
+interface NewsPreviewState {}
+
 interface NewsPreviewDispatch {
     selectNewsItem: Function // thunk messes types up :(
 }
 
-const NewsPreview = (props: NewsPreviewProps & NewsPreviewDispatch): JSX.Element => {
+const NewsPreview = (props: NewsPreviewProps & NewsPreviewState & NewsPreviewDispatch): JSX.Element => {
 
     const { item, selectNewsItem } = props;
     const { title, source, description } = item;
 
-    const [ hidden, setHidden ] = useState(true);
-
-    const onPreviewClick = (): void => {
-        console.log(`clicked:\n${JSON.stringify(item, null, 2)}`);
-        selectNewsItem(item);
-    };
+    const [ hidden, setHidden ] = useState<boolean>(true);
 
     return (
         <div
             onMouseEnter={e => setHidden(false)}
             onMouseLeave={e => setHidden(true)}
-            onClick={onPreviewClick}
+            onClick={e => selectNewsItem(item)}
             >
             <div className="li-title li-between">
                 <div hidden={!hidden}>{title.slice(0, 50)}...</div>
@@ -43,7 +41,7 @@ const NewsPreview = (props: NewsPreviewProps & NewsPreviewDispatch): JSX.Element
     );
 };
 
-export default connect(
+export default connect<NewsPreviewState, NewsPreviewDispatch, {}, StoreState>(
     null,
     { selectNewsItem }
 )(NewsPreview);

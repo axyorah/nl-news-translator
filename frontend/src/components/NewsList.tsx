@@ -13,7 +13,9 @@ interface NewsListState {
     newsListInfo: NewsListInfo
 }
 
-const NewsList = (props: NewsListState): JSX.Element => {
+interface NewsListDispatch {}
+
+const NewsList = (props: NewsListState & NewsListDispatch): JSX.Element => {
     
     const { newsListInfo } = props;
     const { loading, errors, newsList } = newsListInfo;
@@ -21,7 +23,7 @@ const NewsList = (props: NewsListState): JSX.Element => {
     const renderList = (): JSX.Element => {
         return (
             <ListGroup variant="flush">
-                {newsList.map((newsItem: News, i: Number) => {
+                {newsList.map((newsItem: News, i: number) => {
                     return (
                         <ListGroup.Item key={i.toString()}>
                             <NewsPreview item={newsItem} />
@@ -52,7 +54,7 @@ const mapStateToProps = (state: StoreState): NewsListState => {
     };
 };
 
-export default connect(
+export default connect<NewsListState, NewsListDispatch, {}, StoreState>(
     mapStateToProps,
     {}
 )(NewsList);

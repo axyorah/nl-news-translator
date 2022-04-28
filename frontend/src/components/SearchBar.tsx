@@ -17,14 +17,12 @@ interface SearchBarDispatch {
 
 const SearchBar = (props: SearchBarState & SearchBarDispatch): JSX.Element => {
 
-    console.log(props);
     const { getNewsList } = props;
 
-    const [ query, setQuery ] = useState('');
+    const [ query, setQuery ] = useState<string>('');
 
-    const onFormSubmit = (evt: React.SyntheticEvent): void => {
-        evt.preventDefault();
-        console.log(`form submitted: q=${query}`);
+    const onFormSubmit = (e: React.SyntheticEvent): void => {
+        e.preventDefault();
         getNewsList({q: query});
     };
 
@@ -55,7 +53,7 @@ const mapStateToProps = (state: StoreState): SearchBarState => {
     };
 };
 
-export default connect(
+export default connect<SearchBarState, SearchBarDispatch, {}, StoreState>(
     mapStateToProps,
     { getNewsList }
 )(SearchBar);
