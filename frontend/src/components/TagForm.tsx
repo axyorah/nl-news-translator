@@ -13,7 +13,7 @@ const TagForm = (props: TagFormProps): JSX.Element => {
 
     const { tagSelect, updateOrCreateTag, deleteTag } = props;
 
-    const [ name, setName ] = useState('');
+    const [ name, setName ] = useState<string>('');
 
     // initialize
     useEffect(() => {
@@ -36,7 +36,7 @@ const TagForm = (props: TagFormProps): JSX.Element => {
     };
 
     return (
-        <Form style={{ display: 'flex', flexDirection: 'row' }} >
+        <div style={{ display: 'flex', flexDirection: 'row' }} >
             <InputGroup >
                 <Form.Control 
                     placeholder='Add New Tag'
@@ -61,7 +61,7 @@ const TagForm = (props: TagFormProps): JSX.Element => {
                 >X</Button>
                 : null
             }
-        </Form>
+        </div>
     );
 };
 
