@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { Note, NoteMinimal } from '../types/noteTypes';
 import { Tag } from '../types/tagTypes';
@@ -86,7 +87,7 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
     const renderButtons = () => {
         return (
             <div className='d-flex justify-content-between'>
-                <Button type='submit' className='mx-3 my-2'>
+                <Button type='submit' variant='secondary' className='mx-3 my-2'>
                     Save
                 </Button>
 
@@ -133,6 +134,11 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
                     ? tagList.map((tag: Tag) => renderTag(tag)) 
                     : null 
                 }
+
+                <Link to='/tags' target='_blank' rel='noopener noreferrer'>
+                    Add or Change Tags
+                </Link>
+
             </Row>
 
             { renderButtons() }
