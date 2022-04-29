@@ -47,7 +47,7 @@ interface NewsListApiResponse {
 export const getNewsList = (
     params: NewsListQueryParams
 ) => async (dispatch: Dispatch) => {
-    const { q } = params;
+    const { q, category_list } = params;
 
     try {
         // clear old selected news item and translations
@@ -66,7 +66,7 @@ export const getNewsList = (
     
         const { data } = await backend.get<NewsListApiResponse>(
             '/news/', 
-            { params: { q: q } }
+            { params: { q: q, category_list: category_list?.join(',') } }
         );
 
         if (data.errors) {
