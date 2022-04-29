@@ -22,6 +22,7 @@ export interface News {
     source: {
         name: string,
     },
+    publishedAt?: string,
     paragraphs?: string[],
     sentences?: string[],
     translations?: string[]

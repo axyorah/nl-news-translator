@@ -29,13 +29,31 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
     } = props;
 
     const { loading: loadingSelected, errors: errorsSelected, newsSelected } = newsSelectInfo;
-    const { title, sentences } = newsSelected || {};
+    const { title, sentences, url, publishedAt } = newsSelected || {};
 
     const { loading: loadingTranslated, errors: errorsTranslated, newsTranslated } = newsTranslateInfo;
     const { translations } = newsTranslated || {};
 
     const [ errors, setErrors ] = useState<string>('');
 
+
+    const renderHeader = (): JSX.Element => {
+        return (
+            <div>
+                <h3 className="text-center">{ 
+                    title && sentences && sentences.length 
+                        ? <Link to={{ pathname: url }} target='_blank' style={{ color: 'white' }}>
+                            {title}
+                        </Link> || "Title"
+                        : "Select News from the List"
+                }</h3>
+                <small className='m-3'>
+                    { publishedAt ? publishedAt.split('T')[0] : null }
+                </small>
+            </div>
+            
+        );
+    };
 
     const renderSentences = (): JSX.Element[] | null => {
         if (sentences && sentences.length) {
@@ -108,11 +126,7 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
     return (
         <div className="boxed mycard p-5">
             
-            <h3 className="text-center">{ 
-                sentences && sentences.length 
-                    ? title || "Title"
-                    : "Select News from the List"
-            }</h3>
+            { renderHeader() }
             
             { loadingSelected ? <Loader /> : null }
             
