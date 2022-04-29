@@ -121,7 +121,12 @@ def getTranslations(request: HttpRequest):
     try:
         body = request.data 
         sentences = body['sentences']
-        translations = nl2en.translate(sentences)
+
+        # translate sentence-by-sentence to reduce mem requirement
+        translations = [
+            nl2en.translate([sentence])
+            for sentence in sentences
+        ]
         res = { 'translations': translations }
         return Response(res)
 

@@ -175,7 +175,7 @@ interface NewsTranslatedApiResponse {
 }
 
 export const translateNewsItem = (item: News) => async (dispatch: Dispatch) => {
-    const { url,sentences } = item;
+    const { url, sentences } = item;
 
     try {
         dispatch<NewsTranslateQueryAction>({
