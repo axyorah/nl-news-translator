@@ -16,29 +16,31 @@ class NewsRequester:
         'sports', 
         'technology'
     }
-    def __init__(self, api_key):
+    def __init__(self, api_key: str):
         self.api_key = api_key
         self.url = 'https://newsapi.org/v2/top-headlines?'
-        self.period = 14 # default period [days] over which news would be requested        
-
-    def _validate(
-        self,
-        q: str, 
-        category_list: List[str], 
-        from_date: datetime.date, 
-        to_date: datetime.date
-    ) -> None:
+        self.period = 14 # default period [days] over which news would be requested
+        
+    def _validate(self, params: Dict) -> None:
+        q = params['q']
+        category_list = params['category_list']
+        to_ts = params['to_ts']
+        from_ts = params['from_ts']
+        
+        # validate q: should be any string
         if q and not isinstance(q, str):
             raise TypeError(
                 f'`q` should be a string'
             )
-
+        
+        # validate category_list:
+        # should be a list of unique categories from preset
         if category_list and not isinstance(category_list, list):
             raise TypeError(
                 f'Categories should be given as a list of string, '
                 f'got {category_list}'
             )
-        
+            
         if category_list and any(
             cat not in self.CATEGORIES for cat in category_list
         ):
@@ -47,28 +49,66 @@ class NewsRequester:
                 f'got {category_list}'
             )
         
-        if from_date and not isinstance(from_date, datetime):
+        # validate to_ts: 
+        # should be None or int corresponds to any timestamp [sec]
+        if to_ts and not (
+            isinstance(to_ts, int) or isinstance(to_ts, float)
+        ):
             raise TypeError(
-                f'`from_date` should be of type `datetime.datetime`'
+                f'`to_ts` should be an int/float '
+                f'corresponding to a timestamp in seconds; '
+                f'got {to_ts}'
             )
-
-        if to_date and not isinstance(to_date, datetime):
+                
+        if to_ts and to_ts > datetime.now().timestamp():
+            raise ValueError(
+                f'`to_ts` should be less than today\'s timestamp in seconds; '
+                f'got `to_ts`: {to_ts} and today: {int(datetime.now().timestamp())}'                    
+            )
+        
+        # validate from_ts: 
+        # should be None or int corresponding to a timestamp [sec]
+        # should precede to_ts
+        if to_ts and not (
+            isinstance(from_ts, int) or isinstance(from_ts, float)
+        ):
             raise TypeError(
-                f'`to_date` should be of type `datetime.datetime`'
+                f'`from_ts` should be an int/float '
+                f'corresponding to a timestamp in seconds; '
+                f'got {from_ts}'
             )
-            
-        if from_date and to_date and from_date > to_date:
+                
+        if to_ts and from_ts and to_ts <= from_ts:
             raise ValueError(
-                f'`from_date` should come before `to_date`, got '
-                f'`from_date`: {from_date} and `to_date`: {to_date}'
+                f'`from_ts` should precede `to_ts`; '
+                f'got `from_ts`: {from_ts} and `to_ts`: {to_ts}'
             )
-
-        if from_date and from_date > datetime.now():
-            raise ValueError(
-                f'`from_date` is out of range, got {from_date}'
-            )
-
-    def _retry(self, url, times=3, sleep=5):        
+    
+    def _adjust_params(self, params: Dict) -> Dict:
+        params = params.copy()
+                
+        if not params['to_ts']:
+            params['to_ts'] = int(datetime.now().timestamp())
+        params['to'] = datetime\
+            .fromtimestamp(params['to_ts'])\
+            .isoformat()\
+            .split('T')[0]
+                
+        if not params['from_ts']:
+            params['from_ts'] = datetime\
+                .fromtimestamp(
+                    params['to_ts'] - self.period * 24 * 60 * 60                
+                )\
+                .timestamp()
+        params['from'] = datetime\
+            .fromtimestamp(params['from_ts'])\
+            .isoformat()\
+            .split('T')[0]
+                
+        return params
+                
+    def _retry(self, url: str, times: int = 3, sleep: int = 5) -> Dict:
+        print(f'Requesting: {url}')
 
         for _ in range(times):
             res = rq.get(url)
@@ -79,8 +119,8 @@ class NewsRequester:
             time.sleep(sleep)
 
         return {"res": res.text}
-
-    def _get_valid(self, params):
+    
+    def _get_valid(self, params: Dict) -> Dict:
         url = (
             f'{self.url}'
             f'{"category=" + params["category"] + "&" if params["category"] else ""}'
@@ -92,73 +132,57 @@ class NewsRequester:
         )
 
         return self._retry(url, times=3, sleep=5)
-
-    def get(
-        self,
-        q: str = None, 
-        category_list: Optional[List[str]] = None,
-        from_date: Optional[datetime.date] = None, 
-        to_date: Optional[datetime.date] = None
-    ):  
-        """
-        # TODO: make it one category at a time after all...
-        fetches news from newsapi filtered by:
-        q: [optional str] key word 
-        category_list: [optional list[str]]: list of categories 
-            from NewsRequester.CATEGORIES;
-            if empty or None all categories will be used
-        from_date: [optional datetime obj]
-        to_date: [optional datetimeobj]
-        """
-        # <<< TEMP ...
-        with open('api/utils/news.json', 'r') as f:
-            temp = json.load(f)
-        for article in temp['articles']:
-            article['category'] = 'general'
-        return temp
-        # ... TEMP >>>
-
-        try:
-            self._validate(q, category_list, from_date, to_date)
+        
+    def get(self, 
+            q: str = '', 
+            category_list: List[str] = [], 
+            from_ts: Optional[int] = None, 
+            to_ts: Optional[int] = None
+        ) -> Dict:
+                
+        def set_total_res(category: str = '') -> None:
+            r = self._get_valid(
+                {**params, 'category': category}
+            )
+                
+            if r.get('status') and r['status'] == 'ok':
+                res['status'] = r.get('status')
+                res['totalResults'] += r.get('totalResults', 0)
+                res['articles'] += [
+                    {**article, 'category': category}
+                    for article in r.get('articles', [])
+                ]
+            else:
+                print(r)
+                raise Exception(r['res'])
+                
+        try:        
+            params = {
+                'q': q,
+                'category_list': category_list,
+                'from_ts': from_ts,
+                'to_ts': to_ts
+            }
+                    
+            self._validate(params)
+                    
+            params = self._adjust_params(params)
+                
+            res = {
+                'status': 'ok',
+                'totalResults': 0,
+                'articles': []
+            }
+                
+            if not params['category_list']:
+                params['category_list'] = ['general']
+            
+            for category in params['category_list']:
+                set_total_res(category)
+                
+            return res
+        
         except Exception as e:
             print(e)
             raise e
-
-        # use default values for params if no value is provided
-        to_date = to_date or datetime.now()
-        from_date = from_date or datetime.fromtimestamp(
-            datetime.timestamp(to_date) - self.period * 24 * 60 * 60
-        )
-        category_list = category_list if category_list else list(self.CATEGORIES)
-
-        # newsapi can only process one category (or none = all) at a time;
-        # additonally, if `q` is set `category` also needs to be provided;
-        # so we'll need to send several small requests for each category 
-        # and lump them together at the end
-        final = {
-            'status': None,
-            'totalResults': 0,
-            'articles': []
-        }
-
-        for category in category_list:
-            params = {
-                'q': q,
-                'category': category,
-                'from': str(from_date).split(' ')[0],
-                'to': str(to_date).split(' ')[0]
-            }
-            res = self._get_valid(params)
-
-            if res.get('status') and res['status'] == 'ok':
-                final['status'] = 'ok'
-                final['totalResults'] += res.get('totalResults', 0)
-                final['articles'] += [
-                    {**article, **{'category': category}} 
-                    for article in res.get('articles', [])
-                ]
-            else:
-                print(f'Maybe error: {res}')
-                raise Exception(res['res'])
-
-        return final
+        
