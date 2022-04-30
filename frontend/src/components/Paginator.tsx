@@ -59,7 +59,7 @@ function Paginator<Params extends MinimalParams>(
                             : <Link 
                                 to={makeURL(baseURL, params, i + start)} 
                                 style={{ color: 'white' }}
-                            >{i + 1}</Link>
+                            >{i + start}</Link>
                         }                            
                     </span>
                 );
