@@ -12,28 +12,21 @@ import NoteForm from '../components/NoteForm';
 import { StoreState } from '../types/storeTypes';
 import { NewsSelectInfo, NewsTranslateInfo } from '../types/newsTypes';
 import { NoteCreateInfo } from '../types/noteTypes';
-import { TagListInfo, TagCreateInfo } from '../types/tagTypes';
 
 import { translateNewsItem } from '../actions/newsActions';
 import { createUserNote, resetCreateUserNote } from '../actions/noteActions';
-import { getAllUserTags, createUserTag, resetCreateUserTag } from '../actions/tagActions';
 import Message from '../components/Message';
 
 interface NewsScreenState {
     newsSelectInfo: NewsSelectInfo,
     newsTranslateInto: NewsTranslateInfo,
-    noteCreateInfo: NoteCreateInfo,
-    tagListInfo: TagListInfo,
-    tagCreateInfo: TagCreateInfo
+    noteCreateInfo: NoteCreateInfo
 };
 
 interface NewsScreenDispatch {
     translateNewsItem: Function,
     createUserNote: Function,
-    resetCreateUserNote: Function,
-    getAllUserTags: Function,
-    createUserTag: Function,
-    resetCreateUserTag: Function
+    resetCreateUserNote: Function
 };
 
 const NewsScreen = (
@@ -41,32 +34,15 @@ const NewsScreen = (
 ): JSX.Element => {
 
     const { 
-        newsSelectInfo, newsTranslateInto, noteCreateInfo, 
-        tagListInfo, tagCreateInfo,
-        translateNewsItem, createUserNote, resetCreateUserNote, 
-        getAllUserTags, createUserTag, resetCreateUserTag
+        newsSelectInfo, newsTranslateInto, noteCreateInfo,
+        translateNewsItem, createUserNote, resetCreateUserNote,
     } = props;
     const { newsSelected } = newsSelectInfo || {};
     const { loading: loadingTranslate } = newsTranslateInto || {};
     const { loading: loadingNoteCreate, errors: errorsNoteCreate, noteCreate } = noteCreateInfo || {};
-    const { loading: loadingTagCreate, errors: errorsTagCreate, tagCreate } = tagCreateInfo || {}
     const { sentences } = newsSelected || {};
-    const { tagList } = tagListInfo || {};
 
     const [ hidePopup, setHidePopup ] = useState<boolean>(true);
-
-    // on load
-    useEffect(() => {
-        getAllUserTags();
-    }, [ getAllUserTags ]);
-
-    // on successul tag create
-    useEffect(() => {
-        if (tagCreate) {
-            resetCreateUserTag();
-            getAllUserTags();
-        }
-    }, [ tagCreate, resetCreateUserTag, getAllUserTags ]);
 
     // on successful note create via popup
     useEffect(() => {
@@ -118,11 +94,7 @@ const NewsScreen = (
                     <h3 className='px-3'>Add New Note</h3>
                 </Modal.Header>
                 <Modal.Body className='mycard'>
-                    <NoteForm 
-                        tagList={tagList} 
-                        updateOrCreateNote={createUserNote}
-                        createTag={createUserTag}
-                    />
+                    <NoteForm updateOrCreateNote={createUserNote} />
                 </Modal.Body>
             </Modal>
         );
@@ -164,17 +136,11 @@ const mapStateToProps = (state: StoreState): NewsScreenState => {
     return {
         newsSelectInfo: state.newsSelectInfo,
         newsTranslateInto: state.newsTranslateInfo,
-        noteCreateInfo: state.noteCreateInfo,
-        tagListInfo: state.tagListInfo,
-        tagCreateInfo: state.tagCreateInfo
+        noteCreateInfo: state.noteCreateInfo
     };
 };
 
 export default connect<NewsScreenState, NewsScreenDispatch, {}, StoreState>(
     mapStateToProps,
-    { 
-        translateNewsItem, 
-        createUserNote, resetCreateUserNote, 
-        getAllUserTags, createUserTag, resetCreateUserTag 
-    }
+    { translateNewsItem, createUserNote, resetCreateUserNote }
 )(NewsScreen);

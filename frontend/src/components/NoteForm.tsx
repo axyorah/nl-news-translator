@@ -1,18 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import { Note, NoteMinimal } from '../types/noteTypes';
-import { Tag } from '../types/tagTypes';
 
+import Loader from './Loader';
+import Message from './Message';
 import TagForm from './TagForm';
 
+import { StoreState } from '../types/storeTypes';
+import { Note, NoteMinimal } from '../types/noteTypes';
+import { Tag, TagListInfo, TagCreateInfo } from '../types/tagTypes';
+
+import { getAllUserTags, createUserTag, resetCreateUserTag } from '../actions/tagActions';
 
 interface NoteFormProps {
     noteInit?: Note,
-    tagList: Tag[],
     updateOrCreateNote: Function, //update or create action
     deleteNote?: Function // delete action
-    createTag?: Function
+}
+
+interface NoteFormState {
+    tagListInfo: TagListInfo,
+    tagCreateInfo: TagCreateInfo
+}
+
+interface NoteFormDispatch {
+    getAllUserTags: Function,
+    createUserTag: Function,
+    resetCreateUserTag: Function
 }
 
 interface TagState {
@@ -20,16 +35,24 @@ interface TagState {
 }
 
 
-const NoteForm = (props: NoteFormProps): JSX.Element => {
+const NoteForm = (props: NoteFormProps & NoteFormState & NoteFormDispatch): JSX.Element => {
 
     const { 
         noteInit, updateOrCreateNote, deleteNote, 
-        tagList, createTag 
+        tagListInfo, tagCreateInfo,
+        getAllUserTags, createUserTag, resetCreateUserTag
     } = props;
+    const { loading: loadingTagList, errors: errorsTagList, tagList } = tagListInfo || {};
+    const { loading: loadingTagCreate, errors: errorsTagCreate, tagCreate } = tagCreateInfo || {};
 
     const [ sideA, setSideA ] = useState<string>('');
     const [ sideB, setSideB ] = useState<string>('');
     const [ tags, setTags ] = useState<TagState>({});
+
+    // on load
+    useEffect(() => {
+        getAllUserTags();
+    }, [ getAllUserTags ]);
 
     // initialize (if updating)
     useEffect(() => {
@@ -51,6 +74,13 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         }        
     }, [ noteInit, tagList ]);
 
+    // on successful tag create
+    useEffect(() => {
+        if (tagCreate) {
+            resetCreateUserTag();
+            getAllUserTags();
+        }
+    }, [ tagCreate, getAllUserTags, resetCreateUserTag ]);
 
     const renderNoteText = (name: string, val: string, setVal: Function): JSX.Element => {
         return (
@@ -94,11 +124,17 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
         return (                
             <Row className='py-3'>
                 <Col>
-                    { createTag
-                        ? <TagForm updateOrCreateTag={createTag} />
+                    { loadingTagList || loadingTagCreate ? <Loader /> : null }
+                    
+                    { errorsTagList || errorsTagCreate
+                        ? <Message variant='danger'>
+                            { errorsTagList || errorsTagCreate }
+                        </Message>
                         : null
                     }
-            
+                    
+                    <TagForm updateOrCreateTag={createUserTag} />                    
+                    
                     <Link to='/tags' target='_blank' rel='noopener noreferrer'>
                         Add, Change or Delete Tags
                     </Link>
@@ -166,4 +202,14 @@ const NoteForm = (props: NoteFormProps): JSX.Element => {
     );
 };
 
-export default NoteForm;
+const mapStateToProps = (state: StoreState): NoteFormState => {
+    return {
+        tagListInfo: state.tagListInfo,
+        tagCreateInfo: state.tagCreateInfo
+    };
+};
+
+export default connect<NoteFormState, NoteFormDispatch, {}, StoreState>(
+    mapStateToProps,
+    { getAllUserTags, createUserTag, resetCreateUserTag }
+)(NoteForm);

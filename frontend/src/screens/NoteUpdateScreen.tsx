@@ -8,7 +8,6 @@ import NoteForm from '../components/NoteForm';
 
 import { StoreState } from '../types/storeTypes';
 import { NoteSelectInfo, NoteUpdateInfo, NoteDeleteInfo } from '../types/noteTypes';
-import { TagListInfo, TagCreateInfo } from '../types/tagTypes';
 
 import { 
     selectUserNote, 
@@ -18,19 +17,12 @@ import {
     resetUpdateUserNote,
     resetDeleteUserNote 
 } from '../actions/noteActions';
-import { 
-    getAllUserTags,
-    createUserTag,
-    resetCreateUserTag 
-} from '../actions/tagActions';
 
 
 interface NoteUpdateScreenState {
     noteSelectInfo: NoteSelectInfo,
     noteUpdateInfo: NoteUpdateInfo,
-    noteDeleteInfo: NoteDeleteInfo,
-    tagListInfo: TagListInfo,
-    tagCreateInfo: TagCreateInfo
+    noteDeleteInfo: NoteDeleteInfo
 }
 
 interface NoteUpdateScreenDispatch {
@@ -39,10 +31,7 @@ interface NoteUpdateScreenDispatch {
     deleteUserNote: Function,
     resetSelectUserNote: Function,
     resetUpdateUserNote: Function,
-    resetDeleteUserNote: Function,
-    getAllUserTags: Function,
-    createUserTag: Function,
-    resetCreateUserTag: Function
+    resetDeleteUserNote: Function
 }
 
 
@@ -53,23 +42,18 @@ const NoteUpdateScreen = (
     const params = useParams<{id: string}>();
     const {
         history,
-        noteSelectInfo, noteUpdateInfo, noteDeleteInfo, 
-        tagListInfo, tagCreateInfo,
+        noteSelectInfo, noteUpdateInfo, noteDeleteInfo,
         selectUserNote, updateUserNote, deleteUserNote, 
-        resetUpdateUserNote, resetDeleteUserNote,
-        getAllUserTags, createUserTag, resetCreateUserTag
+        resetUpdateUserNote, resetDeleteUserNote
     } = props;
     const { loading: loadingSelect, errors: errorsSelect, noteSelect } = noteSelectInfo || {};
     const { loading: loadingUpdate, errors: errorsUpdate, noteUpdate } = noteUpdateInfo || {};
     const { loading: loadingDelete, errors: errorsDelete, noteDelete } = noteDeleteInfo || {};
-    const { loading: loadingTags, errors: errorsTags, tagList } = tagListInfo || {};
-    const { loading: loadingCreateTag, errors: errorsCreateTag, tagCreate } = tagCreateInfo || {};
-
+    
     // on load
     useEffect(() => {
         selectUserNote(params.id);
-        getAllUserTags();
-    }, [ selectUserNote, getAllUserTags, params ]);
+    }, [ selectUserNote, params ]);
 
     // on successful submit
     useEffect(() => {
@@ -87,38 +71,25 @@ const NoteUpdateScreen = (
         }
     }, [ noteDelete, resetDeleteUserNote, history]);
 
-    // on successful tag create
-    useEffect(() => {
-        if (tagCreate) {
-            resetCreateUserTag();
-            getAllUserTags();
-        }
-    }, [ tagCreate, resetCreateUserTag, getAllUserTags ]);
-
     return (
         <div className='boxed mycard p-5'>
             <h3 className='text-center'>Edit Note</h3>
 
-            { loadingSelect || loadingUpdate || loadingDelete || 
-              loadingTags || loadingCreateTag
+            { loadingSelect || loadingUpdate || loadingDelete 
                 ? <Loader /> 
                 : null 
             }
-            { errorsSelect || errorsUpdate || errorsDelete || 
-              errorsTags || errorsCreateTag
+            { errorsSelect || errorsUpdate || errorsDelete 
                 ? <Message variant='danger'>{
-                    errorsSelect || errorsUpdate || errorsDelete || 
-                    errorsTags || errorsCreateTag
+                    errorsSelect || errorsUpdate || errorsDelete 
                 }</Message> 
                 : null
             }
 
             <NoteForm 
                 noteInit={noteSelect} 
-                tagList={tagList} 
                 updateOrCreateNote={updateUserNote} 
                 deleteNote={() => deleteUserNote(params.id)}
-                createTag={createUserTag}
             />
             
         </div>
@@ -129,9 +100,7 @@ const mapStateToProps = (state: StoreState): NoteUpdateScreenState => {
     return {
         noteSelectInfo: state.noteSelectInfo,
         noteUpdateInfo: state.noteUpdateInfo,
-        noteDeleteInfo: state.noteDeleteInfo,
-        tagListInfo: state.tagListInfo,
-        tagCreateInfo: state.tagCreateInfo
+        noteDeleteInfo: state.noteDeleteInfo
     };
 };
 
@@ -139,7 +108,6 @@ export default connect<NoteUpdateScreenState, NoteUpdateScreenDispatch, {}, Stor
     mapStateToProps,
     { 
         selectUserNote, updateUserNote, deleteUserNote, 
-        resetSelectUserNote, resetUpdateUserNote, resetDeleteUserNote,
-        getAllUserTags, createUserTag, resetCreateUserTag 
+        resetSelectUserNote, resetUpdateUserNote, resetDeleteUserNote
     }
 )(NoteUpdateScreen);
