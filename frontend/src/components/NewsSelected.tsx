@@ -115,7 +115,7 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
                     }
                 </div>
                 <div>
-                    <Link to='/notes/new' className='capsule-lg'>
+                    <Link to='/notes/new' className='capsule-lg' target='_blank'>
                         Add Note
                     </Link>
                 </div>
