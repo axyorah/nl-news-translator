@@ -52,9 +52,10 @@ const NewsSelected = (props: NewsSelectedProps & NewsSelectedState & NewsSelecte
                         </Link> || "Title"
                         : "Select News from the List"
                 }</h3>
-                <small className='m-3'>
-                    { publishedAt ? publishedAt.split('T')[0] : null }
-                </small>
+                { publishedAt 
+                    ? <small className='m-3'>{publishedAt.split('T')[0]}</small>
+                    : null
+                }
             </div>
             
         );
