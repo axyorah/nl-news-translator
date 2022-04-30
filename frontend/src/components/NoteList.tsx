@@ -10,7 +10,7 @@ interface NoteListProps {
     noteList: Note[]
 }
 
-const NoteList = (props: NoteListProps) => {
+const NoteList = (props: NoteListProps): JSX.Element => {
 
     const { noteList } = props;
  
@@ -51,14 +51,14 @@ const NoteList = (props: NoteListProps) => {
                         { note.side_a.slice(0, 50) }
                         { note.side_a.length > 50 ? '...' : null }
                     </div>
-                    <div hidden>
-                        <pre><code>{note.side_a}</code></pre>
+                    <div hidden style={{ whiteSpace: 'pre-wrap' }}>
+                        {note.side_a}
                     </div>
                 </Col>
     
                 <Col md={3} sm={6} className='note-side-b'>
-                    <div hidden>
-                        <pre><code>{note.side_b}</code></pre>
+                    <div hidden style={{ whiteSpace: 'pre-wrap' }}>
+                        {note.side_b}
                     </div>
                 </Col>
     
