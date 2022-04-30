@@ -12,6 +12,10 @@ import { NewsTranslateInfo } from '../types/newsTypes';
 
 import { translateNewsItem } from '../actions/newsActions';
 
+interface NewsSelectedProps {
+    areButtonsRendered?: boolean
+}
+
 interface NewsSelectedState {
     newsSelectInfo: NewsSelectInfo,
     newsTranslateInfo: NewsTranslateInfo
@@ -21,9 +25,10 @@ interface NewsSelectedDispatch {
     translateNewsItem: Function
 }
 
-const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Element => {
+const NewsSelected = (props: NewsSelectedProps & NewsSelectedState & NewsSelectedDispatch): JSX.Element => {
 
-    const { 
+    const {
+        areButtonsRendered=true, 
         newsSelectInfo, newsTranslateInfo,
         translateNewsItem 
     } = props;
@@ -146,7 +151,7 @@ const NewsSelected = (props: NewsSelectedState & NewsSelectedDispatch): JSX.Elem
                     : null
             }
 
-            { renderButtons() }
+            { areButtonsRendered ? renderButtons() : null }
             
         </div>
     );
