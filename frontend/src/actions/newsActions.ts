@@ -4,7 +4,6 @@ import {
     NEWS_LIST_QUERY,
     NEWS_LIST_SUCCESS,
     NEWS_LIST_FAIL,
-    NEWS_LIST_RESET,
 
     NEWS_SELECT_QUERY,
     NEWS_SELECT_SUCCESS,
@@ -136,7 +135,9 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
         const sentences: string[] = [];
         data.paragraphs.forEach((paragraph: string) => {
             paragraph.split('. ').forEach((sentence: string) =>{
-                sentences.push(sentence);
+                if (sentence && sentence.length) {
+                    sentences.push(sentence);
+                }
             });
         });
 
