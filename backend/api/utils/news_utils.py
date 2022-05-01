@@ -1,12 +1,33 @@
 from typing import List, Tuple, Set, Dict, Union, Optional
+from abc import ABC
 
 import requests as rq
 from datetime import datetime
 import time
-import json
    
+class TokenRequester(ABC):
+    def __init__(self, url: str, token: str):
+        self.url = url
+        self.token = token
 
-class NewsRequester:
+    def _validate(self, **params: Dict) -> None:
+        pass
+
+    def _retry(self, url: str, times: int = 3, sleep: int = 5) -> Dict:
+        for _ in range(times):
+            res = rq.get(url)
+
+            if res.status_code == 200:
+                return res.json()
+
+            time.sleep(sleep)
+
+        return {"res": res.text}
+
+    def get(self, **params: Dict) -> Dict:
+        pass
+
+class NewsRequester(TokenRequester):
     CATEGORIES = {
         'business', 
         'entertainment', 
@@ -17,15 +38,16 @@ class NewsRequester:
         'technology'
     }
     def __init__(self, api_key: str):
-        self.api_key = api_key
-        self.url = 'https://newsapi.org/v2/top-headlines?'
+        super().__init__('https://newsapi.org/v2/top-headlines?', api_key)
         self.period = 14 # default period [days] over which news would be requested
-        
-    def _validate(self, params: Dict) -> None:
-        q = params['q']
-        category_list = params['category_list']
-        to_ts = params['to_ts']
-        from_ts = params['from_ts']
+
+    def _validate(
+            self, 
+            q: str = '', 
+            category_list: List[str] = [], 
+            to_ts: Optional[int] = None, 
+            from_ts: Optional[int] = None
+        ) -> None:
         
         # validate q: should be any string
         if q and not isinstance(q, str):
@@ -84,7 +106,7 @@ class NewsRequester:
                 f'got `from_ts`: {from_ts} and `to_ts`: {to_ts}'
             )
     
-    def _adjust_params(self, params: Dict) -> Dict:
+    def _adjust_params(self, **params: Dict) -> Dict:
         params = params.copy()
                 
         if not params['to_ts']:
@@ -106,21 +128,8 @@ class NewsRequester:
             .split('T')[0]
                 
         return params
-                
-    def _retry(self, url: str, times: int = 3, sleep: int = 5) -> Dict:
-        print(f'Requesting: {url}')
 
-        for _ in range(times):
-            res = rq.get(url)
-
-            if res.status_code == 200:
-                return res.json()
-
-            time.sleep(sleep)
-
-        return {"res": res.text}
-    
-    def _get_valid(self, params: Dict) -> Dict:
+    def _get_valid(self, **params: Dict) -> Dict:
         url = (
             f'{self.url}'
             f'{"category=" + params["category"] + "&" if params["category"] else ""}'
@@ -128,7 +137,7 @@ class NewsRequester:
             f'{"from=" + params["from"] + "&" if params["from"] else ""}'
             f'{"to=" + params["to"] + "&" if params["to"] else ""}'
             f'country=nl&'
-            f'apiKey={self.api_key}'
+            f'apiKey={self.token}'
         )
 
         return self._retry(url, times=3, sleep=5)
@@ -142,7 +151,7 @@ class NewsRequester:
                 
         def set_total_res(category: str = '') -> None:
             r = self._get_valid(
-                {**params, 'category': category}
+                **params, category=category
             )
                 
             if r.get('status') and r['status'] == 'ok':
@@ -164,9 +173,9 @@ class NewsRequester:
                 'to_ts': to_ts
             }
                     
-            self._validate(params)
+            self._validate(**params)
                     
-            params = self._adjust_params(params)
+            params = self._adjust_params(**params)
                 
             res = {
                 'status': 'ok',
