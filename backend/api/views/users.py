@@ -44,7 +44,7 @@ def registerUser(request: HttpRequest):
         )
         serializer = UserSerializerWithToken(user, many=False)
     
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     except exceptions.APIException as e:
         print(e)
