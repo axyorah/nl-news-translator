@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 
 from rest_framework import status
@@ -12,6 +13,9 @@ USER_PROFILE_URL = reverse('user')
 
 
 def create_user(**validated_params):
+    validated_params['password'] = make_password(
+        validated_params['password']
+    )
     return User.objects.create(**validated_params)
 
 
@@ -59,3 +63,43 @@ class PublicUserTests(TestCase):
 
         res = self.client.post(USER_REGISTER_URL, params)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class PrivateUserTests(TestCase):
+    """Test user actions that require authentication"""
+
+    def setUp(self) -> None:
+        self.params = {
+            'username': 'New User',
+            'password': 'new-user-pass-123'
+        }
+        self.user = create_user(**self.params)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    def tearDown(self) -> None:
+        self.client = None
+        self.user = None
+
+    def test_user_login_ok(self):
+        """test successful user login with valid credentials"""
+        user_exist = User.objects.filter(username=self.params['username']).exists()
+        self.assertTrue(user_exist)
+
+        res = self.client.post(USER_LOGIN_URL, self.params)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        for field in ['access', 'refresh']:
+            self.assertIn(field, res.data)
+
+    def test_user_login_invalid_creadentials_fail(self):
+        """test failed login in case of invalid creadentials"""
+        res = self.client.post(
+            USER_LOGIN_URL, {**self.params, 'password': 'wrong-pass'}
+        )
+
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        for field in ['accedd', 'refresh']:
+            self.assertNotIn(field, res.data)
