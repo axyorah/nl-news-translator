@@ -11,6 +11,9 @@ USER_REGISTER_URL = reverse('user-register')
 USER_LOGIN_URL = reverse('user-login')
 USER_PROFILE_URL = reverse('user')
 
+PROFILE_FIELDS = ['id', 'username', 'isAdmin', 'token']
+LOGIN_FIELDS = ['access', 'refresh']
+
 
 def create_user(**validated_params):
     validated_params['password'] = make_password(
@@ -41,7 +44,7 @@ class PublicUserTests(TestCase):
         user_exist = User.objects.filter(username=params['username']).exists()
         self.assertTrue(user_exist)
 
-        for field in ['id', 'username', 'isAdmin', 'token']:
+        for field in PROFILE_FIELDS:
             self.assertIn(field, res.data)        
         self.assertNotIn('password', res.data)
 
@@ -63,6 +66,14 @@ class PublicUserTests(TestCase):
 
         res = self.client.post(USER_REGISTER_URL, params)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_unauthenticated_user_profile_fail(self):
+        """test failed getting user profile for unauthenticated user"""
+        res = self.client.get(USER_PROFILE_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        for field in PROFILE_FIELDS + ['password']:
+            self.assertNotIn(field, res.data)
 
 
 class PrivateUserTests(TestCase):
@@ -90,16 +101,28 @@ class PrivateUserTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-        for field in ['access', 'refresh']:
+        for field in LOGIN_FIELDS:
             self.assertIn(field, res.data)
 
-    def test_user_login_invalid_creadentials_fail(self):
-        """test failed login in case of invalid creadentials"""
+    def test_user_login_wrong_creadentials_fail(self):
+        """test failed login in case of wrong credentials"""
         res = self.client.post(
             USER_LOGIN_URL, {**self.params, 'password': 'wrong-pass'}
         )
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        for field in ['accedd', 'refresh']:
+        for field in LOGIN_FIELDS:
             self.assertNotIn(field, res.data)
+
+    def test_user_profile_ok(self):
+        """test getting user profile for authenticated user"""
+        res = self.client.get(USER_PROFILE_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        for field in PROFILE_FIELDS:
+            self.assertIn(field, res.data)
+        self.assertNotIn('password', res.data)
+
+        self.assertEqual(res.data['username'], self.params['username'])
