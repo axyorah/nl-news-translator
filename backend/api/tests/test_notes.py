@@ -10,7 +10,7 @@ from rest_framework.test import APIClient
 from ..models import Note, Tag
 
 NOTES_LIST_URL = reverse('note-list')
-#NOTE_URL = reverse('note-detail')
+NOTE_DETAIL_URL = lambda pk: f'/api/notes/{pk}/'
 
 NOTE_FIELDS = [
     'id',
@@ -59,6 +59,7 @@ class PublicNoteTests(TestCase):
 
 
 class PrivateNoteListTests(TestCase):
+    """Test note-list actions that require authorization"""
 
     def setUp(self) -> None:
         self.user1 = create_user(
@@ -117,3 +118,39 @@ class PrivateNoteListTests(TestCase):
         for note in res.data['notes']:
             self.assertEqual(note['owner'], self.user2.id)
 
+
+class PublicNoteDetailTests(TestCase):
+    """Test specific note-related actions that don't require authorization"""
+
+    def setUp(self) -> None:
+        self.client = APIClient()
+        self.user = create_user(
+            username='New Name',
+            password='new-pass-123'
+        )
+        self.note = create_note(
+            owner=self.user, side_a='test-note-a', side_b='test-note-b'
+        )
+
+    def tearDown(self) -> None:
+        self.client = None
+        self.user = None
+        self.notes = None
+
+    def test_note_access_without_login_fail(self):
+        """test that anonymous user cannot access note"""
+        res = self.client.get(NOTE_DETAIL_URL(self.note.id))
+
+        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def test_note_update_without_login_fail(self):
+        """test that anonymous user cannot update note"""
+        res = self.client.put(NOTE_DETAIL_URL(self.note.id), {})
+
+        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def test_note_delete_without_login_fail(self):
+        """test that anonymous user cannot delete note"""
+        res = self.client.delete(NOTE_DETAIL_URL(self.note.id))
+
+        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
