@@ -23,15 +23,15 @@ def try_except(view):
 
         except Note.DoesNotExist as e:
             print(e)
-            return Response({ 'errors': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
+            return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
     
         except exceptions.APIException as e:
             print(e)
-            return Response({ 'errors': e.detail }, status=e.status_code)
+            return Response({ 'errors': e.detail, 'detail': e.detail }, status=e.status_code)
     
         except Exception as e:
             print(e)
-            return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return helper
 

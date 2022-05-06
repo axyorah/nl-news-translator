@@ -22,14 +22,14 @@ def getAllUsers(request: HttpRequest):
     except exceptions.APIException as e:
         print(e)
         return Response(
-            { 'errors': e.detail }, 
+            { 'errors': e.detail, 'detail': e.detail }, 
             status=e.status_code
         )
 
     except Exception as e:
         print(e)
         return Response(
-            { 'errors': e.args[0] }, 
+            { 'errors': e.args[0], 'detail': e.args[0] }, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -49,13 +49,13 @@ def registerUser(request: HttpRequest):
     except exceptions.APIException as e:
         print(e)
         return Response(
-            { 'errors': e.detail }, 
+            { 'errors': e.detail, 'detail': e.detail }, 
             status=e.status_code
         )
         
     except Exception as e:
         return Response(
-            {'errors': e.args[0]}, 
+            {'errors': e.args[0], 'detail': e.args[0] }, 
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -71,13 +71,13 @@ def getUserProfile(request: HttpRequest):
     except exceptions.APIException as e:
         print(e)
         return Response(
-            { 'errors': e.detail }, 
+            { 'errors': e.detail, 'detail': e.detail }, 
             status=e.status_code
         )
 
     except Exception as e:
         print(e)
         return Response(
-            {'errors': e.args[0]}, 
+            {'errors': e.args[0], 'detail': e.args[0] }, 
             status=status.HTTP_400_BAD_REQUEST
         )
