@@ -28,6 +28,10 @@ def try_except(view):
         except exceptions.APIException as e:
             print(e)
             return Response({ 'errors': e.detail, 'detail': e.detail }, status=e.status_code)
+
+        except AssertionError as e:
+            print(e)
+            return Response({'errors': e.args[0], 'detail': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
     
         except Exception as e:
             print(e)
@@ -100,7 +104,7 @@ class NoteList(APIView):
             raise Exception('Note creation failed')
 
         serializer = NoteSerializer(note, many=False)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class NoteDetail(APIView):
     """get, update, delete user note"""

@@ -1,4 +1,3 @@
-from wsgiref import validate
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -7,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ..models import Note, Tag
+from ..models import Note
 
 NOTES_LIST_URL = reverse('note-list')
 NOTE_DETAIL_URL = lambda pk: f'/api/notes/{pk}/'
@@ -30,7 +29,7 @@ def create_user(**validated_params):
 def create_note(**validated_params):
     return Note.objects.create(**validated_params)
 
-class PublicNoteTests(TestCase):
+class PublicNoteListTests(TestCase):
     """Test note actions that don't require authorization"""
 
     def setUp(self) -> None:
@@ -164,17 +163,174 @@ class PublicNoteDetailTests(TestCase):
     def test_note_access_without_login_fail(self):
         """test that anonymous user cannot access note"""
         res = self.client.get(NOTE_DETAIL_URL(self.note.id))
-
         self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_note_update_without_login_fail(self):
         """test that anonymous user cannot update note"""
         res = self.client.put(NOTE_DETAIL_URL(self.note.id), {})
-
         self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_note_delete_without_login_fail(self):
         """test that anonymous user cannot delete note"""
         res = self.client.delete(NOTE_DETAIL_URL(self.note.id))
-
         self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class PrivateNoteDetailTests(TestCase):
+    """Test specific note-related actions that require authorization"""
+
+    def setUp(self) -> None:
+        self.user1 = create_user(
+            username='User1',
+            password='user-pass-1'
+        )
+        self.user2 = create_user(
+            username='User2',
+            password='user-pass-2'
+        )
+
+        self.notes1 = [
+            create_note(
+                owner=self.user1, side_a='user1-note1-a', side_b='user1-note1-b'
+            ),
+            create_note(
+                owner=self.user1, side_a='user1-note2-a', side_b='user1-note2-b'
+            ),        ]
+        self.notes2 = [
+            create_note(
+                owner=self.user2, side_a='user2-note1-a', side_b='user2-note1-b'
+            )
+        ]
+
+        self.client = APIClient()
+        self.client.force_authenticate(self.user2)
+
+    def tearDown(self) -> None:
+        self.client = None
+        self.user1 = None
+        self.user2 = None
+        self.notes1 = None
+        self.notes2 = None
+
+    def test_get_own_note_ok(self):
+        """test if user can get own note"""
+        # recall: user2 is logged in
+        idx = 0
+        res = self.client.get(NOTE_DETAIL_URL(self.notes2[idx].id))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # note should have all required fields
+        for field in NOTE_FIELDS:
+            self.assertIn(field, res.data)
+
+        # note content should be as expected
+        self.assertEqual(res.data['id'], str(self.notes2[idx].id))
+        self.assertEqual(res.data['side_a'], self.notes2[idx].side_a)
+        self.assertEqual(res.data['side_b'], self.notes2[idx].side_b)
+
+    def test_get_not_own_note_fail(self):
+        """test that user cannot get someone else's note"""
+        # recall: user2 is logged in
+        idx = 0
+        res = self.client.get(NOTE_DETAIL_URL(self.notes1[idx].id))
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND) # not 401!
+
+        # no note-specific fields are attached to error message
+        for field in NOTE_FIELDS:
+            self.assertNotIn(field, res.data)
+
+    def test_add_note_ok(self):
+        """test if user can add a note"""
+        data = {
+            'side_a': 'new-user2-note-a',
+            'side_b': 'new-user2-note-b'
+        }
+        res = self.client.post(NOTES_LIST_URL, data)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        # response contains expected fields
+        for field in NOTE_FIELDS:
+            self.assertIn(field, res.data)
+
+        # owner is set correctly
+        self.assertEqual(res.data['owner'], self.user2.id)
+
+        # note is in db
+        note = Note.objects.get(id=res.data['id'])
+        self.assertTrue(note is not None)
+
+        # note has correct content
+        self.assertEqual(note.side_a, data['side_a'])
+        self.assertEqual(note.side_b, data['side_b'])
+
+    def test_add_note_invalid_data_ok(self):
+        """
+        test that note can be created even if 
+        wrong owner is specified or fields are missing
+        """
+        # recall: user2 is logged in
+        data = {
+            'owner': self.user1.id
+        }
+        res = self.client.post(NOTES_LIST_URL, data)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        # check if note's owner is the logged in user
+        self.assertEqual(res.data['owner'], self.user2.id)
+
+    def test_update_own_note_ok(self):
+        """test that user can update own note"""
+        idx = 0
+        note_id = self.notes2[idx].id
+        msg = 'i am updated'
+        res = self.client.put(NOTE_DETAIL_URL(note_id), {'side_a': msg})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # check if returned note is updated
+        self.assertEqual(res.data['side_a'], msg)
+
+        # check if db is udpated
+        note = Note.objects.get(id=note_id)
+        self.assertTemplateNotUsed(note is not None)
+        self.assertEqual(note.side_a, msg)
+
+    def test_update_not_own_note_fail(self):
+        """test that user can't update someone else's note"""
+        idx = 0
+        note_id = self.notes1[idx].id
+        msg = 'i am updated'
+        res = self.client.put(NOTE_DETAIL_URL(note_id), {'side_a': msg})
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+        # confirm that note info is not attached to error message
+        for field in NOTE_FIELDS + ['notes']:
+            self.assertNotIn(field, res.data)
+
+        # confirm that db is not udpated
+        note = Note.objects.get(id=note_id)
+        self.assertTrue(note is not None)
+        self.assertNotEqual(note.side_a, msg)
+
+    def test_delete_own_note_ok(self):
+        """test if user can delete own note"""
+        # recall: user2 is logged in
+        idx = 0
+        note_id = self.notes2[idx].id
+        res = self.client.delete(NOTE_DETAIL_URL(note_id))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # check if note is deleted from db
+        note_exists = Note.objects.filter(id=note_id).exists()
+        self.assertFalse(note_exists)
+
+    def test_delete_not_own_note_fail(self):
+        """test that user can't delete someone else's note"""
+        # recall: user2 is logged in
+        idx = 0
+        note_id = self.notes1[idx].id
+        res = self.client.delete(NOTE_DETAIL_URL(note_id))
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+        # check if note is still in db
+        note_exists = Note.objects.filter(id=note_id).exists()
+        self.assertTrue(note_exists)
