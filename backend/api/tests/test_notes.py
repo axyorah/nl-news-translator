@@ -1,12 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from ..models import Note
+from .utils import create_user, create_note
 
 NOTES_LIST_URL = reverse('note-list')
 NOTE_DETAIL_URL = lambda pk: f'/api/notes/{pk}/'
@@ -20,14 +19,6 @@ NOTE_FIELDS = [
     'tags'
 ]
 
-def create_user(**validated_params):
-    validated_params['password'] = make_password(
-        validated_params['password']
-    )
-    return User.objects.create(**validated_params)
-
-def create_note(**validated_params):
-    return Note.objects.create(**validated_params)
 
 class PublicNoteListTests(TestCase):
     """Test note actions that don't require authorization"""

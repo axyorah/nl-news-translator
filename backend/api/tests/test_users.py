@@ -1,10 +1,12 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
+#from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
+
+from .utils import create_user
 
 
 USER_REGISTER_URL = reverse('user-register')
@@ -13,13 +15,6 @@ USER_PROFILE_URL = reverse('user')
 
 PROFILE_FIELDS = ['id', 'username', 'isAdmin', 'token']
 LOGIN_FIELDS = ['access', 'refresh']
-
-
-def create_user(**validated_params):
-    validated_params['password'] = make_password(
-        validated_params['password']
-    )
-    return User.objects.create(**validated_params)
 
 
 class PublicUserTests(TestCase):
