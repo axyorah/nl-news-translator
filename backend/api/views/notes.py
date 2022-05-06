@@ -1,19 +1,17 @@
-from urllib.error import HTTPError
 from typing import List, Dict, Optional, Union
-from django.forms import ValidationError
-from django.http import HttpRequest, Http404
+from django.http import HttpRequest
+from django.conf import settings
+from django.core.paginator import Paginator
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
-from django.conf import settings
-from django.core.paginator import Paginator
-from rest_framework import exceptions
+from rest_framework import status, exceptions
 
-from api.models import Note, Tag
-from api.serializers import NoteSerializer, TagSerializer
-from api.forms import NoteForm, TagForm
+from api.models import Note
+from api.serializers import NoteSerializer
+from api.forms import NoteForm
 
 
 def try_except(view):

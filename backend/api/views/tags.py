@@ -1,34 +1,17 @@
-from urllib.error import HTTPError
 from typing import List, Dict, Optional, Union
-from django.forms import ValidationError
-from django.http import HttpRequest, Http404
+from django.http import HttpRequest
+from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.conf import settings
-from django.core.paginator import Paginator
 from rest_framework import exceptions
 
-from api.models import Note, Tag
-from api.serializers import NoteSerializer, TagSerializer
-from api.forms import NoteForm, TagForm
+from api.models import Tag
+from api.serializers import TagSerializer
+from api.forms import TagForm
 
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getAllUserTags(request):
-    try:
-        user = request.user
-
-        tags = Tag.objects.filter(owner=user)
-        serializer = TagSerializer(tags, many=True)
-    
-        return Response({ 'tags': serializer.data })
-
-    except Exception as e:
-        return Response({ 'errors': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def try_except(view):
     def helper(*args, **kwargs):
@@ -80,6 +63,7 @@ class TagList(APIView):
 
         serializer = TagSerializer(tag, many=False)
         return Response(serializer.data)
+
 
 class TagDetail(APIView):
     """get, update, delete user tag"""
