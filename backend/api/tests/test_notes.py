@@ -85,7 +85,7 @@ class PrivateNoteListTests(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(self.user2)
 
-    def test_list_notes__response_ok(self):
+    def test_list_notes_response_ok(self):
         """test that authorized user can see his own notes"""
         res = self.client.get(NOTES_LIST_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -96,6 +96,30 @@ class PrivateNoteListTests(TestCase):
         self.assertIn('num_pages', res.data)
 
         # default page should be `1`
+        self.assertEqual(int(res.data['page']), 1)
+
+    def test_list_notes_response_wrongpage1_ok(self):
+        """test that authorized user can see his own notes"""
+        res = self.client.get(NOTES_LIST_URL, {'page': 100})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # corrected page should be `1`
+        self.assertEqual(int(res.data['page']), 1)
+
+    def test_list_notes_response_wrongpage2_ok(self):
+        """test that authorized user can see his own notes"""
+        res = self.client.get(NOTES_LIST_URL, {'page': -1})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # corrected page should be `1`
+        self.assertEqual(int(res.data['page']), 1)
+
+    def test_list_notes_response_wrongpage3_ok(self):
+        """test that authorized user can see his own notes"""
+        res = self.client.get(NOTES_LIST_URL, {'page': 'notanumber'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # corrected page should be `1`
         self.assertEqual(int(res.data['page']), 1)
 
     def test_list_notes_fields_ok(self):
