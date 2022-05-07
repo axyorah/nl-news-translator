@@ -41,10 +41,8 @@ class PublicNoteListTests(TestCase):
     def test_list_notes_nologin_fail(self):
         """test that anonymous user can't see any notes"""
         res = self.client.get(NOTES_LIST_URL)
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-        self.assertIn('detail', res.data)
-        self.assertIn('\'AnonymousUser\' object has no attribute \'note_set\'', res.data['detail'])
-
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertIn('detail', res.data)        
 
 class PrivateNoteListTests(TestCase):
     """Test note-list actions that require authorization"""
@@ -86,7 +84,10 @@ class PrivateNoteListTests(TestCase):
         self.assertEqual(int(res.data['page']), 1)
 
     def test_list_notes_response_wrongpage1_ok(self):
-        """test that authorized user can see his own notes"""
+        """
+        test that authorized user can see his own notes, and 
+        note page defaults to 1 if invalid page query string is provided
+        """
         res = self.client.get(NOTES_LIST_URL, {'page': 100})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
@@ -94,7 +95,10 @@ class PrivateNoteListTests(TestCase):
         self.assertEqual(int(res.data['page']), 1)
 
     def test_list_notes_response_wrongpage2_ok(self):
-        """test that authorized user can see his own notes"""
+        """
+        test that authorized user can see his own notes, and 
+        note page defaults to 1 if invalid page query string is provided
+        """
         res = self.client.get(NOTES_LIST_URL, {'page': -1})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
@@ -102,7 +106,10 @@ class PrivateNoteListTests(TestCase):
         self.assertEqual(int(res.data['page']), 1)
 
     def test_list_notes_response_wrongpage3_ok(self):
-        """test that authorized user can see his own notes"""
+        """
+        test that authorized user can see his own notes, and 
+        note page defaults to 1 if invalid page query string is provided
+        """
         res = self.client.get(NOTES_LIST_URL, {'page': 'notanumber'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
@@ -151,17 +158,17 @@ class PublicNoteDetailTests(TestCase):
     def test_note_access_without_login_fail(self):
         """test that anonymous user cannot access note"""
         res = self.client.get(NOTE_DETAIL_URL(self.note.id))
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_note_update_without_login_fail(self):
         """test that anonymous user cannot update note"""
         res = self.client.put(NOTE_DETAIL_URL(self.note.id), {})
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_note_delete_without_login_fail(self):
         """test that anonymous user cannot delete note"""
         res = self.client.delete(NOTE_DETAIL_URL(self.note.id))
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class PrivateNoteDetailTests(TestCase):
