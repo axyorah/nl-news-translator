@@ -29,11 +29,9 @@ class PublicNoteListTests(TestCase):
             username='New Name',
             password='new-pass-123'
         )
-        self.notes = [
-            create_note(
-                owner=self.user, side_a='test-note-a', side_b='test-note-b'
-            )
-        ]
+        self.note = create_note(
+            owner=self.user, side_a='test-note-a', side_b='test-note-b'
+        )
 
     def tearDown(self) -> None:
         self.client = None
@@ -60,17 +58,16 @@ class PrivateNoteListTests(TestCase):
             username='User2',
             password='user-pass-2'
         )
-        self.notes = [
-            create_note(
-                owner=self.user1, side_a='user1-note1-a', side_b='user1-note1-b'
-            ),
-            create_note(
-                owner=self.user1, side_a='user1-note2-a', side_b='user1-note2-b'
-            ),
-            create_note(
-                owner=self.user2, side_a='user2-note1-a', side_b='user2-note1-b'
-            )
-        ]
+
+        self.user1_note1 = create_note(
+            owner=self.user1, side_a='user1-note1-a', side_b='user1-note1-b'
+        )
+        self.user1_note2 = create_note(
+            owner=self.user1, side_a='user1-note2-a', side_b='user1-note2-b'
+        )
+        self.user2_note1 = create_note(
+            owner=self.user2, side_a='user2-note1-a', side_b='user2-note1-b'
+        )
 
         self.client = APIClient()
         self.client.force_authenticate(self.user2)
@@ -180,18 +177,15 @@ class PrivateNoteDetailTests(TestCase):
             password='user-pass-2'
         )
 
-        self.notes1 = [
-            create_note(
-                owner=self.user1, side_a='user1-note1-a', side_b='user1-note1-b'
-            ),
-            create_note(
-                owner=self.user1, side_a='user1-note2-a', side_b='user1-note2-b'
-            ),        ]
-        self.notes2 = [
-            create_note(
-                owner=self.user2, side_a='user2-note1-a', side_b='user2-note1-b'
-            )
-        ]
+        self.user1_note1 = create_note(
+            owner=self.user1, side_a='user1-note1-a', side_b='user1-note1-b'
+        )
+        self.user1_note2 = create_note(
+            owner=self.user1, side_a='user1-note2-a', side_b='user1-note2-b'
+        )
+        self.user2_note1 = create_note(
+            owner=self.user2, side_a='user2-note1-a', side_b='user2-note1-b'
+        )
 
         self.client = APIClient()
         self.client.force_authenticate(self.user2)
@@ -206,8 +200,7 @@ class PrivateNoteDetailTests(TestCase):
     def test_get_own_note_ok(self):
         """test if user can get own note"""
         # recall: user2 is logged in
-        idx = 0
-        res = self.client.get(NOTE_DETAIL_URL(self.notes2[idx].id))
+        res = self.client.get(NOTE_DETAIL_URL(self.user2_note1.id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         # note should have all required fields
@@ -215,15 +208,14 @@ class PrivateNoteDetailTests(TestCase):
             self.assertIn(field, res.data)
 
         # note content should be as expected
-        self.assertEqual(res.data['id'], str(self.notes2[idx].id))
-        self.assertEqual(res.data['side_a'], self.notes2[idx].side_a)
-        self.assertEqual(res.data['side_b'], self.notes2[idx].side_b)
+        self.assertEqual(res.data['id'], str(self.user2_note1.id))
+        self.assertEqual(res.data['side_a'], self.user2_note1.side_a)
+        self.assertEqual(res.data['side_b'], self.user2_note1.side_b)
 
     def test_get_not_own_note_fail(self):
         """test that user cannot get someone else's note"""
         # recall: user2 is logged in
-        idx = 0
-        res = self.client.get(NOTE_DETAIL_URL(self.notes1[idx].id))
+        res = self.client.get(NOTE_DETAIL_URL(self.user1_note1.id))
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND) # not 401!
 
         # no note-specific fields are attached to error message
@@ -271,8 +263,7 @@ class PrivateNoteDetailTests(TestCase):
 
     def test_update_own_note_ok(self):
         """test that user can update own note"""
-        idx = 0
-        note_id = self.notes2[idx].id
+        note_id = self.user2_note1.id
         msg = 'i am updated'
         res = self.client.put(NOTE_DETAIL_URL(note_id), {'side_a': msg})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -287,8 +278,7 @@ class PrivateNoteDetailTests(TestCase):
 
     def test_update_not_own_note_fail(self):
         """test that user can't update someone else's note"""
-        idx = 0
-        note_id = self.notes1[idx].id
+        note_id = self.user1_note1.id
         msg = 'i am updated'
         res = self.client.put(NOTE_DETAIL_URL(note_id), {'side_a': msg})
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
@@ -305,8 +295,7 @@ class PrivateNoteDetailTests(TestCase):
     def test_delete_own_note_ok(self):
         """test if user can delete own note"""
         # recall: user2 is logged in
-        idx = 0
-        note_id = self.notes2[idx].id
+        note_id = self.user2_note1.id
         res = self.client.delete(NOTE_DETAIL_URL(note_id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
@@ -317,8 +306,7 @@ class PrivateNoteDetailTests(TestCase):
     def test_delete_not_own_note_fail(self):
         """test that user can't delete someone else's note"""
         # recall: user2 is logged in
-        idx = 0
-        note_id = self.notes1[idx].id
+        note_id = self.user1_note1.id
         res = self.client.delete(NOTE_DETAIL_URL(note_id))
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
 
