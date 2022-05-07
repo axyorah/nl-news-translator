@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 from ..models import Note
 from .utils import create_user, create_note
 
+
 NOTES_LIST_URL = reverse('note-list')
 NOTE_DETAIL_URL = lambda pk: f'/api/notes/{pk}/'
 
@@ -36,7 +37,7 @@ class PublicNoteListTests(TestCase):
     def tearDown(self) -> None:
         self.client = None
         self.user = None
-        self.notes = None
+        self.note = None
 
     def test_list_notes_nologin_fail(self):
         """test that anonymous user can't see any notes"""
@@ -76,9 +77,8 @@ class PrivateNoteListTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         # res contains all expected fields: note, page, num_pages
-        self.assertIn('notes', res.data)
-        self.assertIn('page', res.data)
-        self.assertIn('num_pages', res.data)
+        for field in ['notes', 'page', 'num_pages']:
+            self.assertIn(field, res.data)
 
         # default page should be `1`
         self.assertEqual(int(res.data['page']), 1)
@@ -126,7 +126,7 @@ class PrivateNoteListTests(TestCase):
                 self.assertIn(field, note)
 
     def test_list_notes_unauthorized_fail(self):
-        """test that one user can't see other user's notes"""
+        """test that user can only see own notes"""
         res = self.client.get(NOTES_LIST_URL)
 
         # the amount of notes authored by user2 is correct
@@ -153,22 +153,34 @@ class PublicNoteDetailTests(TestCase):
     def tearDown(self) -> None:
         self.client = None
         self.user = None
-        self.notes = None
+        self.note = None
 
-    def test_note_access_without_login_fail(self):
+    def test_note_view_without_login_fail(self):
         """test that anonymous user cannot access note"""
         res = self.client.get(NOTE_DETAIL_URL(self.note.id))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # confirm that note info is not attached to error msg
+        for field in NOTE_FIELDS + ['notes']:
+            self.assertNotIn(field, res.data)
 
     def test_note_update_without_login_fail(self):
         """test that anonymous user cannot update note"""
         res = self.client.put(NOTE_DETAIL_URL(self.note.id), {})
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # confirm that note info is not attached to error msg
+        for field in NOTE_FIELDS + ['notes']:
+            self.assertNotIn(field, res.data)
+
     def test_note_delete_without_login_fail(self):
         """test that anonymous user cannot delete note"""
         res = self.client.delete(NOTE_DETAIL_URL(self.note.id))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # confirm that note info is not attached to error msg
+        for field in NOTE_FIELDS + ['notes']:
+            self.assertNotIn(field, res.data)
 
 
 class PrivateNoteDetailTests(TestCase):
@@ -201,12 +213,12 @@ class PrivateNoteDetailTests(TestCase):
         self.client = None
         self.user1 = None
         self.user2 = None
-        self.notes1 = None
-        self.notes2 = None
+        self.user1_note1 = None
+        self.user1_note2 = None
+        self.user2_note1 = None
 
-    def test_get_own_note_ok(self):
+    def test_note_view_ok(self):
         """test if user can get own note"""
-        # recall: user2 is logged in
         res = self.client.get(NOTE_DETAIL_URL(self.user2_note1.id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
@@ -219,9 +231,8 @@ class PrivateNoteDetailTests(TestCase):
         self.assertEqual(res.data['side_a'], self.user2_note1.side_a)
         self.assertEqual(res.data['side_b'], self.user2_note1.side_b)
 
-    def test_get_not_own_note_fail(self):
+    def test_note_view_unauthorize_fail(self):
         """test that user cannot get someone else's note"""
-        # recall: user2 is logged in
         res = self.client.get(NOTE_DETAIL_URL(self.user1_note1.id))
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND) # not 401!
 
@@ -229,7 +240,7 @@ class PrivateNoteDetailTests(TestCase):
         for field in NOTE_FIELDS:
             self.assertNotIn(field, res.data)
 
-    def test_add_note_ok(self):
+    def test_note_create_ok(self):
         """test if user can add a note"""
         data = {
             'side_a': 'new-user2-note-a',
@@ -253,22 +264,19 @@ class PrivateNoteDetailTests(TestCase):
         self.assertEqual(note.side_a, data['side_a'])
         self.assertEqual(note.side_b, data['side_b'])
 
-    def test_add_note_invalid_data_ok(self):
+    def test_note_create_invalid_data_ok(self):
         """
         test that note can be created even if 
         wrong owner is specified or fields are missing
         """
-        # recall: user2 is logged in
-        data = {
-            'owner': self.user1.id
-        }
+        data = {'owner': self.user1.id}
         res = self.client.post(NOTES_LIST_URL, data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         # check if note's owner is the logged in user
         self.assertEqual(res.data['owner'], self.user2.id)
 
-    def test_update_own_note_ok(self):
+    def test_note_update_ok(self):
         """test that user can update own note"""
         note_id = self.user2_note1.id
         msg = 'i am updated'
@@ -283,7 +291,7 @@ class PrivateNoteDetailTests(TestCase):
         self.assertTemplateNotUsed(note is not None)
         self.assertEqual(note.side_a, msg)
 
-    def test_update_not_own_note_fail(self):
+    def test_note_update_unauthorized_fail(self):
         """test that user can't update someone else's note"""
         note_id = self.user1_note1.id
         msg = 'i am updated'
@@ -299,9 +307,8 @@ class PrivateNoteDetailTests(TestCase):
         self.assertTrue(note is not None)
         self.assertNotEqual(note.side_a, msg)
 
-    def test_delete_own_note_ok(self):
+    def test_note_delete_ok(self):
         """test if user can delete own note"""
-        # recall: user2 is logged in
         note_id = self.user2_note1.id
         res = self.client.delete(NOTE_DETAIL_URL(note_id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -310,9 +317,8 @@ class PrivateNoteDetailTests(TestCase):
         note_exists = Note.objects.filter(id=note_id).exists()
         self.assertFalse(note_exists)
 
-    def test_delete_not_own_note_fail(self):
+    def test_note_delete_unauthorized_fail(self):
         """test that user can't delete someone else's note"""
-        # recall: user2 is logged in
         note_id = self.user1_note1.id
         res = self.client.delete(NOTE_DETAIL_URL(note_id))
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
