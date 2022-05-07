@@ -68,7 +68,7 @@ class TagList(APIView):
             raise Exception('Note creation failed')
 
         serializer = TagSerializer(tag, many=False)
-        return Response(serializer.data)
+        return Response(serializer.data, status.HTTP_201_CREATED)
 
 
 class TagDetail(APIView):
