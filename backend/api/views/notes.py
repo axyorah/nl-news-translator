@@ -1,4 +1,5 @@
 from typing import List, Dict, Optional, Union
+from uuid import UUID
 from django.http import HttpRequest
 from django.conf import settings
 from django.core.paginator import Paginator
@@ -13,6 +14,13 @@ from api.models import Note
 from api.serializers import NoteSerializer
 from api.forms import NoteForm
 
+
+def validate_uuid(uuid_str):
+    try:
+        UUID(uuid_str)
+    except ValueError:
+        return False
+    return True
 
 def try_except(view):
     def helper(*args, **kwargs):
@@ -54,6 +62,9 @@ class NoteList(APIView):
 
         page = int(page_string) if page_string is not None and page_string.isnumeric() else 1
         tags = tags_string.split(',') if tags_string is not None else []
+
+        # filter out invalid tags
+        tags = [tag for tag in tags if validate_uuid(tag)]
 
         # notes with specific tags (if specified)
         if tags:
