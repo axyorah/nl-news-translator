@@ -129,8 +129,16 @@ class NewsRequester(TokenRequester):
                 
         return params
 
-    def _get_valid(self, **params: Dict) -> Dict:
-        url = (
+    def _params_to_url(self, **params) -> str:
+        """convert valid params to url with query string 
+        recognizable by news api;
+        expects `params` to have the following optional fields:
+        - category: [str] one of seven categorie recognized by newsapi
+        - q: [str] search keyword
+        - from: [str] YYYY-MM-DD
+        - to: [str] YYYY-MM-DD
+        """
+        return (
             f'{self.url}'
             f'{"category=" + params["category"] + "&" if params["category"] else ""}'
             f'{"q=" + params["q"] + "&" if params["q"] else ""}'
@@ -139,8 +147,6 @@ class NewsRequester(TokenRequester):
             f'country=nl&'
             f'apiKey={self.token}'
         )
-
-        return self._retry(url, times=3, sleep=5)
         
     def get(self, 
             q: str = '', 
@@ -150,9 +156,8 @@ class NewsRequester(TokenRequester):
         ) -> Dict:
                 
         def set_total_res(category: str = '') -> None:
-            r = self._get_valid(
-                **params, category=category
-            )
+            url = self.params_to_url(**params, category=category)
+            r = self._retry(url, times=3, sleep=5)
                 
             if r.get('status') and r['status'] == 'ok':
                 res['status'] = r.get('status')
