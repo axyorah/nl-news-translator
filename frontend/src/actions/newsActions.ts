@@ -184,7 +184,7 @@ export const translateNewsItem = (item: News) => async (dispatch: Dispatch) => {
         });
 
         const { data } = await backend.post<NewsTranslatedApiResponse>(
-            '/translate/',
+            'news/translate/',
             { 'sentences': sentences }
         );
 

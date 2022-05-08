@@ -5,5 +5,5 @@ urlpatterns = [
     path('', views.getRoutes, name='api-routes'),
     path('news/', views.getAllNews, name='api-news'),
     path('news/selected/', views.getSelectedNews, name='api-selected-news'),
-    path('translate/', views.getTranslations, name='api-translations'),
+    path('news/translate/', views.getTranslations, name='api-translations'),
 ]
