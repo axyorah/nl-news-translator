@@ -13,9 +13,6 @@ from api.utils.translation_utils import NlToEnTranslator
 news_requester = NewsRequester(settings.NEWSAPI_KEY)
 nl2en = NlToEnTranslator()
 
-def validate_news_query(params):
-    #TODO: proper param validation
-    return
 
 def try_except(view):
     def helper(*args, **kwargs):
@@ -51,9 +48,8 @@ def getAllNews(request: HttpRequest):
         'q': q,
         'category_list': categories.split(',') if categories is not None else None
     }
-    validate_news_query(params)
-    res = news_requester.get(**params)
     
+    res = news_requester.get(**params)    
     return Response(res)
 
 @api_view(['GET'])
