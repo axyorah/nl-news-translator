@@ -155,7 +155,7 @@ class NewsRequester(TokenRequester):
             to_ts: Optional[int] = None
         ) -> Dict:
                 
-        def set_total_res(category: str = '') -> None:
+        def add_respose_for_category(category: str = '') -> None:
             url = self.params_to_url(**params, category=category)
             r = self._retry(url, times=3, sleep=5)
                 
@@ -192,7 +192,7 @@ class NewsRequester(TokenRequester):
                 params['category_list'] = ['general']
             
             for category in params['category_list']:
-                set_total_res(category)
+                add_respose_for_category(category)
                 
             return res
         
