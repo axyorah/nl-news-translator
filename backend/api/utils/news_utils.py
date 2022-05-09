@@ -91,7 +91,7 @@ class NewsRequester(TokenRequester):
         # validate from_ts: 
         # should be None or int corresponding to a timestamp [sec]
         # should precede to_ts
-        if to_ts and not (
+        if from_ts and not (
             isinstance(from_ts, int) or isinstance(from_ts, float)
         ):
             raise TypeError(
@@ -105,18 +105,24 @@ class NewsRequester(TokenRequester):
                 f'`from_ts` should precede `to_ts`; '
                 f'got `from_ts`: {from_ts} and `to_ts`: {to_ts}'
             )
+        
+        if to_ts is None and from_ts and datetime.now().timestamp() <= from_ts:
+            raise ValueError(
+                f'`from_ts` should precede `to_ts`; '
+                f'got `from_ts`: {from_ts} and `to_ts`: {to_ts}'
+            )
     
     def _adjust_params(self, **params: Dict) -> Dict:
         params = params.copy()
                 
-        if not params['to_ts']:
+        if not params.get('to_ts'):
             params['to_ts'] = int(datetime.now().timestamp())
         params['to'] = datetime\
             .fromtimestamp(params['to_ts'])\
             .isoformat()\
             .split('T')[0]
                 
-        if not params['from_ts']:
+        if not params.get('from_ts'):
             params['from_ts'] = datetime\
                 .fromtimestamp(
                     params['to_ts'] - self.period * 24 * 60 * 60                
@@ -133,17 +139,17 @@ class NewsRequester(TokenRequester):
         """convert valid params to url with query string 
         recognizable by news api;
         expects `params` to have the following optional fields:
-        - category: [str] one of seven categorie recognized by newsapi
+        - category: [str] one of seven categories recognized by newsapi
         - q: [str] search keyword
         - from: [str] YYYY-MM-DD
         - to: [str] YYYY-MM-DD
         """
         return (
             f'{self.url}'
-            f'{"category=" + params["category"] + "&" if params["category"] else ""}'
-            f'{"q=" + params["q"] + "&" if params["q"] else ""}'
-            f'{"from=" + params["from"] + "&" if params["from"] else ""}'
-            f'{"to=" + params["to"] + "&" if params["to"] else ""}'
+            f'{"category=" + params["category"] + "&" if params.get("category") else ""}'
+            f'{"q=" + params["q"] + "&" if params.get("q") else ""}'
+            f'{"from=" + params["from"] + "&" if params.get("from") else ""}'
+            f'{"to=" + params["to"] + "&" if params.get("to") else ""}'
             f'country=nl&'
             f'apiKey={self.token}'
         )
