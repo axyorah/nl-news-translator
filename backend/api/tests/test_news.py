@@ -124,3 +124,52 @@ class NewsListTests(TestCase):
             'Categories should be one or several of',
             res.data['errors']
         )
+
+
+class NewsSelectedTests(TestCase):
+
+    def setUp(self) -> None:
+        self.client = APIClient()
+
+    def tearDown(self) -> None:
+        self.client = None
+
+    def test_nos_paragraphs_ok(self):
+        source = 'nos.nl'
+        url = 'https://nos.nl/index.php/l/2417100'
+        res = self.client.get(NEWS_ARTICLE_URL, {
+            'source': source, 'url': url
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.assertIn('paragraphs', res.data)
+        self.assertIsInstance(res.data['paragraphs'], list)
+        self.assertEqual(
+            res.data['paragraphs'][0],
+            "In Brussel heeft een man vlak na het verlaten van de gevangenis een dakloze man in brand gestoken bij het Zuidstation. Dat is gebeurd in de nacht van vrijdag op zaterdag en is vastgelegd door bewakingscamera's op het station, melden Belgische media waaronder Sudinfo."
+        )
+
+    def test_missing_query_params_fail(self):
+        url = 'https://nos.nl/index.php/l/2417100'
+        res = self.client.get(NEWS_ARTICLE_URL, {'url': url})
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.assertIn('errors', res.data)
+        self.assertIn(
+            'Please specify both `url` and `source` in a query string',
+            res.data['errors']
+        )
+
+    def test_invalid_query_params_fail(self):
+        source = 'nos'
+        url = 'https://nos.nl/index.php/l/2417100'
+        res = self.client.get(NEWS_ARTICLE_URL, {
+            'source': source, 'url': url
+        })
+        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        self.assertIn('errors', res.data)
+        self.assertIn(
+            'Posts from `nos` cannot be parsed yet.',
+            res.data['errors']
+        )
