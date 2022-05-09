@@ -1,4 +1,5 @@
 from tkinter import E
+from typing import Type
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpRequest, Http404
@@ -81,6 +82,11 @@ def getSelectedNews(request: HttpRequest):
 def getTranslations(request: HttpRequest):
     body = request.data
     sentences = body['sentences']
+
+    if not isinstance(sentences, list):
+        raise TypeError(
+            f'Sentences must be a list of strings, got {type(sentences)}'
+        )
 
     # translate sentence-by-sentence to reduce mem requirement
     translations = [
