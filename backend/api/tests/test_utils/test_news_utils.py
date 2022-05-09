@@ -1,6 +1,7 @@
 from typing import Type
 from datetime import datetime
 from django.test import TestCase
+from django.conf import settings
 
 from api.utils.news_utils import NewsRequester
 
@@ -18,7 +19,7 @@ CATEGORIES = {
 class NewsRequesterTests(TestCase):
 
     def setUp(self) -> None:
-        self.api_key = 'mock-api-key'
+        self.api_key = settings.NEWSAPI_KEY
         self.requester = NewsRequester(self.api_key)
 
     def tearDown(self) -> None:
@@ -160,3 +161,23 @@ class NewsRequesterTests(TestCase):
             f'to=2022-03-05&'
             f'country=nl'
         ))
+
+    def test_get_ok(self):
+        params = {
+            'q': 'crypto',
+            'category_list': ['technology', 'science'],
+            'from_ts': 1652043983,
+            'to_ts': 1652130383
+        }
+        res = self.requester.get(**params)
+        
+        for field in ['status', 'totalResults', 'articles']:
+            self.assertIn(field, res)
+
+        self.assertEqual(res['status'], 'ok')
+        self.assertEqual(res['totalResults'], 14)
+        self.assertIsInstance(res['articles'], list)
+        self.assertIn(
+            'Concept langere bitcoin cycli klopt niet meer, aldus populaire analist',
+            res['articles'][0]['title']
+        )
