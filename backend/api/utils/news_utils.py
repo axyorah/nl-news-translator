@@ -15,7 +15,9 @@ class TokenRequester(ABC):
 
     def _retry(self, url: str, times: int = 3, sleep: int = 5) -> Dict:
         for _ in range(times):
-            res = rq.get(url)
+            res = rq.get(url, headers={
+                'Authorization': f'Bearer {self.token}'
+            })
 
             if res.status_code == 200:
                 return res.json()
@@ -150,8 +152,7 @@ class NewsRequester(TokenRequester):
             f'{"q=" + params["q"] + "&" if params.get("q") else ""}'
             f'{"from=" + params["from"] + "&" if params.get("from") else ""}'
             f'{"to=" + params["to"] + "&" if params.get("to") else ""}'
-            f'country=nl&'
-            f'apiKey={self.token}'
+            f'country=nl'
         )
         
     def get(self, 

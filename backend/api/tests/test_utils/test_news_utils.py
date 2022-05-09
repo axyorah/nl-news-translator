@@ -121,14 +121,13 @@ class NewsRequesterTests(TestCase):
         self.assertEqual(from_date, params['from'])
 
     def test_params_to_url_ok(self):
-        """make several"""
         url_base = 'https://newsapi.org/v2/top-headlines?'
         
         url = self.requester._params_to_url(q='query')
         self.assertEqual(url, (
             f'{url_base}'
             f'q=query&'
-            f'country=nl&apiKey={self.requester.token}'
+            f'country=nl'
         ))
 
         url = self.requester._params_to_url(q='query', category='general')
@@ -136,7 +135,7 @@ class NewsRequesterTests(TestCase):
             f'{url_base}'
             f'category=general&'
             f'q=query&'
-            f'country=nl&apiKey={self.requester.token}'
+            f'country=nl'
         ))
 
         url = self.requester._params_to_url(**{
@@ -147,7 +146,7 @@ class NewsRequesterTests(TestCase):
             f'category=general&'
             f'q=query&'
             f'from=2022-03-03&'
-            f'country=nl&apiKey={self.requester.token}'
+            f'country=nl'
         ))
 
         url = self.requester._params_to_url(**{
@@ -159,5 +158,5 @@ class NewsRequesterTests(TestCase):
             f'q=query&'
             f'from=2022-03-03&'
             f'to=2022-03-05&'
-            f'country=nl&apiKey={self.requester.token}'
+            f'country=nl'
         ))
