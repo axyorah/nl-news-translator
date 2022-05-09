@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.urls import reverse
 
@@ -171,5 +172,41 @@ class NewsSelectedTests(TestCase):
         self.assertIn('errors', res.data)
         self.assertIn(
             'Posts from `nos` cannot be parsed yet.',
+            res.data['errors']
+        )
+
+
+class NewsTranslatedTests(TestCase):
+
+    def setUp(self) -> None:
+        self.client = APIClient()
+
+    def tearDown(self) -> None:
+        self.client = None
+
+    def test_translations_list_ok(self):
+        nl = 'Vertaal dit'
+        en = 'Translate this'
+
+        # sentences list bugs out unless it's done with json.dumps(.)
+        res = self.client.post(NEWS_TRANSLATED_URL, 
+            content_type='application/json',
+            data=json.dumps({'sentences': [nl]})
+        )        
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.assertIn('translations', res.data)
+        self.assertEqual(res.data['translations'], [en])
+
+    def test_translations_list_fail(self):
+        res = self.client.post(NEWS_TRANSLATED_URL, 
+            content_type='application/json',
+            data=json.dumps({'sentences': 'Dit is geen lijst'})
+        )
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.assertIn('errors', res.data)
+        self.assertIn(
+            'Sentences must be a list of strings',
             res.data['errors']
         )
