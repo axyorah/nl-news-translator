@@ -20,6 +20,10 @@ def try_except(view):
         try:
             return view(*args, **kwargs)
 
+        except TypeError as e:
+            print(e)
+            return Response({'errors': e.args[0], 'detail': e.args[0]}, status.HTTP_400_BAD_REQUEST)
+
         except exceptions.APIException as e:
             print(e)
             return Response({ 'errors': e.detail, 'detail': e.detail }, status=e.status_code)
