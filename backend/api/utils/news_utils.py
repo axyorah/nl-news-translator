@@ -162,7 +162,7 @@ class NewsRequester(TokenRequester):
         ) -> Dict:
                 
         def add_respose_for_category(category: str = '') -> None:
-            url = self.params_to_url(**params, category=category)
+            url = self._params_to_url(**params, category=category)
             r = self._retry(url, times=3, sleep=5)
                 
             if r.get('status') and r['status'] == 'ok':
