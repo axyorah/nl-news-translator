@@ -46,7 +46,9 @@ def getAllNews(request: HttpRequest):
     
     params = {
         'q': q,
-        'category_list': categories.split(',') if categories is not None else None
+        'category_list': [
+            cat.strip() for cat in categories.split(',')
+        ] if categories is not None else None
     }
     
     res = news_requester.get(**params)    
