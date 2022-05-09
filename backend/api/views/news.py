@@ -81,10 +81,10 @@ def getSelectedNews(request: HttpRequest):
 def getTranslations(request: HttpRequest):
     body = request.data
     sentences = body['sentences']
-    
+
     # translate sentence-by-sentence to reduce mem requirement
     translations = [
-        nl2en.translate([sentence])
+        nl2en.translate([sentence])[0]
         for sentence in sentences
     ]
     res = { 'translations': translations }
