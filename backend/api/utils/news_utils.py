@@ -24,7 +24,7 @@ class TokenRequester(ABC):
 
             time.sleep(sleep)
 
-        return {"res": res.text}
+        return {"raw_response": res}
 
     def get(self, **params: Dict) -> Dict:
         pass
@@ -174,8 +174,15 @@ class NewsRequester(TokenRequester):
                     for article in r.get('articles', [])
                 ]
             else:
-                print(r)
-                raise Exception(r['res'])
+                msg = ''
+                try:
+                    msg = r['raw_response'].json()['message']
+                except:
+                    msg = r['raw_response'].text
+                finally:
+                    print(msg)
+                    raise Exception(msg)
+                    
                 
         try:        
             params = {
