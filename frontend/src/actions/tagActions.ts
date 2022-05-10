@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { AxiosError } from 'axios';
 
 import backend from '../api/backend';
 
@@ -85,7 +86,13 @@ export const getAllUserTags = () => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<TagListFailAction>({
+                type: TAG_LIST_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<TagListFailAction>({
                 type: TAG_LIST_FAIL,
                 payload: e
@@ -127,7 +134,13 @@ export const selectUserTag = (id: string) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<TagSelectFailAction>({
+                type: TAG_SELECT_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<TagSelectFailAction>({
                 type: TAG_SELECT_FAIL,
                 payload: e
@@ -176,7 +189,13 @@ export const createUserTag = (tagCreate: TagMinimal) => async (dispatch: Dispatc
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<TagCreateFailAction>({
+                type: TAG_CREATE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<TagCreateFailAction>({
                 type: TAG_CREATE_FAIL,
                 payload: e
@@ -229,7 +248,13 @@ export const updateUserTag = (tagUpdate: TagMinimal) => async (dispatch: Dispatc
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<TagUpdateFailAction>({
+                type: TAG_UPDATE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<TagUpdateFailAction>({
                 type: TAG_UPDATE_FAIL,
                 payload: e
@@ -277,7 +302,13 @@ export const deleteUserTag = (id: string) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<TagDeleteFailAction>({
+                type: TAG_DELETE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<TagDeleteFailAction>({
                 type: TAG_DELETE_FAIL,
                 payload: e

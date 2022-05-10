@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { AxiosError } from 'axios';
 
 import backend from '../api/backend';
 
@@ -100,7 +101,13 @@ export const getAllUserNotes = (page: number = 1, tags: string[] = []) => async 
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NoteListFailAction>({
+                type: NOTE_LIST_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NoteListFailAction>({
                 type: NOTE_LIST_FAIL,
                 payload: e
@@ -141,7 +148,13 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NoteSelectFailAction>({
+                type: NOTE_SELECT_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NoteSelectFailAction>({
                 type: NOTE_SELECT_FAIL,
                 payload: e
@@ -189,7 +202,13 @@ export const createUserNote = (noteCreate: NoteMinimal) => async (dispatch: Disp
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NoteCreateFailAction>({
+                type: NOTE_CREATE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NoteCreateFailAction>({
                 type: NOTE_CREATE_FAIL,
                 payload: e
@@ -241,7 +260,13 @@ export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Disp
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NoteUpdateFailAction>({
+                type: NOTE_UPDATE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NoteUpdateFailAction>({
                 type: NOTE_UPDATE_FAIL,
                 payload: e
@@ -288,7 +313,13 @@ export const deleteUserNote = (noteId: string) => async (dispatch: Dispatch) => 
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NoteDeleteFailAction>({
+                type: NOTE_DELETE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NoteDeleteFailAction>({
                 type: NOTE_DELETE_FAIL,
                 payload: e

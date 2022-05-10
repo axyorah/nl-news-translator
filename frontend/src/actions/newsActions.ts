@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { AxiosError } from 'axios';
 
 import {
     NEWS_LIST_QUERY,
@@ -80,7 +81,13 @@ export const getNewsList = (
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NewsListFailAction>({
+                type: NEWS_LIST_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if ( typeof e === 'string' ) {
             dispatch<NewsListFailAction>({
                 type: NEWS_LIST_FAIL,
                 payload: e
@@ -150,7 +157,13 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NewsSelectFailAction>({
+                type: NEWS_SELECT_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NewsSelectFailAction>({
                 type: NEWS_SELECT_FAIL,
                 payload: e
@@ -204,7 +217,13 @@ export const translateNewsItem = (item: News) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<NewsTranslateFailAction>({
+                type: NEWS_TRANSLATE_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<NewsTranslateFailAction>({
                 type: NEWS_TRANSLATE_FAIL,
                 payload: e

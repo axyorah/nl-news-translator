@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { AxiosError } from 'axios';
 
 import backend from '../api/backend';
 import {
@@ -58,7 +59,13 @@ export const loginUser = (username: string, password: string) => async (dispatch
         localStorage.setItem('userDetail', JSON.stringify(data));
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<UserLoginFailAction>({
+                type: USER_LOGIN_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<UserLoginFailAction>({
                 type: USER_LOGIN_FAIL,
                 payload: e
@@ -114,7 +121,13 @@ export const registerUser = (username: string, password: string) => async (dispa
         localStorage.setItem('userDetail', JSON.stringify(data));
 
     } catch (e) {
-        if (typeof e === 'string') {
+        const err = e as AxiosError;
+        if ( err && err.response ) {
+            dispatch<UserRegisterFailAction>({
+                type: USER_REGISTER_FAIL,
+                payload: err.response.data.errors || err.response.data.detail
+            });
+        } else if (typeof e === 'string') {
             dispatch<UserRegisterFailAction>({
                 type: USER_REGISTER_FAIL,
                 payload: e

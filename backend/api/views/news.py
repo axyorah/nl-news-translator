@@ -30,11 +30,11 @@ def try_except(view):
 
         except AttributeError as e:
             print(e)
-            return Response({'errors': e.args[0], 'detail': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_400_BAD_REQUEST)
 
         except AssertionError as e:
             print(e)
-            return Response({'errors': e.args[0], 'detail': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             print(e)
