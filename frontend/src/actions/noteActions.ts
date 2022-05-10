@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { AxiosError } from 'axios';
+import { dispatchErrorForAction } from '../utils/errorUtils';
 
 import backend from '../api/backend';
 
@@ -101,28 +101,9 @@ export const getAllUserNotes = (page: number = 1, tags: string[] = []) => async 
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NoteListFailAction>({
-                type: NOTE_LIST_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NoteListFailAction>({
-                type: NOTE_LIST_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NoteListFailAction>({
-                type: NOTE_LIST_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NoteListFailAction>({
-                type: NOTE_LIST_FAIL,
-                payload: 'Something went wrong while fetching notes...'
-            });
-        }
+        dispatchErrorForAction<NoteListFailAction, typeof NOTE_LIST_FAIL>(
+            dispatch, e, NOTE_LIST_FAIL
+        );
     }
 };
 
@@ -148,28 +129,9 @@ export const selectUserNote = (noteId: string) => async (dispatch: Dispatch) => 
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NoteSelectFailAction>({
-                type: NOTE_SELECT_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NoteSelectFailAction>({
-                type: NOTE_SELECT_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NoteSelectFailAction>({
-                type: NOTE_SELECT_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NoteSelectFailAction>({
-                type: NOTE_SELECT_FAIL,
-                payload: `Something went wrong while fetching note ${noteId}...`
-            });
-        }
+        dispatchErrorForAction<NoteSelectFailAction, typeof NOTE_SELECT_FAIL>(
+            dispatch, e, NOTE_SELECT_FAIL
+        );
     }
 };
 
@@ -202,28 +164,9 @@ export const createUserNote = (noteCreate: NoteMinimal) => async (dispatch: Disp
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NoteCreateFailAction>({
-                type: NOTE_CREATE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NoteCreateFailAction>({
-                type: NOTE_CREATE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NoteCreateFailAction>({
-                type: NOTE_CREATE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NoteCreateFailAction>({
-                type: NOTE_CREATE_FAIL,
-                payload: `Something went wrong while creating note...`
-            });
-        }
+        dispatchErrorForAction<NoteCreateFailAction, typeof NOTE_CREATE_FAIL>(
+            dispatch, e, NOTE_CREATE_FAIL
+        );
     }
 };
 
@@ -260,28 +203,9 @@ export const updateUserNote = (noteUpdate: NoteMinimal) => async (dispatch: Disp
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NoteUpdateFailAction>({
-                type: NOTE_UPDATE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NoteUpdateFailAction>({
-                type: NOTE_UPDATE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NoteUpdateFailAction>({
-                type: NOTE_UPDATE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NoteUpdateFailAction>({
-                type: NOTE_UPDATE_FAIL,
-                payload: `Something went wrong while updating note ${noteUpdate.id}...`
-            });
-        }
+        dispatchErrorForAction<NoteUpdateFailAction, typeof NOTE_UPDATE_FAIL>(
+            dispatch, e, NOTE_UPDATE_FAIL
+        );
     }
 };
 
@@ -313,28 +237,9 @@ export const deleteUserNote = (noteId: string) => async (dispatch: Dispatch) => 
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NoteDeleteFailAction>({
-                type: NOTE_DELETE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NoteDeleteFailAction>({
-                type: NOTE_DELETE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NoteDeleteFailAction>({
-                type: NOTE_DELETE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NoteDeleteFailAction>({
-                type: NOTE_DELETE_FAIL,
-                payload: `Something went wrong while deleting note ${noteId}...`
-            });
-        }
+        dispatchErrorForAction<NoteDeleteFailAction, typeof NOTE_DELETE_FAIL>(
+            dispatch, e, NOTE_DELETE_FAIL
+        );
     }
 };
 

@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
-import { AxiosError } from 'axios';
-
+import { dispatchErrorForAction } from '../utils/errorUtils';
+ 
 import backend from '../api/backend';
 
 import { UserDetail } from '../types/userTypes';
@@ -86,28 +86,9 @@ export const getAllUserTags = () => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<TagListFailAction>({
-                type: TAG_LIST_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<TagListFailAction>({
-                type: TAG_LIST_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<TagListFailAction>({
-                type: TAG_LIST_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<TagListFailAction>({
-                type: TAG_LIST_FAIL,
-                payload: 'Something went wrong while fetching user tags...'
-            });
-        }
+        dispatchErrorForAction<TagListFailAction, typeof TAG_LIST_FAIL>(
+            dispatch, e, TAG_LIST_FAIL
+        );
     }
 };
 
@@ -134,28 +115,9 @@ export const selectUserTag = (id: string) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<TagSelectFailAction>({
-                type: TAG_SELECT_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<TagSelectFailAction>({
-                type: TAG_SELECT_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<TagSelectFailAction>({
-                type: TAG_SELECT_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<TagSelectFailAction>({
-                type: TAG_SELECT_FAIL,
-                payload: 'Something went wrong while fetching user tags...'
-            });
-        }
+        dispatchErrorForAction<TagSelectFailAction, typeof TAG_SELECT_FAIL>(
+            dispatch, e, TAG_SELECT_FAIL
+        );
     }
 };
 
@@ -189,28 +151,9 @@ export const createUserTag = (tagCreate: TagMinimal) => async (dispatch: Dispatc
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<TagCreateFailAction>({
-                type: TAG_CREATE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<TagCreateFailAction>({
-                type: TAG_CREATE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<TagCreateFailAction>({
-                type: TAG_CREATE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<TagCreateFailAction>({
-                type: TAG_CREATE_FAIL,
-                payload: 'Something went wrong while creating user tag...'
-            });
-        }
+        dispatchErrorForAction<TagCreateFailAction, typeof TAG_CREATE_FAIL>(
+            dispatch, e, TAG_CREATE_FAIL
+        );
     }
 };
 
@@ -248,28 +191,9 @@ export const updateUserTag = (tagUpdate: TagMinimal) => async (dispatch: Dispatc
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<TagUpdateFailAction>({
-                type: TAG_UPDATE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<TagUpdateFailAction>({
-                type: TAG_UPDATE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<TagUpdateFailAction>({
-                type: TAG_UPDATE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<TagUpdateFailAction>({
-                type: TAG_UPDATE_FAIL,
-                payload: 'Something went wrong while updating user tag...'
-            });
-        }
+        dispatchErrorForAction<TagUpdateFailAction, typeof TAG_UPDATE_FAIL>(
+            dispatch, e, TAG_UPDATE_FAIL
+        );
     }
 };
 
@@ -302,28 +226,9 @@ export const deleteUserTag = (id: string) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<TagDeleteFailAction>({
-                type: TAG_DELETE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<TagDeleteFailAction>({
-                type: TAG_DELETE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<TagDeleteFailAction>({
-                type: TAG_DELETE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<TagDeleteFailAction>({
-                type: TAG_DELETE_FAIL,
-                payload: 'Something went wrong while deleting user tag...'
-            });
-        }
+        dispatchErrorForAction<TagDeleteFailAction, typeof TAG_DELETE_FAIL>(
+            dispatch, e, TAG_DELETE_FAIL
+        );
     }
 };
 

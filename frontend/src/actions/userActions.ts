@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { AxiosError } from 'axios';
+import { dispatchErrorForAction } from '../utils/errorUtils';
 
 import backend from '../api/backend';
 import {
@@ -59,28 +59,9 @@ export const loginUser = (username: string, password: string) => async (dispatch
         localStorage.setItem('userDetail', JSON.stringify(data));
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<UserLoginFailAction>({
-                type: USER_LOGIN_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<UserLoginFailAction>({
-                type: USER_LOGIN_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<UserLoginFailAction>({
-                type: USER_LOGIN_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<UserLoginFailAction>({
-                type: USER_LOGIN_FAIL,
-                payload: 'Something went wrong while loggin in...'
-            });
-        }
+        dispatchErrorForAction<UserLoginFailAction, typeof USER_LOGIN_FAIL>(
+            dispatch, e, USER_LOGIN_FAIL
+        );
     }
 };
 
@@ -121,27 +102,8 @@ export const registerUser = (username: string, password: string) => async (dispa
         localStorage.setItem('userDetail', JSON.stringify(data));
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<UserRegisterFailAction>({
-                type: USER_REGISTER_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<UserRegisterFailAction>({
-                type: USER_REGISTER_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<UserRegisterFailAction>({
-                type: USER_REGISTER_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<UserRegisterFailAction>({
-                type: USER_REGISTER_FAIL,
-                payload: 'Something went wrong while registering...'
-            });
-        }
+        dispatchErrorForAction<UserRegisterFailAction, typeof USER_REGISTER_FAIL>(
+            dispatch, e, USER_REGISTER_FAIL
+        );
     }
 };

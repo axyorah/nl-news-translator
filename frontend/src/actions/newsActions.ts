@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { AxiosError } from 'axios';
+import { dispatchErrorForAction } from '../utils/errorUtils';
 
 import {
     NEWS_LIST_QUERY,
@@ -81,28 +81,9 @@ export const getNewsList = (
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NewsListFailAction>({
-                type: NEWS_LIST_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if ( typeof e === 'string' ) {
-            dispatch<NewsListFailAction>({
-                type: NEWS_LIST_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NewsListFailAction>({
-                type: NEWS_LIST_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NewsListFailAction>({
-                type: NEWS_LIST_FAIL,
-                payload: 'Something went wrong while fetching news list...'
-            });
-        }
+        dispatchErrorForAction<NewsListFailAction, typeof NEWS_LIST_FAIL>(
+            dispatch, e, NEWS_LIST_FAIL
+        );
     }
 };
 
@@ -157,28 +138,9 @@ export const selectNewsItem = (item: News) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NewsSelectFailAction>({
-                type: NEWS_SELECT_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NewsSelectFailAction>({
-                type: NEWS_SELECT_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NewsSelectFailAction>({
-                type: NEWS_SELECT_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NewsSelectFailAction>({
-                type: NEWS_SELECT_FAIL,
-                payload: `Something went wrong while parsing news post from ${url} ...`
-            });
-        }
+        dispatchErrorForAction<NewsSelectFailAction, typeof NEWS_SELECT_FAIL>(
+            dispatch, e, NEWS_SELECT_FAIL
+        );        
     }
 };
 
@@ -217,27 +179,8 @@ export const translateNewsItem = (item: News) => async (dispatch: Dispatch) => {
         });
 
     } catch (e) {
-        const err = e as AxiosError;
-        if ( err && err.response ) {
-            dispatch<NewsTranslateFailAction>({
-                type: NEWS_TRANSLATE_FAIL,
-                payload: err.response.data.errors || err.response.data.detail
-            });
-        } else if (typeof e === 'string') {
-            dispatch<NewsTranslateFailAction>({
-                type: NEWS_TRANSLATE_FAIL,
-                payload: e
-            });
-        } else if ( e instanceof Error ) {
-            dispatch<NewsTranslateFailAction>({
-                type: NEWS_TRANSLATE_FAIL,
-                payload: e.message
-            });
-        } else {
-            dispatch<NewsTranslateFailAction>({
-                type: NEWS_TRANSLATE_FAIL,
-                payload: `Something went wrong while translating news post from ${url} ...`
-            });
-        }
+        dispatchErrorForAction<NewsTranslateFailAction, typeof NEWS_TRANSLATE_FAIL>(
+            dispatch, e, NEWS_TRANSLATE_FAIL
+        );        
     }
 };
