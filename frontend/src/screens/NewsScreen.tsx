@@ -100,6 +100,15 @@ const NewsScreen = (
         );
     };
 
+    const renderTemporaryInProgressMessage = () => {
+        const msg = `
+            This app is still in progress... 
+            Currently it can only show and translate 
+            news articles from nos.nl!
+        `;
+        return <Message variant='info'>{msg}</Message>;
+    };
+
     return (
         <div>
 
@@ -109,6 +118,8 @@ const NewsScreen = (
                 ? <Message variant='danger'>{errorsNoteCreate}</Message>
                 : null
             }
+
+            { renderTemporaryInProgressMessage() }
 
             <Row className="my-3">
                 <Col>
