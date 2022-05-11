@@ -30,8 +30,8 @@
   "scripts": {
     "start": "HOST=localhost react-scripts start",
     "build": "HOST=localhost react-scripts build",
-    "test": "HOST=localhost react-scripts test",
-    "eject": "HOST=localhost react-scripts eject"
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
