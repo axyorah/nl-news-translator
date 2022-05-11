@@ -166,8 +166,8 @@ class NewsRequesterTests(TestCase):
         params = {
             'q': 'crypto',
             'category_list': ['technology', 'science'],
-            'from_ts': 1652043983,
-            'to_ts': 1652130383
+            'from_ts': 1651960800,
+            'to_ts': 1652047200
         }
         res = self.requester.get(**params)
         
@@ -175,9 +175,5 @@ class NewsRequesterTests(TestCase):
             self.assertIn(field, res)
 
         self.assertEqual(res['status'], 'ok')
-        self.assertEqual(res['totalResults'], 14)
+        self.assertEqual(res['totalResults'], 7)
         self.assertIsInstance(res['articles'], list)
-        self.assertIn(
-            'Concept langere bitcoin cycli klopt niet meer, aldus populaire analist',
-            res['articles'][0]['title']
-        )
