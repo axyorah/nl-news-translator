@@ -16,7 +16,7 @@ Simple React app with Django backend to help you learn Dutch by reading Dutch ne
 ## 1. Setup
 Clone this repo to your machine:
 ```bash
-$ git clone https://github.com/axyorah/nl-news-translate
+$ git clone https://github.com/axyorah/nl-news-translator.git
 ```
 
 After cloning in project root you'll see two directories: `backend` and `frontend`.
