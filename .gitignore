@@ -8,7 +8,6 @@ __pycache__
 tmp
 static/imgs/profiles/*
 staticfiles*
-newsnl2en
 
 # --- FRONTEND ---
 # dependencies
