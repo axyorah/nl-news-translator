@@ -57,11 +57,16 @@ class NoteList(APIView):
             raise exceptions.NotAuthenticated('You must be logged in to view notes')
 
         # params
-        page_string = request.GET.get('page')
+        page_string = request.GET.get('page', None)
         tags_string = request.GET.get('tags', None)
+        notes_per_page_string = request.GET.get('notes_per_page', None)
 
         page = int(page_string) if page_string is not None and page_string.isnumeric() else 1
         tags = tags_string.split(',') if tags_string is not None else []
+        notes_per_page = int(notes_per_page_string) \
+            if notes_per_page_string is not None \
+            and notes_per_page_string.isnumeric() \
+            else 10
 
         # filter out invalid tags
         tags = [tag for tag in tags if validate_uuid(tag)]
@@ -73,7 +78,7 @@ class NoteList(APIView):
             notes = user.note_set.all()
 
         # current page notes
-        paginator = Paginator(notes, 5)
+        paginator = Paginator(notes, notes_per_page)
 
         # adjust page number if needed
         if page <= 0:
