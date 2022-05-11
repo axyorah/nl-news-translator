@@ -22,7 +22,7 @@ $ git clone https://github.com/axyorah/nl-news-translate
 After cloning in project root you'll see two directories: `backend` and `frontend`.
 
 ### 1.1 Requirements
-This projects requires [python3](https://www.python.org/) for backend and [node](https://nodejs.org/en/) v14+ for frontend.
+This projects requires [python3](https://www.python.org/) for backend and [node](https://nodejs.org/en/) v15+ for frontend.
 
 ### 1.2 Environmental Variables
 For news-fetching part of the app to work you need to get **API key from [newsapi](https://newsapi.org/)** and save it in `backend/.env` file.
