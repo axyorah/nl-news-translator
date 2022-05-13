@@ -1,4 +1,4 @@
-from tkinter import E
+#from tkinter import E
 from typing import Type
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
