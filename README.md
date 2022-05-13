@@ -98,7 +98,7 @@ $ docker-compose up
 
 This will start both API server and React app.
 
-App will be available at `http://localhost:3000`. API will be available at `http://localhost:8000/api/`.
+On Mac/Linux app will be available at `http://localhost:3000` and API will be available at `http://localhost:8000/api/`. On Windows: `http://192.168.99.100:3000` and `http://192.168.99.100:8000/api/`, respectively.
 
 To stop the services:
 ```bash
