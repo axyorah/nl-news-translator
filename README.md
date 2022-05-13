@@ -22,7 +22,9 @@ $ git clone https://github.com/axyorah/nl-news-translator.git
 After cloning in project root you'll see two directories: `backend` and `frontend`.
 
 ### 1.1 Requirements
-This projects requires [python3](https://www.python.org/) for backend and [node](https://nodejs.org/en/) v15+ for frontend.
+This projects requires [python3](https://www.python.org/) for backend and [node](https://nodejs.org/en/) v15+ for frontend. 
+
+**Alternatively**, you can run this app from a [docker](https://docs.docker.com/) container. In this can you don't need python or node, but you do need [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/) installed on your machine.
 
 ### 1.2 Environmental Variables
 For news-fetching part of the app to work you need to get **API key from [newsapi](https://newsapi.org/)** and save it in `backend/.env` file.
@@ -34,7 +36,8 @@ Once you have your key go to `backend` directory, **create file `.env`** and cop
 NEWSAPI_KEY=<YOUR-NEWSAPI-KEY>
 ```
 
-### 1.3 Python Dependencies
+### 1.3 Setup Locally (requires Python and Node)
+#### 1.3.1 Python Dependencies
 While in `backend` directory create and activate python virtual environment, and install the dependencies:
 
 On Mac/Linux
@@ -51,10 +54,55 @@ venv\Scripts\activate.bat
 python -m pip install -r requirements.txt
 ```
 
-### 1.4 Node Dependencies
+#### 1.3.2 Node Dependencies
+<small style="color: grey;">If you have different node versions on your machine make sure that you're using version 15 or higher.</small>
+
 Go to `frontend` directory and install node dependencies:
 ```bash
 $ npm install 
+```
+
+#### 1.3.3 Start
+To start backend server make sure that virtual environment is activated. on Linux:
+```bash
+$ source venv/bin/activate
+```
+
+on Windows:
+```
+venv\Scripts\activate.bat
+```
+
+Then **go to `backend`** directory and run:
+```bash
+$ python manage.py runserver
+```
+
+To start React app **go to `frontend`** dir and run:
+```bash
+$ npm start
+```
+
+App will be available at `http://localhost:3000`. API will be available at `http://localhost:8000/api/`.
+
+### 1.4 Setup via Docker 
+To build the app go to project root and run:
+```bash
+$ docker-compose build
+```
+
+To run the app services:
+```bash
+$ docker-compose up
+```
+
+This will start both API server and React app.
+
+App will be available at `http://localhost:3000`. API will be available at `http://localhost:8000/api/`.
+
+To stop the services:
+```bash
+$ docker-compose down
 ```
 
 ## 2. What's Under the Hood
