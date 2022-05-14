@@ -5,7 +5,7 @@ elif [[ -d backend/venv ]]
     then source backend/venv/bin/activate
 else
     python3 -m venv venv
-    source backend/venv/bin/activate
+    source venv/bin/activate
     python3 -m pip install -r backend/requirements.txt
 fi
 
