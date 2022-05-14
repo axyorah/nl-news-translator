@@ -15,8 +15,17 @@ from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv, dotenv_values
 
+# set env variables
+DOTENV_PATH = '.env' if 'backend' in os.getcwd() else 'backend/.env'
+
+if not os.path.exists(DOTENV_PATH):
+    raise FileNotFoundError(
+        'You should have `.env` file with `NEWSAPI_KEY` value set '
+        'in the root of `backend` directory'
+    )
+
 load_dotenv()
-env = dotenv_values('.env')
+env = dotenv_values(DOTENV_PATH)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
