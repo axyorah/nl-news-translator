@@ -22,7 +22,7 @@ $ git clone https://github.com/axyorah/nl-news-translator.git
 After cloning in project root you'll see two directories: `backend` and `frontend`.
 
 ### 1.1 Requirements
-This projects requires [python3](https://www.python.org/) for backend and [node](https://nodejs.org/en/) v15+ for frontend. 
+This projects requires 64-bit [python3.7+](https://www.python.org/) for backend and [node](https://nodejs.org/en/) v15+ for frontend. 
 
 **Alternatively**, you can run this app from a [docker](https://docs.docker.com/) container. In this can you don't need python or node, but you do need [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/) installed on your machine.
 
@@ -36,52 +36,31 @@ Once you have your key go to `backend` directory, **create file `.env`** and cop
 NEWSAPI_KEY=<YOUR-NEWSAPI-KEY>
 ```
 
-### 1.3 Setup Locally (requires Python and Node)
-#### 1.3.1 Python Dependencies
-While in `backend` directory create and activate python virtual environment, and install the dependencies:
-
-On Mac/Linux
+### 1.3 Setup Locally (requires 64-bit Python3.7+ and Node v15+)
+If you're on Linux or Mac setup and start backend server by going to project root and running:
 ```bash
-$ python -m venv venv
-$ source ./venv/bin/activate
-$ python -m pip install -r requirements.txt
+$ bash run-backend.sh
 ```
 
-On Windows:
-```
-python -m venv venv
-venv\Scripts\activate.bat
-python -m pip install -r requirements.txt
-```
-
-#### 1.3.2 Node Dependencies
-<small style="color: grey;">If you have different node versions on your machine make sure that you're using version 15 or higher.</small>
-
-Go to `frontend` directory and install node dependencies:
+Similarly, setup and start frontend by running the following from the project too:
 ```bash
-$ npm install 
+$ bash run-frontend.sh
 ```
 
-#### 1.3.3 Start
-To start backend server make sure that virtual environment is activated. on Linux:
-```bash
-$ source venv/bin/activate
+If you're on Windows, for backend run:
+```
+.\run-backend-win.bat
 ```
 
-on Windows:
+and for frontend run:
 ```
-venv\Scripts\activate.bat
-```
-
-Then **go to `backend`** directory and run:
-```bash
-$ python manage.py runserver
+.\run-frontend-win.bat
 ```
 
-To start React app **go to `frontend`** dir and run:
-```bash
-$ npm start
-```
+These files:
+- create and activate virtual env (backend) and install dependencies (both backend and frontend) when run for the first time
+- setup database (backend) and additional environmental variables (frontend)
+- start API server (backend) and React app (frontend)
 
 App will be available at `http://localhost:3000`. API will be available at `http://localhost:8000/api/`.
 
