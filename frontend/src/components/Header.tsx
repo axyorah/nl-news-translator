@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import jwt_decode from 'jwt-decode';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import UserTokenChecker from './UserTokenChecker';
 
 import { StoreState } from '../types/storeTypes';
 import { UserLoginInfo } from '../types/userTypes';
@@ -18,39 +19,20 @@ interface HeaderDispatch {
     logout: Function
 }
 
-interface JWToken {
-    token_type: string,
-    exp: number,
-    jti: string
-}
-
-
 const Header = (props: & HeaderState & HeaderDispatch): JSX.Element => {
 
     const { userLoginInfo, logout } = props;
     const { userDetail } = userLoginInfo || {};
-    const history = useHistory();
 
     const handleLogout = () => {
         logout()
     };
 
-    useEffect(() => {
-        // on page change check user token:
-        // logout user if token is expired
-        if (userDetail && userDetail.token) {
-            history.listen(() => {
-                const userData = jwt_decode(userDetail.token) as JWToken;
-                
-                if ( new Date() > new Date(userData.exp * 1000) ) {
-                    logout();
-                }
-            });            
-        }
-    }, [ history, userDetail, logout ]);
-
     return (
         <Navbar bg="dark" variant="dark" expand="md">
+
+            <UserTokenChecker />
+
             <Container>
                 <Navbar.Brand as={Link} to="/">HOME</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
