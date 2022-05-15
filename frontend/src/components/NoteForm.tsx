@@ -6,6 +6,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import Loader from './Loader';
 import Message from './Message';
 import TagForm from './TagForm';
+import UserChecker from './UserChecker';
 
 import { StoreState } from '../types/storeTypes';
 import { Note, NoteMinimal } from '../types/noteTypes';
@@ -183,6 +184,9 @@ const NoteForm = (props: NoteFormProps & NoteFormState & NoteFormDispatch): JSX.
 
     return (
         <Form onSubmit={handleSubmit}>
+
+            <UserChecker />
+            
             <Row>
                 { renderNoteText('Side A', sideA, setSideA)}
                 { renderNoteText('Side B', sideB, setSideB)}

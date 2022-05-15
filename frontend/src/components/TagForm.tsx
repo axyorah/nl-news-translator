@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 
+import UserChecker from './UserChecker';
+
 import { Tag, TagMinimal } from '../types/tagTypes';
 
 interface TagFormProps {
@@ -37,6 +39,8 @@ const TagForm = (props: TagFormProps): JSX.Element => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row' }} >
+            <UserChecker />
+            
             <InputGroup >
                 <Form.Control 
                     placeholder='Add New Tag'
