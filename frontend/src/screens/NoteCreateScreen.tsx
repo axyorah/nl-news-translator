@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import NoteForm from '../components/NoteForm';
+import UserChecker from '../components/UserChecker';
 
 import { StoreState } from '../types/storeTypes';
 import { NoteCreateInfo } from '../types/noteTypes';
@@ -47,6 +48,8 @@ const NoteCreateScreen = (
     return (
         <div className='boxed mycard p-5'>
             <h3 className='text-center'>New Note</h3>
+
+            <UserChecker />
 
             { loadingCreate ? <Loader /> : null }
             { errorsCreate 

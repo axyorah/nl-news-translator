@@ -16,6 +16,7 @@ import {
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import TagForm from '../components/TagForm';
+import UserChecker from '../components/UserChecker';
 
 import { 
     getAllUserTags, 
@@ -143,6 +144,8 @@ const TagListScreen = (
     return (
         <div className='boxed mycard p-5 my-5'>
             <h3 className='text-center'>My Tags</h3>
+
+            <UserChecker />
             
             { errorsList || errorsSelect || errorsUpdate || errorsCreate || errorsDelete
                 ? <Message variant='danger'>

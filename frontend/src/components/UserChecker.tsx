@@ -30,6 +30,10 @@ const UserChecker = (props: UserCheckerState): JSX.Element => {
         <div>
             { loadingUserInfo ? <Loader /> : null }
             { errorsUserInfo ? <Message variant='danger'>{errorsUserInfo}</Message> : null }
+            { userDetail 
+                ? null 
+                : <Message variant='danger'>You need to be logged in to view this page!</Message>
+            }
         </div>
     );
 };

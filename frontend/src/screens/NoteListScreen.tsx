@@ -12,6 +12,7 @@ import Message from '../components/Message';
 import Paginator from '../components/Paginator';
 import NoteList from '../components/NoteList';
 import NoteForm from '../components/NoteForm';
+import UserChecker from '../components/UserChecker';
 
 import { getAllUserNotes, createUserNote, resetCreateUserNote } from '../actions/noteActions';
 import { getAllUserTags } from '../actions/tagActions';
@@ -155,6 +156,8 @@ const NoteListScreen = (
         <div className='boxed mycard mt-5 p-5'>
 
             <h3 className='text-center mb-4'>My Notes</h3>
+
+            <UserChecker />
 
             { loadingTags || loadingNoteCreate ? <Loader /> : null }
             { errorsTags || errorsNoteCreate 
