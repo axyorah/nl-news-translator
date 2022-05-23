@@ -1,11 +1,15 @@
 from typing import List, Tuple, Set, Dict, Union, Optional
 from types import FunctionType
+import logging
+from abc import ABC
 
 import requests as rq
 from bs4 import BeautifulSoup
 import json
 
-from abc import ABC
+
+logger = logging.getLogger(__name__)
+
 
 class Scrapper(ABC):
     def __init__(self):
