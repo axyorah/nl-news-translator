@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv, dotenv_values
 
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    "corsheaders",
+    'corsheaders',
     'api.apps.ApiConfig',
 ]
 
@@ -99,7 +99,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -185,6 +185,45 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 NEWSAPI_KEY = env['NEWSAPI_KEY']
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://localhost:3000",
+    'http://localhost:8000',
+    'http://localhost:3000',
 ]
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(
+                BASE_DIR, 
+                'logs', 
+                f'django_{datetime.now().strftime("%Y-%m-%d")}.log'
+            ),
+            'formatter': 'verbose'
+        }
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] {module} {process:d} {thread:d} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '{asctime} [{levelname}] {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+}

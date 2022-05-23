@@ -9,6 +9,7 @@ tmp
 static/imgs/profiles/*
 staticfiles*
 newsnl2en
+*.log
 
 # --- FRONTEND ---
 # dependencies
