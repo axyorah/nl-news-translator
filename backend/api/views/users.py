@@ -63,7 +63,7 @@ def registerUser(request: HttpRequest):
     except Exception as e:
         logger.error(e)
         return Response(
-            {'errors': e.args[0], 'detail': e.args[0] }, 
+            { 'errors': e.args[0], 'detail': e.args[0] }, 
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -87,6 +87,6 @@ def getUserProfile(request: HttpRequest):
     except Exception as e:
         logger.error(e)
         return Response(
-            {'errors': e.args[0], 'detail': e.args[0] }, 
+            { 'errors': e.args[0], 'detail': e.args[0] }, 
             status=status.HTTP_400_BAD_REQUEST
         )
