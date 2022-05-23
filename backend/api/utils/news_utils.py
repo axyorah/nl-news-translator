@@ -1,9 +1,14 @@
 from typing import List, Tuple, Set, Dict, Union, Optional
+import logging
 from abc import ABC
 
 import requests as rq
 from datetime import datetime
 import time
+
+
+logger = logging.getLogger(__name__)
+
    
 class TokenRequester(ABC):
     def __init__(self, url: str, token: str):
@@ -50,6 +55,7 @@ class NewsRequester(TokenRequester):
             to_ts: Optional[int] = None, 
             from_ts: Optional[int] = None
         ) -> None:
+        logger.debug('Validating query params for fetching news from newsapi...')
         
         # validate q: should be any string
         if q and not isinstance(q, str):
@@ -115,6 +121,8 @@ class NewsRequester(TokenRequester):
             )
     
     def _adjust_params(self, **params: Dict) -> Dict:
+        logger.debug('Adjusting query params for fetching news from newsapi...')
+
         params = params.copy()
                 
         if not params.get('to_ts'):
@@ -146,6 +154,8 @@ class NewsRequester(TokenRequester):
         - from: [str] YYYY-MM-DD
         - to: [str] YYYY-MM-DD
         """
+        logger.debug('Converting query params to valid url for newsapi...')
+
         return (
             f'{self.url}'
             f'{"category=" + params["category"] + "&" if params.get("category") else ""}'
@@ -161,6 +171,7 @@ class NewsRequester(TokenRequester):
             from_ts: Optional[int] = None, 
             to_ts: Optional[int] = None
         ) -> Dict:
+        logger.debug('Querying newsapi...')
                 
         def add_respose_for_category(category: str = '') -> None:
             url = self._params_to_url(**params, category=category)
@@ -180,7 +191,7 @@ class NewsRequester(TokenRequester):
                 except:
                     msg = r['raw_response'].text
                 finally:
-                    print(msg)
+                    logger.error(msg)
                     raise Exception(msg)
                     
                 
@@ -211,6 +222,6 @@ class NewsRequester(TokenRequester):
             return res
         
         except Exception as e:
-            print(e)
+            logger.error(e)
             raise e
         

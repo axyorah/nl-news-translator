@@ -1,5 +1,6 @@
-#from tkinter import E
 from typing import Type
+import logging
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpRequest, Http404
@@ -11,6 +12,8 @@ from api.utils.scrap_utils import source2paragraphs
 from api.utils.translation_utils import NlToEnTranslator
 
 
+logger = logging.getLogger(__name__)
+
 news_requester = NewsRequester(settings.NEWSAPI_KEY)
 nl2en = NlToEnTranslator()
 
@@ -21,23 +24,23 @@ def try_except(view):
             return view(*args, **kwargs)
 
         except TypeError as e:
-            print(e)
+            logger.error(e)
             return Response({'errors': e.args[0], 'detail': e.args[0]}, status.HTTP_400_BAD_REQUEST)
 
         except exceptions.APIException as e:
-            print(e)
+            logger.error(e)
             return Response({ 'errors': e.detail, 'detail': e.detail }, status=e.status_code)
 
         except AttributeError as e:
-            print(e)
+            logger.error(e)
             return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_400_BAD_REQUEST)
 
         except AssertionError as e:
-            print(e)
+            logger.error(e)
             return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            print(e)
+            logger.error(e)
             return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return helper
@@ -55,6 +58,12 @@ def getAllNews(request: HttpRequest):
             cat.strip() for cat in categories.split(',')
         ] if categories is not None else None
     }
+
+    logger.info(
+        f'Fetching news from newsapi '
+        f'{("for categories " + categories) if categories else ""} '
+        f'{("using keyword " + q) if q else ""}'
+    )
     
     res = news_requester.get(**params)    
     return Response(res)
@@ -71,6 +80,8 @@ def getSelectedNews(request: HttpRequest):
             f'`/api/news/?source=nos.nl&url=<url>`'
         )
 
+    logger.info(f'Fetching {source} news article from {url}')
+
     source = source.lower()
 
     if (source not in source2paragraphs):
@@ -86,6 +97,8 @@ def getSelectedNews(request: HttpRequest):
 def getTranslations(request: HttpRequest):
     body = request.data
     sentences = body['sentences']
+
+    logger.info('Translating...')
 
     if not isinstance(sentences, list):
         raise TypeError(

@@ -200,7 +200,7 @@ LOGGING = {
             'formatter': 'simple'
         },
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(
                 BASE_DIR, 
@@ -212,7 +212,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console', 'file'],
-        'level': 'INFO',
+        'level': 'DEBUG',
     },
     'formatters': {
         'verbose': {

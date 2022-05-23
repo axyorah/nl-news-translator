@@ -1,9 +1,13 @@
 from typing import List, Tuple, Set, Dict, Union, Optional
 from types import FunctionType
+import logging
+from abc import ABC
 
 from transformers import MarianMTModel, MarianTokenizer
 
-from abc import ABC
+
+logger = logging.getLogger(__name__)
+
 
 def singleton(cls):
     instances = {}
@@ -17,7 +21,7 @@ def singleton(cls):
 @singleton
 class NlToEnTranslator:
     def __init__(self):
-        print('loading Helsinki-NLP/opus-mt-nl-en')
+        logger.info('Loading Helsinki-NLP/opus-mt-nl-en...')
         self.model_name = "Helsinki-NLP/opus-mt-nl-en"
         self.model = MarianMTModel.from_pretrained(self.model_name)
         self.tokenizer = MarianTokenizer.from_pretrained(self.model_name)

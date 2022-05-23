@@ -58,10 +58,12 @@ class NOSScrapper(Scrapper):
         return ps
     
     def get_article(self, url):
+        logger.debug(f'Fetching {self.name} news article from {url}...')
+
         res = rq.get(url)
         
         if res.status_code != 200:
-            print(res.text)
+            logger.error(res.text)
             return 
         
         html = res.text
