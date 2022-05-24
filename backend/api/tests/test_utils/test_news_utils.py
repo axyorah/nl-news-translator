@@ -175,5 +175,4 @@ class NewsRequesterTests(TestCase):
             self.assertIn(field, res)
 
         self.assertEqual(res['status'], 'ok')
-        self.assertEqual(res['totalResults'], 7)
         self.assertIsInstance(res['articles'], list)
