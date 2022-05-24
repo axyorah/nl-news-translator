@@ -44,6 +44,8 @@ class TagList(APIView):
     @try_except
     def get(self, request: HttpRequest):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to view tags')
         logger.debug(f'Fetching tag list for {user}')
 
         tags = user.tag_set.all()
@@ -55,6 +57,8 @@ class TagList(APIView):
     @try_except
     def post(self, request: HttpRequest):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to create tags')
         logger.debug(f'Creating new tag for {user}')
 
         # create new tag
@@ -79,6 +83,8 @@ class TagDetail(APIView):
     @try_except
     def get(self, request: HttpRequest, pk: str):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to view this tag')
         logger.debug(f'Fetching a tag for {user}')
         
         tag = user.tag_set.get(id=pk)
@@ -89,6 +95,8 @@ class TagDetail(APIView):
     @try_except
     def put(self, request: HttpRequest, pk: str):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to update tags')
         logger.debug(f'Updating a tag for {user}')
         
         tag = user.tag_set.get(id=pk)
@@ -115,6 +123,8 @@ class TagDetail(APIView):
     @try_except
     def delete(self, request: HttpRequest, pk: str,):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to delete tags')
         logger.debug(f'Deleting a tag for user')
         
         tag = user.tag_set.get(id=pk)

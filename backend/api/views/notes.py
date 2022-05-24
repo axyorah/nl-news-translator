@@ -35,7 +35,7 @@ def try_except(view):
         except Note.DoesNotExist as e:
             logger.error(e)
             return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_404_NOT_FOUND)
-    
+
         except exceptions.APIException as e:
             logger.error(e)
             return Response({ 'errors': e.detail, 'detail': e.detail }, status=e.status_code)
@@ -43,7 +43,7 @@ def try_except(view):
         except AssertionError as e:
             logger.error(e)
             return Response({'errors': e.args[0], 'detail': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         except Exception as e:
             logger.error(e)
             return Response({ 'errors': e.args[0], 'detail': e.args[0] }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -57,6 +57,8 @@ class NoteList(APIView):
     @try_except
     def get(self, request: HttpRequest):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to view notes')
         logger.debug(f'Fetching note list for {user}')
 
         # get/adjust query params
@@ -102,6 +104,8 @@ class NoteList(APIView):
     @try_except
     def post(self, request: HttpRequest):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to create notes')
         logger.debug(f'Creating new note for {user}...')
 
         # create new note
@@ -133,6 +137,8 @@ class NoteDetail(APIView):
     @try_except
     def get(self, request: HttpRequest, pk: str):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to view this note')
         logger.debug(f'Fetching a note for {user}')
         
         note = user.note_set.get(id=pk)
@@ -143,6 +149,8 @@ class NoteDetail(APIView):
     @try_except
     def put(self, request: HttpRequest, pk: str):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to update notes')
         logger.debug(f'Updating a note for {user}')
 
         note = user.note_set.get(id=pk)
@@ -174,6 +182,8 @@ class NoteDetail(APIView):
     @try_except
     def delete(self, request: HttpRequest, pk: str,):
         user = request.user
+        if not user or not user.is_authenticated:
+            raise exceptions.NotAuthenticated('You must be logged in to delete notes')
         logger.debug(f'Deleting a note for {user}')
         
         note = user.note_set.get(id=pk)
