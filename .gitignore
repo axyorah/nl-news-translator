@@ -10,6 +10,7 @@ static/imgs/profiles/*
 staticfiles*
 newsnl2en
 *.log
+saves
 
 # --- FRONTEND ---
 # dependencies
