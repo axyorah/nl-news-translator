@@ -6,15 +6,14 @@ from django.http import HttpRequest
 from django.conf import settings
 from django.core.paginator import Paginator
 
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, exceptions
 
 from api.models import Note
 from api.serializers import NoteSerializer
-from api.forms import NoteForm
 
 
 logger = logging.getLogger(__name__)
@@ -108,28 +107,25 @@ class NoteList(APIView):
             raise exceptions.NotAuthenticated('You must be logged in to create notes')
         logger.debug(f'Creating new note for {user}...')
 
-        # create new note
-        note_form = NoteForm(request.data)
+        # get and validate note with serializer
+        serializer = NoteSerializer(data=request.data, many=False)
 
-        # fugly constraint on tags visible for `this` note:
-        # this constraint should be added during model creation via `Membership`,
-        # but that creates errors for some reason...
-        note_form.fields['tags'].queryset = user.tag_set.all()
+        if serializer.is_valid():
 
-        if note_form.is_valid():
-            # update form fields
-            note = note_form.save(commit=False)
-            note.owner = user
+            data = serializer.data
+            data['owner'] = user
+            data['tags'] = user.tag_set.filter(
+                id__in=request.data.get('tags',[])
+            ) # limit queryset to tags available to user
 
-            # update m2m
-            note.save()
-            note_form.save_m2m()
+            note = serializer.create(validated_data=data)
 
         else:
             raise Exception('Note creation failed')
 
         serializer = NoteSerializer(note, many=False)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class NoteDetail(APIView):
     """get, update, delete user note"""
@@ -154,28 +150,16 @@ class NoteDetail(APIView):
         logger.debug(f'Updating a note for {user}')
 
         note = user.note_set.get(id=pk)
-        note_orig = user.note_set.get(id=pk)
-
-        # make sure that we're updating existing note instead of creating new
-        note_form = NoteForm(request.data, instance=note_orig)
-
-        # fugly constraint on tags visible for `this` note:
-        # this constraint should be added during model creation via `Membership`,
-        # but that creates errors for some reason...
-        note_form.fields['tags'].queryset = user.tag_set.all()
-
-        if note_form.is_valid():
-            # update form fields
-            note = note_form.save(commit=False)
-
-            # update m2m
-            note.save()
-            note_form.save_m2m()
-
+        serializer = NoteSerializer(note, data=request.data, many=False)
+        
+        if serializer.is_valid():
+            # pass m2m field as additional arg
+            serializer.save(
+                tags=user.tag_set.filter(id__in=request.data.get('tags', []))
+            )
         else:
             raise Exception('Note update failed')
 
-        serializer = NoteSerializer(note, many=False)
         return Response(serializer.data)
 
     @permission_classes([IsAuthenticated])
