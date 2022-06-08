@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import UserTokenChecker from './UserTokenChecker';
+//import UserTokenChecker from './UserTokenChecker';
 
 import { StoreState } from '../types/storeTypes';
 import { UserLoginInfo } from '../types/userTypes';
@@ -31,7 +31,12 @@ const Header = (props: & HeaderState & HeaderDispatch): JSX.Element => {
     return (
         <Navbar bg="dark" variant="dark" expand="md">
 
-            <UserTokenChecker />
+            {/* 
+                userLoginInfo is not updating is UserTokenChecker,
+                so whenever token expires it is always seed as expired (even after login...)
+                TODO: check the updates of userLoginInfo...
+            */}
+            {/* <UserTokenChecker /> */}
 
             <Container>
                 <Navbar.Brand as={Link} to="/">HOME</Navbar.Brand>
