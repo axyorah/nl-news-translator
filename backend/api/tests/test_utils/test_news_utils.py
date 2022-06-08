@@ -163,11 +163,14 @@ class NewsRequesterTests(TestCase):
         ))
 
     def test_get_ok(self):
+        to_ts = int(datetime.today().timestamp())
+        from_ts = to_ts - 3 * 24 * 60 * 60
+
         params = {
             'q': 'crypto',
             'category_list': ['technology', 'science'],
-            'from_ts': 1651960800,
-            'to_ts': 1652047200
+            'from_ts': from_ts,
+            'to_ts': to_ts
         }
         res = self.requester.get(**params)
         
