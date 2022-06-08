@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-//import UserTokenChecker from './UserTokenChecker';
+import { useHistory } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 import { StoreState } from '../types/storeTypes';
 import { UserLoginInfo } from '../types/userTypes';
@@ -19,25 +20,35 @@ interface HeaderDispatch {
     logout: Function
 }
 
+interface JWToken {
+    token_type: string,
+    exp: number,
+    jti: string
+}
+
 const Header = (props: & HeaderState & HeaderDispatch): JSX.Element => {
 
     const { userLoginInfo, logout } = props;
     const { userDetail } = userLoginInfo || {};
 
-    const handleLogout = () => {
-        logout()
-    };
+    // logout user if its token expired
+    const history = useHistory();
+    useEffect(() => {
+        // check token on page change
+        history.listen(() => {
+            if (userDetail && userDetail.token) {
+                const userData = jwtDecode<JWToken>(userDetail.token);
+            
+                if ( new Date() > new Date(userData.exp * 1000) ) {
+                    logout();
+                    userDetail.token = '';
+                }
+            }
+        });
+    }, [history, userDetail, logout])
 
     return (
         <Navbar bg="dark" variant="dark" expand="md">
-
-            {/* 
-                userLoginInfo is not updating is UserTokenChecker,
-                so whenever token expires it is always seed as expired (even after login...)
-                TODO: check the updates of userLoginInfo...
-            */}
-            {/* <UserTokenChecker /> */}
-
             <Container>
                 <Navbar.Brand as={Link} to="/">HOME</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -54,7 +65,7 @@ const Header = (props: & HeaderState & HeaderDispatch): JSX.Element => {
                     { userDetail && userDetail.username 
                         ? <Nav className="ms-auto">
                             <Nav.Link as={Link} to="/profile">{userDetail.username}</Nav.Link>
-                            <Nav.Link as={Link} to="/" onClick={handleLogout}>Logout</Nav.Link>
+                            <Nav.Link as={Link} to="/" onClick={() => logout()}>Logout</Nav.Link>
                         </Nav>
                         : <Nav className="ms-auto">
                             <Nav.Link as={Link} to="/login">Login/Sign Up</Nav.Link>
