@@ -1,8 +1,11 @@
+from ast import Dict
 from django.test import TestCase
 from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
+
+import json
 
 from ..models import Note, Tag
 from .utils import create_user, create_note, create_tag
@@ -195,7 +198,7 @@ class PrivateNoteDetailWithTagsTests(TestCase):
             'side_b': 'user2-note2-b',
             'tags': [str(self.user2_tag2.id)]
         }
-        res = self.client.post(NOTES_LIST_URL, data)
+        res = self.client.post(NOTES_LIST_URL, json.dumps(data), content_type="application/json")
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         # confirm that tag is present
@@ -217,7 +220,7 @@ class PrivateNoteDetailWithTagsTests(TestCase):
             'side_b': 'user2-note2-b',
             'tags': ['wrong-id']
         }
-        res = self.client.post(NOTES_LIST_URL, data)
+        res = self.client.post(NOTES_LIST_URL, json.dumps(data), content_type="application/json")
         self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_note_update_by_adding_tag_ok(self):
@@ -228,7 +231,7 @@ class PrivateNoteDetailWithTagsTests(TestCase):
             'side_b': self.user2_note1.side_b,
             'tags': [str(self.user2_tag1.id), str(self.user2_tag2.id)]
         }
-        res = self.client.put(NOTE_DETAIL_URL(note_id), data)
+        res = self.client.put(NOTE_DETAIL_URL(note_id), json.dumps(data), content_type="application/json")
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         # confirm note has two tags now
@@ -250,8 +253,11 @@ class PrivateNoteDetailWithTagsTests(TestCase):
             'side_b': self.user2_note1.side_b,
             'tags': [str(self.user1_tag1.id)]
         }
-        res = self.client.put(NOTE_DETAIL_URL(note_id), data)
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # non-conflicting data should be updated, tags should not
+        res = self.client.put(NOTE_DETAIL_URL(note_id), json.dumps(data), content_type="application/json")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(len(res.data['tags']), 0)
 
         # confirm db didn't update
         note_tags = Note.objects.get(id=note_id).tags.all()
@@ -266,7 +272,7 @@ class PrivateNoteDetailWithTagsTests(TestCase):
             'side_b': self.user2_note1.side_b,
             'tags': []
         }
-        res = self.client.put(NOTE_DETAIL_URL(note_id), data)
+        res = self.client.put(NOTE_DETAIL_URL(note_id), json.dumps(data), content_type="application/json")
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         # confirm note no longer has any tags
