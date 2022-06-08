@@ -29,7 +29,13 @@ class Note(models.Model):
         }
 
     def __str__(self):
-        return f'{self.side_a[:50] if self.side_a else ""}... -> {self.side_b[:50] if self.side_b else ""}...'
+        return (
+            f'{self.side_a[:50] if self.side_a else ""}... -> '
+            f'{self.side_b[:50] if self.side_b else ""}...'
+        )
+
+    class Meta:
+        ordering = ['-created']
 
 class Tag(models.Model):
     id = models.UUIDField(
